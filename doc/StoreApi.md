@@ -2,7 +2,7 @@
 
 ## Load the API package
 ```dart
-import 'package:openapi/api.dart';
+import 'package:openapi/api_client_generator.dart';
 ```
 
 All URIs are relative to *https://petstore3.swagger.io/api/v3*
@@ -24,7 +24,7 @@ For valid response try integer IDs with value < 1000. Anything above 1000 or non
 
 ### Example
 ```dart
-import 'package:openapi/api.dart';
+import 'package:openapi/api_client_generator.dart';
 
 final api_instance = StoreApi();
 final orderId = 789; // int | ID of the order that needs to be deleted
@@ -66,7 +66,7 @@ Returns a map of status codes to quantities
 
 ### Example
 ```dart
-import 'package:openapi/api.dart';
+import 'package:openapi/api_client_generator.dart';
 // TODO Configure API key authorization: api_key
 //defaultApiClient.getAuthentication<ApiKeyAuth>('api_key').apiKey = 'YOUR_API_KEY';
 // uncomment below to setup prefix (e.g. Bearer) for API key, if needed
@@ -109,7 +109,7 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 
 ### Example
 ```dart
-import 'package:openapi/api.dart';
+import 'package:openapi/api_client_generator.dart';
 
 final api_instance = StoreApi();
 final orderId = 789; // int | ID of order that needs to be fetched
@@ -152,7 +152,7 @@ Place a new order in the store
 
 ### Example
 ```dart
-import 'package:openapi/api.dart';
+import 'package:openapi/api_client_generator.dart';
 
 final api_instance = StoreApi();
 final order = Order(); // Order | 

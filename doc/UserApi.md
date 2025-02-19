@@ -2,7 +2,7 @@
 
 ## Load the API package
 ```dart
-import 'package:openapi/api.dart';
+import 'package:openapi/api_client_generator.dart';
 ```
 
 All URIs are relative to *https://petstore3.swagger.io/api/v3*
@@ -27,7 +27,7 @@ This can only be done by the logged in user.
 
 ### Example
 ```dart
-import 'package:openapi/api.dart';
+import 'package:openapi/api_client_generator.dart';
 
 final api_instance = UserApi();
 final user = User(); // User | Created user object
@@ -70,7 +70,7 @@ Creates list of users with given input array
 
 ### Example
 ```dart
-import 'package:openapi/api.dart';
+import 'package:openapi/api_client_generator.dart';
 
 final api_instance = UserApi();
 final user = [List<User>()]; // List<User> | 
@@ -113,7 +113,7 @@ This can only be done by the logged in user.
 
 ### Example
 ```dart
-import 'package:openapi/api.dart';
+import 'package:openapi/api_client_generator.dart';
 
 final api_instance = UserApi();
 final username = username_example; // String | The name that needs to be deleted
@@ -155,7 +155,7 @@ Get user by user name
 
 ### Example
 ```dart
-import 'package:openapi/api.dart';
+import 'package:openapi/api_client_generator.dart';
 
 final api_instance = UserApi();
 final username = username_example; // String | The name that needs to be fetched. Use user1 for testing. 
@@ -198,7 +198,7 @@ Logs user into the system
 
 ### Example
 ```dart
-import 'package:openapi/api.dart';
+import 'package:openapi/api_client_generator.dart';
 
 final api_instance = UserApi();
 final username = username_example; // String | The user name for login
@@ -243,7 +243,7 @@ Logs out current logged in user session
 
 ### Example
 ```dart
-import 'package:openapi/api.dart';
+import 'package:openapi/api_client_generator.dart';
 
 final api_instance = UserApi();
 
@@ -281,7 +281,7 @@ This can only be done by the logged in user.
 
 ### Example
 ```dart
-import 'package:openapi/api.dart';
+import 'package:openapi/api_client_generator.dart';
 
 final api_instance = UserApi();
 final username = username_example; // String | name that needs to be updated

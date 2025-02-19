@@ -1,19 +1,25 @@
+import 'package:dio/dio.dart';
+import 'package:easymotion_app/api-client-generated/lib/api.dart';
 import 'package:easymotion_app/ui/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:fquery/fquery.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(QueryClientProvider(queryClient: QueryClient(), child: const MyApp()));
 }
 
 final GoRouter _router = GoRouter(routes: [
   GoRoute(
     path: '/',
     builder: (BuildContext context, GoRouterState state) {
-      return const HomeScreen();
+      return HomeScreen(coursesApi: coursesApi);
     },
   )
 ]);
+
+final CoursesApi coursesApi =
+    CoursesApi(ApiClient(basePath: 'https://api.easymotion.it'));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
