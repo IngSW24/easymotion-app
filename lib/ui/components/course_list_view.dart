@@ -25,11 +25,16 @@ class CourseListView extends HookWidget {
       return Text("Empty list");
     }
 
-    return ListView.builder(
+    return GridView.builder(
       itemCount: courseList.length,
       itemBuilder: (BuildContext ctx, int index) {
         return CourseCard(course: courseList[index]);
       },
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 600,
+          mainAxisExtent: 280,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8),
     );
   }
 }

@@ -15,12 +15,10 @@ final GoRouter _router = GoRouter(routes: [
   GoRoute(
     path: '/',
     builder: (BuildContext context, GoRouterState state) {
-      return HomeScreen(/*coursesApi: coursesApi*/);
+      return HomeScreen();
     },
   )
 ]);
-
-//final CoursesApi coursesApi = CoursesApi(ApiClient(basePath: 'https://api.easymotion.it'));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
