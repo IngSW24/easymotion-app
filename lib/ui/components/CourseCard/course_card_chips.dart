@@ -13,8 +13,8 @@ class CourseCardChips extends StatelessWidget {
     return ListView.separated(
       scrollDirection: Axis.horizontal,
       itemCount: courseTags.length,
-      itemBuilder: (BuildContext ctx, int index) => SizedBox(
-        width: 100,
+      itemBuilder: (BuildContext ctx, int index) => Container(
+        constraints: BoxConstraints(maxWidth: 100),
         child: Chip(
             label: Text(
               courseTags[index],
