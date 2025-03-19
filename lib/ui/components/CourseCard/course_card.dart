@@ -2,7 +2,7 @@ import 'package:easymotion_app/api-client-generated/schema.swagger.dart';
 import 'package:easymotion_app/data/providers/StaticProvider.dart';
 import 'package:flutter/material.dart';
 
-import 'course_card_chips.dart';
+import '../horizontal_chips_list.dart';
 
 class CourseCard extends StatelessWidget {
   const CourseCard({super.key, required this.course, required this.onClick});
@@ -51,7 +51,7 @@ class CourseCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: SizedBox(
                 height: 30,
-                child: CourseCardChips(courseTags: course.tags),
+                child: HorizontalChipsList(labels: course.tags),
               ),
             ),
           ],

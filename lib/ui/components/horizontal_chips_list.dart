@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
 
-class CourseCardChips extends StatelessWidget {
-  const CourseCardChips({
+class HorizontalChipsList extends StatelessWidget {
+  const HorizontalChipsList({
     super.key,
-    required this.courseTags,
+    required this.labels,
+    this.onDeleted
   });
 
-  final List<String> courseTags;
+  final List<String> labels;
+  final void Function(String)? onDeleted;
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
       scrollDirection: Axis.horizontal,
-      itemCount: courseTags.length,
+      itemCount: labels.length,
       itemBuilder: (BuildContext ctx, int index) => Container(
         constraints: BoxConstraints(maxWidth: 100),
         child: Chip(
             label: Text(
-              courseTags[index],
+              labels[index],
               overflow: TextOverflow.ellipsis,
             ),
-            side: BorderSide.none,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            backgroundColor: Color(0xffcae2fc)),
-      ),
+          onDeleted: onDeleted != null ? () => onDeleted?.call(labels[index]) : null,
+      )),
       separatorBuilder: (BuildContext context, int index) =>
           SizedBox(width: 10),
     );
