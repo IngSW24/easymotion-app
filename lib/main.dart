@@ -63,7 +63,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: _router,
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple)),
+      theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple)),
     );
   }
 }
