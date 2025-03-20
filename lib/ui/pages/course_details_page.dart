@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import '../components/courses/course_details.dart';
 
-class CourseDetailsScreen extends StatelessWidget {
-  const CourseDetailsScreen({super.key});
+class CourseDetailsPage extends StatelessWidget {
+  const CourseDetailsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Easymotion'),
+          title: Text('Course details'),
         ),
-        body: Text("Course details"));
+        body: CourseDetails());
   }
 }
