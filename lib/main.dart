@@ -32,7 +32,7 @@ final GoRouter _router = GoRouter(routes: [
                 GoRoute(
                   path: 'details',
                   builder: (BuildContext context, GoRouterState state) {
-                    return CourseDetailsScreen();
+                    return CourseDetailsPage();
                   },
                 )
               ])
@@ -47,7 +47,7 @@ final GoRouter _router = GoRouter(routes: [
                 GoRoute(
                   path: 'details',
                   builder: (BuildContext context, GoRouterState state) {
-                    return CourseDetailsScreen();
+                    return CourseDetailsPage();
                   },
                 )
               ])
