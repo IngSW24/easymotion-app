@@ -13,7 +13,7 @@ class BottomNavBar extends StatelessWidget {
       bottomNavigationBar: NavigationBar(
         destinations: [
           NavigationDestination(icon: Icon(Icons.explore), label: "Explore"),
-          NavigationDestination(icon: Icon(Icons.home), label: "Home"),
+          NavigationDestination(icon: Icon(Icons.home), label: "My courses"),
           NavigationDestination(icon: Icon(Icons.trending_up), label: "Stats"),
         ],
         onDestinationSelected: (int index) {

@@ -1,8 +1,8 @@
 import 'package:easymotion_app/data/providers/api.provider.dart';
-import 'package:easymotion_app/ui/components/main_scaffold.dart';
+import 'package:easymotion_app/ui/components/bottom_nav_bar.dart';
 import 'package:easymotion_app/ui/pages/course_details_page.dart';
+import 'package:easymotion_app/ui/pages/my_courses_page.dart';
 import 'package:easymotion_app/ui/pages/explore_page.dart';
-import 'package:easymotion_app/ui/pages/home_page.dart';
 import 'package:easymotion_app/ui/pages/stats_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fquery/fquery.dart';
@@ -24,17 +24,24 @@ final GoRouter _router = GoRouter(routes: [
       branches: [
         StatefulShellBranch(routes: [
           GoRoute(
-            path: '/explore',
-            builder: (BuildContext context, GoRouterState state) {
-              return ExploreScreen();
-            },
-          )
+              path: '/',
+              builder: (BuildContext context, GoRouterState state) {
+                return ExplorePage();
+              },
+              routes: [
+                GoRoute(
+                  path: 'details',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return CourseDetailsScreen();
+                  },
+                )
+              ])
         ]),
         StatefulShellBranch(routes: [
           GoRoute(
-              path: '/',
+              path: '/my_courses',
               builder: (BuildContext context, GoRouterState state) {
-                return HomeScreen();
+                return MyCoursesPage();
               },
               routes: [
                 GoRoute(
@@ -49,7 +56,7 @@ final GoRouter _router = GoRouter(routes: [
           GoRoute(
             path: '/stats',
             builder: (BuildContext context, GoRouterState state) {
-              return StatsScreen();
+              return StatsPage();
             },
           )
         ])
@@ -63,8 +70,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: _router,
-      theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple)),
+      theme:
+          ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue)),
     );
   }
 }
