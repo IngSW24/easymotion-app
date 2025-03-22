@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 
-const List<String> _typeCourse = <String>['ACQUAGYM', 'CROSSFIT', 'PILATES', 'ZUMBA_FITNESS', 'POSTURAL_TRAINING', 'BODYWEIGHT_WORKOUT'];
-const List<String> _activeCourse = <String>['Attivo', 'Non attivo'];
+const List<String> typeCourse = <String>['ACQUAGYM', 'CROSSFIT', 'PILATES', 'ZUMBA_FITNESS', 'POSTURAL_TRAINING', 'BODYWEIGHT_WORKOUT'];
+const List<String> activeCourse = <String>['Attivo', 'Non attivo'];
 
-const List<String> _exampleCourses = <String>['Corso 1', 'Corso 2'];
+const List<String> exampleCourses = <String>['Corso 1', 'Corso 2'];
 
 class MyCoursesPage extends StatefulWidget {
 
@@ -17,15 +17,68 @@ class MyCoursesPage extends StatefulWidget {
 
 class _MyScaffoldState extends State<MyCoursesPage> {
 
-  String _dropDownTypeCourseValue = _typeCourse.first;
-  String _dropDownActiveValue = _activeCourse.first;
+  String dropDownTypeCourseValue = typeCourse.first;
+  String dropDownActiveValue = activeCourse.first;
 
-  bool _showAdvancedSearch = true;
+  bool showAdvancedSearch = true;
+
+  DateTime? dateFilterStart;
+  DateTime? dateFilterEnd;
+
+  final controllerAdvancedSearch = TextEditingController(); //controller for searchbar in "Ricerca avanzata"
+
+
+  Future<void> _selectStartDate() async{
+    final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100),
+    );
+
+    setState(() {
+
+      if(dateFilterEnd != null){
+
+        if(dateFilterEnd!.isAfter(pickedDate!)){
+          dateFilterStart = pickedDate;
+        }
+
+      }else{
+        dateFilterStart = pickedDate;
+      }
+
+    });
+  }
+
+  Future<void> _selectEndDate() async{
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    setState(() {
+
+      if(dateFilterStart != null){
+
+        if(dateFilterStart!.isBefore(pickedDate!)){
+          dateFilterEnd = pickedDate;
+        }
+
+      }else{
+        dateFilterEnd = pickedDate;
+      }
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
 
     double width50 = MediaQuery.of(context).size.width * 0.50;
+
 
     return Scaffold(
       appBar: AppBar(
@@ -78,7 +131,7 @@ class _MyScaffoldState extends State<MyCoursesPage> {
               child: const Text('Ricerca avanzata'),
               onPressed: () {
                 setState(() {
-                  _showAdvancedSearch = !_showAdvancedSearch;
+                  showAdvancedSearch = !showAdvancedSearch;
                 });
               }
 
@@ -86,43 +139,104 @@ class _MyScaffoldState extends State<MyCoursesPage> {
 
 
           Offstage(   //Ho usato "Offstage" invece di "Visibility", perchè la seconda lascia lo SPAZIO BIANCO (rende invisibile l'oggetto, ma continua ad occupare spazio), mentre la prima NO (Sparisce senza occupare spazio bianco)
-            offstage: _showAdvancedSearch,
+            offstage: showAdvancedSearch,
             child:
                   Column(
 
                     children: [
 
-                      DropdownButton(
-                        value: _dropDownTypeCourseValue,
-                        icon: const Icon(Icons.arrow_downward),
+                      Row(
+                        children: [
+                          Text("Nome corso: "),
 
-                        onChanged: (String? value){
-                          setState(() {
-                            _dropDownTypeCourseValue = value!;
-                          });
-                        },
-                        items:
-                        _typeCourse.map<DropdownMenuItem<String>>((String value){
-                          return DropdownMenuItem<String>(value: value, child: Text(value));
-                        }).toList(),
+
+                        ]
+                      ),
+
+                      Row(
+                        children: [
+
+                          Text("Tipo di corso: "),
+
+                          Card(
+                            child: DropdownButton(
+                              value: dropDownTypeCourseValue,
+                              icon: const Icon(Icons.arrow_downward),
+
+                              onChanged: (String? value){
+                                  setState(() {
+                                    dropDownTypeCourseValue = value!;
+                                  });
+                                },
+                              items:
+                                typeCourse.map<DropdownMenuItem<String>>((String value){
+                                  return DropdownMenuItem<String>(value: value, child: Text(value));
+                                }).toList(),
+
+                            ),
+                          ),
+
+
+                        ],
+                      ),
+
+                      Row(
+                        children: [
+
+                          Text("Stato del corso: "),
+
+                          Card(
+
+                            child: DropdownButton(
+                                    value: dropDownActiveValue,
+                                    icon: const Icon(Icons.arrow_downward),
+
+                                    onChanged: (String? value){
+                                      setState(() {
+                                        dropDownActiveValue = value!;
+                                      });
+                                    },
+                                    items:
+                                    activeCourse.map<DropdownMenuItem<String>>((String value){
+                                      return DropdownMenuItem<String>(value: value, child: Text(value));
+                                    }).toList(),
+
+                                  ),
+                          ),
+
+
+                        ],
+                      ),
+
+                      Row(
+                        children: [
+                          Text("Da: "),
+                          OutlinedButton( onPressed: _selectStartDate,
+                                          child: (dateFilterStart == null) ? Text("Seleziona la data") :
+                                           Text("${dateFilterStart!.day}/${dateFilterStart!.month}/${dateFilterStart!.year}")
+                          )
+                        ],
+                      ),
+
+                      Row(
+                        children: [
+                          Text("al: "),
+                          OutlinedButton( onPressed: _selectEndDate,
+                              child: (dateFilterEnd == null ) ? Text("Seleziona la data") : 
+                               Text("${dateFilterEnd!.day}/${dateFilterEnd!.month}/${dateFilterEnd!.year}" )
+                          )
+                        ],
+                      ),
+
+
+                      ElevatedButton(
+                          child: const Text('Applica filtro'),
+                          onPressed: () {
+                          }
 
                       ),
 
-                      DropdownButton(
-                        value: _dropDownActiveValue,
-                        icon: const Icon(Icons.arrow_downward),
 
-                        onChanged: (String? value){
-                          setState(() {
-                            _dropDownActiveValue = value!;
-                          });
-                        },
-                        items:
-                        _activeCourse.map<DropdownMenuItem<String>>((String value){
-                          return DropdownMenuItem<String>(value: value, child: Text(value));
-                        }).toList(),
-
-                      ),
 
                     ],
                   ),
@@ -133,7 +247,7 @@ class _MyScaffoldState extends State<MyCoursesPage> {
           Divider(),
 
           Column(
-            children: (_exampleCourses.isEmpty==true) ? [ Text('Nessun corso iscritto') ] : _exampleCourses.map((i) => ListTile(
+            children: (exampleCourses.isEmpty==true) ? [ Text('Nessun corso iscritto') ] : exampleCourses.map((i) => ListTile(
                                                                                                         title: Text(i.toString()),
                                                                                                         subtitle: Text('Attivo'),
                                                                                                         trailing: ElevatedButton(
@@ -142,20 +256,6 @@ class _MyScaffoldState extends State<MyCoursesPage> {
                                                                                                       )).toList()
           ),
 
-
-
-          /*
-          Card(
-            child:ListTile(
-              title: Text("Corso 3"),
-              subtitle: Text("Attivo"),
-              trailing: ElevatedButton(
-                  onPressed: (){},
-                  child: const Text('Dettagli')
-              ),
-            ),
-          ),
-          */
 
 
         ],
