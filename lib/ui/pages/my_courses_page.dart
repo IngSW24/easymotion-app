@@ -2,8 +2,12 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 
 const List<String> _typeCourse = <String>['ACQUAGYM', 'CROSSFIT', 'PILATES', 'ZUMBA_FITNESS', 'POSTURAL_TRAINING', 'BODYWEIGHT_WORKOUT'];
+const List<String> _activeCourse = <String>['Attivo', 'Non attivo'];
+
+const List<String> _exampleCourses = <String>['Corso 1', 'Corso 2'];
 
 class MyCoursesPage extends StatefulWidget {
 
@@ -13,12 +17,16 @@ class MyCoursesPage extends StatefulWidget {
 
 class _MyScaffoldState extends State<MyCoursesPage> {
 
-  String _dropDownValue = _typeCourse.first;
+  String _dropDownTypeCourseValue = _typeCourse.first;
+  String _dropDownActiveValue = _activeCourse.first;
 
   bool _showAdvancedSearch = true;
 
   @override
   Widget build(BuildContext context) {
+
+    double width50 = MediaQuery.of(context).size.width * 0.50;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Corsi a cui ti sei iscritto"),
@@ -79,28 +87,67 @@ class _MyScaffoldState extends State<MyCoursesPage> {
 
           Offstage(   //Ho usato "Offstage" invece di "Visibility", perchè la seconda lascia lo SPAZIO BIANCO (rende invisibile l'oggetto, ma continua ad occupare spazio), mentre la prima NO (Sparisce senza occupare spazio bianco)
             offstage: _showAdvancedSearch,
-            child: DropdownButton(
-                value: _dropDownValue,
-                icon: const Icon(Icons.arrow_downward),
+            child:
+                  Column(
 
-                onChanged: (String? value){
-                  setState(() {
-                      _dropDownValue = value!;
-                  });
-                },
-                items:
-                  _typeCourse.map<DropdownMenuItem<String>>((String value){
-                    return DropdownMenuItem<String>(value: value, child: Text(value));
-                  }).toList(),
+                    children: [
 
-            )
+                      DropdownButton(
+                        value: _dropDownTypeCourseValue,
+                        icon: const Icon(Icons.arrow_downward),
+
+                        onChanged: (String? value){
+                          setState(() {
+                            _dropDownTypeCourseValue = value!;
+                          });
+                        },
+                        items:
+                        _typeCourse.map<DropdownMenuItem<String>>((String value){
+                          return DropdownMenuItem<String>(value: value, child: Text(value));
+                        }).toList(),
+
+                      ),
+
+                      DropdownButton(
+                        value: _dropDownActiveValue,
+                        icon: const Icon(Icons.arrow_downward),
+
+                        onChanged: (String? value){
+                          setState(() {
+                            _dropDownActiveValue = value!;
+                          });
+                        },
+                        items:
+                        _activeCourse.map<DropdownMenuItem<String>>((String value){
+                          return DropdownMenuItem<String>(value: value, child: Text(value));
+                        }).toList(),
+
+                      ),
+
+                    ],
+                  ),
+
+
           ),
 
           Divider(),
 
+          Column(
+            children: (_exampleCourses.isEmpty==true) ? [ Text('Nessun corso iscritto') ] : _exampleCourses.map((i) => ListTile(
+                                                                                                        title: Text(i.toString()),
+                                                                                                        subtitle: Text('Attivo'),
+                                                                                                        trailing: ElevatedButton(
+                                                                                                            onPressed: () {},
+                                                                                                            child: const Text('Dettagli')),
+                                                                                                      )).toList()
+          ),
+
+
+
+          /*
           Card(
             child:ListTile(
-              title: Text("Corso 1"),
+              title: Text("Corso 3"),
               subtitle: Text("Attivo"),
               trailing: ElevatedButton(
                   onPressed: (){},
@@ -108,7 +155,7 @@ class _MyScaffoldState extends State<MyCoursesPage> {
               ),
             ),
           ),
-
+          */
 
 
         ],
