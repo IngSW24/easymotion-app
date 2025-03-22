@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class HorizontalChipsList extends StatelessWidget {
-  const HorizontalChipsList({super.key, required this.labels, this.onDeleted});
+  const HorizontalChipsList({super.key, required this.labels, this.maxWidth  =100, this.onDeleted});
 
   final List<String> labels;
+  final double maxWidth;
   final void Function(String)? onDeleted;
 
   @override
@@ -12,7 +13,7 @@ class HorizontalChipsList extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       itemCount: labels.length,
       itemBuilder: (BuildContext ctx, int index) => Container(
-          constraints: BoxConstraints(maxWidth: 100),
+          constraints: BoxConstraints(maxWidth: maxWidth),
           child: Chip(
             label: Text(
               labels[index],
