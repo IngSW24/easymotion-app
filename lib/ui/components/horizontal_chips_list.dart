@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class HorizontalChipsList extends StatelessWidget {
-  const HorizontalChipsList({super.key, required this.labels, this.maxWidth  =100, this.onDeleted});
+  const HorizontalChipsList(
+      {super.key, required this.labels, this.maxWidth = 100, this.onDeleted});
 
   final List<String> labels;
   final double maxWidth;

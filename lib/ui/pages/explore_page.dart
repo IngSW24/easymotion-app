@@ -2,6 +2,7 @@ import 'package:easymotion_app/ui/components/courses/course_list_view.dart';
 import 'package:easymotion_app/ui/components/filters/course_filters.dart';
 import 'package:easymotion_app/ui/components/horizontal_chips_list.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -11,27 +12,64 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
-  DateTime? _startDate, _endDate;
+  List<String> _categories = [], _levels = [], _frequencies = [], _availabilities = [];
+
+  List<String> get _filterList {
+    List<String> list = [];
+      list.addAll(_categories);
+
+      list.addAll(_levels);
+
+      list.addAll(_frequencies);
+
+      list.addAll(_availabilities);
+
+    return list;
+  }
+
+  String _convertDatetimeToString(DateTime dateTime) {
+    return DateFormat.yMMMd(Localizations.localeOf(context).languageCode).format(dateTime);
+  }
 
   void _openFilterBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
         return StatefulBuilder(builder: (context, setModalState) {
-          return CourseFilter( startDate: _startDate ?? DateTime.timestamp(), endDate: _endDate ?? DateTime.timestamp(),
-              onStartDateChange: (DateTime date) {
-                setModalState(() {
-                  setState(() {
-                    _startDate = date;
-                  });
-                });
-              },onEndDateChange: (DateTime date) {
+          return CourseFilter(
+            selectedCategories: _categories,
+            selectedLevels: _levels,
+            selectedFrequencies: _frequencies,
+            selectedAvailabilities: _availabilities,
+            onCategoriesChanged: (List<String> value) {
               setModalState(() {
                 setState(() {
-                  _endDate = date;
+                  _categories = value;
                 });
               });
-            },);
+            },
+            onLevelsChanged: (List<String> value) {
+              setModalState(() {
+                setState(() {
+                  _levels = value;
+                });
+              });
+            },
+            onFrequenciesChanged: (List<String> value) {
+              setModalState(() {
+                setState(() {
+                  _frequencies = value;
+                });
+              });
+            },
+            onAvailabilitiesChanged: (List<String> value) {
+              setModalState(() {
+                setState(() {
+                  _availabilities = value;
+                });
+              });
+            },
+          );
         });
       },
     );
@@ -95,33 +133,19 @@ class _ExplorePageState extends State<ExplorePage> {
                   });
                 },
               )),
-          if (_startDate != null)
+          if (_filterList.isNotEmpty)
             Padding(
                 padding: EdgeInsets.all(8),
                 child: SizedBox(
                     height: 40,
                     child: HorizontalChipsList(
                       maxWidth: 320,
-                      labels: ["Start date: $_startDate"], // FIXME: show date only
-                      onDeleted: (String tag) {
+                      labels: _filterList,
+                      /*onDeleted: (String tag) {
                         setState(() {
-                          _startDate = null;
+
                         });
-                      },
-                    ))),
-          if (_endDate != null)
-            Padding(
-                padding: EdgeInsets.all(8),
-                child: SizedBox(
-                    height: 40,
-                    child: HorizontalChipsList(
-                      maxWidth: 200,
-                      labels: ["End date: $_endDate"],
-                      onDeleted: (String tag) {
-                        setState(() {
-                          _endDate = null;
-                        });
-                      },
+                      },*/
                     ))),
           Expanded(child: CourseListView())
         ]));
