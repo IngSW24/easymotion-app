@@ -11,34 +11,27 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
-  final List<String> activeFilters = [];
-
-  final List<String> availableFilters = const [
-    'Popular',
-    'Recent',
-    'Trending',
-    'Favorites'
-  ];
-
-  void onChange(String filter, bool selected) {
-    setState(() {
-      selected ? activeFilters.add(filter) : activeFilters.remove(filter);
-    });
-  }
+  DateTime? _startDate, _endDate;
 
   void _openFilterBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
         return StatefulBuilder(builder: (context, setModalState) {
-          return CourseFilter(
-              availableFilters: availableFilters,
-              activeFilters: activeFilters,
-              onFilterChange: (String filter, bool selected) {
+          return CourseFilter( startDate: _startDate ?? DateTime.timestamp(), endDate: _endDate ?? DateTime.timestamp(),
+              onStartDateChange: (DateTime date) {
                 setModalState(() {
-                  onChange(filter, selected);
+                  setState(() {
+                    _startDate = date;
+                  });
+                });
+              },onEndDateChange: (DateTime date) {
+              setModalState(() {
+                setState(() {
+                  _endDate = date;
                 });
               });
+            },);
         });
       },
     );
@@ -102,16 +95,31 @@ class _ExplorePageState extends State<ExplorePage> {
                   });
                 },
               )),
-          if (activeFilters.isNotEmpty)
+          if (_startDate != null)
             Padding(
                 padding: EdgeInsets.all(8),
                 child: SizedBox(
                     height: 40,
                     child: HorizontalChipsList(
-                      labels: activeFilters,
+                      maxWidth: 320,
+                      labels: ["Start date: $_startDate"], // FIXME: show date only
                       onDeleted: (String tag) {
                         setState(() {
-                          activeFilters.remove(tag);
+                          _startDate = null;
+                        });
+                      },
+                    ))),
+          if (_endDate != null)
+            Padding(
+                padding: EdgeInsets.all(8),
+                child: SizedBox(
+                    height: 40,
+                    child: HorizontalChipsList(
+                      maxWidth: 200,
+                      labels: ["End date: $_endDate"],
+                      onDeleted: (String tag) {
+                        setState(() {
+                          _endDate = null;
                         });
                       },
                     ))),
