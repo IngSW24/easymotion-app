@@ -4,13 +4,24 @@ import 'package:go_router/go_router.dart';
 class CourseFilter extends StatelessWidget {
   const CourseFilter(
       {super.key,
-      required this.availableFilters,
-      required this.activeFilters,
-      required this.onFilterChange});
+      required this.startDate,
+      required this.endDate,
+      required this.onStartDateChange,
+        required this.onEndDateChange});
 
-  final List<String> availableFilters;
-  final List<String> activeFilters;
-  final void Function(String, bool) onFilterChange;
+  final DateTime startDate, endDate;
+  final void Function(DateTime) onStartDateChange;
+  final void Function(DateTime) onEndDateChange;
+
+  Future<void> _askStartDate(BuildContext context) async {
+    var date = await showDatePicker(context: context, firstDate: DateTime.timestamp(), lastDate: DateTime.timestamp());
+    if (date != null) onStartDateChange(date);
+  }
+
+  Future<void> _askEndDate(BuildContext context) async {
+    var date = await showDatePicker(context: context, firstDate: DateTime.timestamp(), lastDate: DateTime.timestamp());
+    if (date != null) onEndDateChange(date);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,21 +34,11 @@ class CourseFilter extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.only(bottom: 16),
-            child: Text('Select Filters',
+            child: Text('Select filters',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           ),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: availableFilters.map((filter) {
-              return FilterChip(
-                label: Text(filter),
-                avatar: CircleAvatar(),
-                selected: activeFilters.contains(filter),
-                onSelected: (selected) => onFilterChange(filter, selected),
-              );
-            }).toList(),
-          ),
+          OutlinedButton(onPressed: () => _askStartDate(context), child: Text("Select start date")),
+          OutlinedButton(onPressed: () => _askEndDate(context), child: Text("Select end date")),
           Spacer(),
           Expanded(
             flex: 0,
