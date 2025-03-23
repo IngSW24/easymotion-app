@@ -13,7 +13,7 @@ class CourseListView extends HookWidget {
   final CourseFilterType courseFilterType;
 
   void onCourseClick(CourseEntity courseEntity, BuildContext context) {
-    context.go("/details");
+    context.go("/explore/details");
   }
 
   bool includeCourse(CourseEntity course) {
