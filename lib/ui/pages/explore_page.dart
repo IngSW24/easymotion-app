@@ -1,8 +1,8 @@
+import 'package:easymotion_app/ui/components/courses/course_filter.type.dart';
 import 'package:easymotion_app/ui/components/courses/course_list_view.dart';
 import 'package:easymotion_app/ui/components/filters/course_filters.dart';
 import 'package:easymotion_app/ui/components/horizontal_chips_list.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -12,24 +12,11 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
-  List<String> _categories = [], _levels = [], _frequencies = [], _availabilities = [];
-
-  List<String> get _filterList {
-    List<String> list = [];
-      list.addAll(_categories);
-
-      list.addAll(_levels);
-
-      list.addAll(_frequencies);
-
-      list.addAll(_availabilities);
-
-    return list;
-  }
-
-  String _convertDatetimeToString(DateTime dateTime) {
-    return DateFormat.yMMMd(Localizations.localeOf(context).languageCode).format(dateTime);
-  }
+  String _searchText = "";
+  List<String> _categories = [],
+      _levels = [],
+      _frequencies = [],
+      _availabilities = [];
 
   void _openFilterBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -76,8 +63,9 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   void onSearchChanged(String query) {
-    // TODO: search
-    print(query);
+    setState(() {
+      _searchText = query;
+    });
   }
 
   @override
@@ -93,61 +81,60 @@ class _ExplorePageState extends State<ExplorePage> {
         body: Column(children: [
           Padding(
               padding: EdgeInsets.all(8),
-              child: SearchAnchor(
-                viewOnChanged: onSearchChanged,
-                builder: (BuildContext context, SearchController controller) {
-                  return SearchBar(
-                      controller: controller,
-                      padding: const WidgetStatePropertyAll<EdgeInsets>(
-                        EdgeInsets.symmetric(horizontal: 16.0),
-                      ),
-                      onTap: () {
-                        controller.openView();
-                      },
-                      onChanged: (String query) {
-                        controller.openView();
-                      },
-                      leading: Icon(Icons.search),
-                      trailing: [
-                        Tooltip(
-                            message: "Open filters menu",
-                            child: IconButton(
-                                onPressed: () {
-                                  _openFilterBottomSheet(context);
-                                },
-                                icon: Icon(Icons.filter_alt_outlined))),
-                      ]);
-                },
-                suggestionsBuilder:
-                    (BuildContext context, SearchController controller) {
-                  return List<ListTile>.generate(5, (int index) {
-                    final String item = 'item $index'; // TODO: temporary
-                    return ListTile(
-                      title: Text(item),
-                      onTap: () {
-                        setState(() {
-                          controller.closeView(item);
-                        });
-                      },
-                    );
-                  });
-                },
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: "Cerca corsi (es. nuoto)",
+                  prefixIcon: Icon(Icons.search),
+                  suffixIcon: IconButton(
+                      onPressed: () => _openFilterBottomSheet(context),
+                      icon: Icon(Icons.filter_alt_outlined)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(32),
+                  ),
+                ),
+                onChanged: onSearchChanged,
               )),
-          if (_filterList.isNotEmpty)
+          if (_categories.isNotEmpty ||
+              _levels.isNotEmpty ||
+              _frequencies.isNotEmpty ||
+              _availabilities.isNotEmpty)
             Padding(
                 padding: EdgeInsets.all(8),
                 child: SizedBox(
                     height: 40,
                     child: HorizontalChipsList(
                       maxWidth: 320,
-                      labels: _filterList,
-                      /*onDeleted: (String tag) {
+                      labels: _categories
+                              .map((key) => CourseFilter.categories[key] ?? "")
+                              .toList() +
+                          _levels
+                              .map((key) => CourseFilter.levels[key] ?? "")
+                              .toList() +
+                          _frequencies
+                              .map((key) => CourseFilter.frequencies[key] ?? "")
+                              .toList() +
+                          _availabilities
+                              .map((key) =>
+                                  CourseFilter.availabilities[key] ?? "")
+                              .toList(),
+                      onDeleted: (String tag) {
                         setState(() {
-
+                          _categories.remove(tag);
+                          _levels.remove(tag);
+                          _frequencies.remove(tag);
+                          _availabilities.remove(tag);
                         });
-                      },*/
+                      },
                     ))),
-          Expanded(child: CourseListView())
+          Expanded(
+              child: CourseListView(
+            courseFilterType: CourseFilterType(
+                searchText: _searchText,
+                categories: _categories,
+                levels: _levels,
+                frequencies: _frequencies,
+                availabilities: _availabilities),
+          ))
         ]));
   }
 }
