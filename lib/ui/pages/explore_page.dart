@@ -1,7 +1,7 @@
 import 'package:easymotion_app/ui/components/courses/course_filter.type.dart';
 import 'package:easymotion_app/ui/components/courses/course_list_view.dart';
-import 'package:easymotion_app/ui/components/filters/course_filters.dart';
-import 'package:easymotion_app/ui/components/horizontal_chips_list.dart';
+import 'package:easymotion_app/ui/components/courses/course_filters.dart';
+import 'package:easymotion_app/ui/components/chip_list/horizontal_chips_list.dart';
 import 'package:flutter/material.dart';
 
 class ExplorePage extends StatefulWidget {

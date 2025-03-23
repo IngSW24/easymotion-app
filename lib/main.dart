@@ -1,5 +1,5 @@
 import 'package:easymotion_app/data/providers/api.provider.dart';
-import 'package:easymotion_app/ui/components/bottom_nav_bar.dart';
+import 'package:easymotion_app/ui/components/nav_bar/bottom_nav_bar.dart';
 import 'package:easymotion_app/ui/pages/course_details_page.dart';
 import 'package:easymotion_app/ui/pages/my_courses_page.dart';
 import 'package:easymotion_app/ui/pages/explore_page.dart';

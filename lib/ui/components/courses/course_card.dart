@@ -2,7 +2,7 @@ import 'package:easymotion_app/api-client-generated/schema.swagger.dart';
 import 'package:easymotion_app/data/providers/static_provider.dart';
 import 'package:flutter/material.dart';
 
-import '../horizontal_chips_list.dart';
+import '../chip_list/horizontal_chips_list.dart';
 
 class CourseCard extends StatelessWidget {
   const CourseCard({super.key, required this.course, required this.onClick});

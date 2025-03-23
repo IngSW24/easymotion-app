@@ -122,7 +122,9 @@ class CourseFilter extends StatelessWidget {
                   }
                 });
           }).toList()),
-          Spacer(),
+          SizedBox(
+            height: 12,
+          ),
           FilledButton.icon(
             onPressed: () => context.pop(),
             label: Text('Apply Filters'),
