@@ -1,7 +1,14 @@
+import 'package:easymotion_app/api-client-generated/schema.models.swagger.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 
-class LoginPage extends StatefulWidget {
+import '../../data/hooks/useAuth.dart';
+
+/**
+ * Pagina di login, se access_token presente salta
+ */
+class LoginPage extends StatefulHookWidget {
   const LoginPage({super.key});
 
   @override
@@ -11,13 +18,10 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String _username = "", _password = "";
 
-  void onSave() {
-    print("$_username,,$_password");
-    context.go("/explore");
-  }
-
   @override
   Widget build(BuildContext context) {
+    final login = useLoginFn(context);
+
     return Scaffold(
         appBar: AppBar(
           title: Text('Login'),
@@ -52,7 +56,10 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                   padding: EdgeInsets.all(8),
                   child:
-                      ElevatedButton(onPressed: onSave, child: Text("Login")))
+                      ElevatedButton(onPressed:  () async{
+                        await login.mutate(SignInDto(email: _username, password: _password));
+                        print(login.data?.accessToken); // TODO: ritardo di 1 chiamata
+                      }, child: Text("Login")))
             ],
           ),
         ));

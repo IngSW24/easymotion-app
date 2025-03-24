@@ -1,5 +1,5 @@
 import 'package:easymotion_app/api-client-generated/schema.swagger.dart';
-import 'package:easymotion_app/data/providers/static_provider.dart';
+import 'package:easymotion_app/data/common/static_resources.dart';
 import 'package:flutter/material.dart';
 
 import '../chip_list/horizontal_chips_list.dart';
@@ -24,7 +24,7 @@ class CourseCard extends StatelessWidget {
             ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
                 child: Image.network(
-                  "${StaticProvider.uri}/${course.category.value?.toLowerCase()}.jpg",
+                  "${StaticResources.uri}/${course.category.value?.toLowerCase()}.jpg",
                   height: 120,
                   width: double.infinity,
                   fit: BoxFit.cover,
