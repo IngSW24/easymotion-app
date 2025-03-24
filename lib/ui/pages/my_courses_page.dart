@@ -250,7 +250,7 @@ class _MyScaffoldState extends State<MyCoursesPage> {
             children: (exampleCourses.isEmpty==true) ? [ Text('Nessun corso iscritto') ] : exampleCourses.map((i) => ListTile(
                                                                                                         title: Text(i.toString()),
                                                                                                         subtitle: Text('Attivo'),
-                                                                                                        leading: Image.network(),
+                                                                                                        leading: Image.network('https://picsum.photos/250?image=9'),
                                                                                                         trailing: ElevatedButton(
                                                                                                             onPressed: () {},
                                                                                                             child: const Text('Dettagli')),
