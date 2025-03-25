@@ -44,4 +44,3 @@ app.*.map.json
 
 
 /lib/api-client-generated
-/lib/l10n/generated/
