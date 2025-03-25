@@ -1,3 +1,1 @@
-class LoginDto {
-
-}
+class LoginDto {}

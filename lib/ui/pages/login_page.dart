@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../data/hooks/useAuth.dart';
+import '../../data/hooks/use_auth.dart';
 
-/**
- * Pagina di login, se access_token presente salta
- */
 class LoginPage extends StatefulHookWidget {
   const LoginPage({super.key});
 
@@ -55,11 +52,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Padding(
                   padding: EdgeInsets.all(8),
-                  child:
-                      ElevatedButton(onPressed:  () async{
-                        await login.mutate(SignInDto(email: _username, password: _password));
-                        print(login.data?.accessToken); // TODO: ritardo di 1 chiamata
-                      }, child: Text("Login")))
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        await login.mutate(
+                            SignInDto(email: _username, password: _password));
+                        print(login
+                            .data?.accessToken); // TODO: ritardo di 1 chiamata
+                      },
+                      child: Text("Login")))
             ],
           ),
         ));
