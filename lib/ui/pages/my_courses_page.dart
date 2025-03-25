@@ -249,10 +249,17 @@ class _MyScaffoldState extends State<MyCoursesPage> {
           Column(
             children: (exampleCourses.isEmpty==true) ? [ Text('Nessun corso iscritto') ] : exampleCourses.map((i) => ListTile(
                                                                                                         title: Text(i.toString()),
-                                                                                                        subtitle: Text('Attivo'),
+                                                                                                        subtitle: Text('Attivo',
+                                                                                                                      style: TextStyle(
+                                                                                                                          fontWeight: FontWeight.bold,
+                                                                                                                          color: Colors.green
+                                                                                                                      ),
+                                                                                                        ),
                                                                                                         leading: Image.network('https://picsum.photos/250?image=9'),
                                                                                                         trailing: ElevatedButton(
-                                                                                                            onPressed: () {},
+                                                                                                            onPressed: () {
+                                                                                                              //Mettere un Dialog con cui mostrare i dettagli del corso
+                                                                                                            },
                                                                                                             child: const Text('Dettagli')),
                                                                                                       )).toList()
           ),
