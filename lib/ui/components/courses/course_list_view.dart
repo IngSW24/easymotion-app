@@ -1,4 +1,4 @@
-import 'package:easymotion_app/api-client-generated/schema.models.swagger.dart';
+import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.dart';
 import 'package:easymotion_app/data/hooks/use_courses.dart';
 import 'package:easymotion_app/ui/components/courses/course_card.dart';
 import 'package:flutter/material.dart';

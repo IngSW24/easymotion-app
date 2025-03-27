@@ -1,5 +1,4 @@
 import 'package:easymotion_app/data/providers/api.provider.dart';
-import 'package:easymotion_app/data/hooks/use_auth.dart';
 import 'package:easymotion_app/ui/components/nav_bar/bottom_nav_bar.dart';
 import 'package:easymotion_app/ui/pages/course_details_page.dart';
 import 'package:easymotion_app/ui/pages/login_page.dart';
@@ -15,7 +14,7 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(QueryClientProvider(
       queryClient: QueryClient(),
-      child: Provider(create: (BuildContext ctx) => ApiProvider(ctx), child: const MyApp())));
+      child: ChangeNotifierProvider(create: (BuildContext ctx) => ApiProvider(ctx), child: const MyApp())));
 }
 
 final GoRouter _router = GoRouter(initialLocation: "/login", routes: [

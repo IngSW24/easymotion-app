@@ -1,4 +1,4 @@
-import 'package:easymotion_app/api-client-generated/schema.swagger.dart';
+import 'package:easymotion_app/api-client-generated/api_schema.swagger.dart';
 import 'package:easymotion_app/data/common/static_resources.dart';
 import 'package:flutter/material.dart';
 
