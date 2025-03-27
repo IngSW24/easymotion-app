@@ -29,9 +29,12 @@ class AuthInterceptor implements Interceptor {
     }
 
     final refreshTokenResponse = await apiProvider.schema.authRefreshPost(body: RefreshTokenDto(refreshToken: refreshToken));
-    final newAccessToken = refreshTokenResponse.body?.accessToken;
-    if (newAccessToken != null) {
+    final newAccessToken = refreshTokenResponse.body?.tokens?.accessToken;
+    final newRefreshToken = refreshTokenResponse.body?.tokens?.refreshToken;
+    if (newAccessToken != null && newRefreshToken != null) {
       apiProvider.setAccessToken(newAccessToken);
+      apiProvider.setRefreshToken(newRefreshToken);
+
       request = request.copyWith(headers: {
         ...request.headers,
         'Authorization': 'Bearer $newAccessToken',

@@ -38,8 +38,7 @@ class ApiProvider extends ChangeNotifier {
       baseUrl: baseUrl,
       converter:
           $JsonSerializableConverter(), // TODO: estratto dal codice auto generato, no documentazione
-      // Il tuo servizio API
-      interceptors: [AuthInterceptor(this)], // Aggiungi l'interceptor
+      interceptors: [AuthInterceptor(this)],
     );
   }
 
@@ -65,9 +64,11 @@ class ApiProvider extends ChangeNotifier {
     if (refreshToken != null) {
       final response = await schema.authRefreshPost(
           body: RefreshTokenDto(refreshToken: refreshToken));
-      final newAccessToken = response.body?.accessToken;
-      if (newAccessToken != null) {
+      final newAccessToken = response.body?.tokens?.accessToken;
+      final newRefreshToken = response.body?.tokens?.refreshToken;
+      if (newAccessToken != null && newRefreshToken != null) {
         setAccessToken(newAccessToken);
+        setRefreshToken(newRefreshToken);
       } else {
         setAccessToken(null);
         setRefreshToken(null);
@@ -81,18 +82,9 @@ class ApiProvider extends ChangeNotifier {
       final response = await schema.authLoginPost(body: data);
       final responseBody = response.body;
       if (responseBody != null) {
-        if (responseBody.refreshToken != null) {
-          setRefreshToken(responseBody.refreshToken ?? ""); // TODO: why (?? "")
-        }
-        setAccessToken(responseBody.accessToken);
-        _setUser(AuthUserDto(
-            id: responseBody.id,
-            email: responseBody.email,
-            firstName: responseBody.firstName,
-            lastName: responseBody.lastName,
-            role: AuthUserDtoRole.user, // FIXME
-            isEmailVerified: responseBody.isEmailVerified,
-            twoFactorEnabled: responseBody.twoFactorEnabled));
+        setRefreshToken(responseBody.tokens?.refreshToken);
+        setAccessToken(responseBody.tokens?.accessToken);
+        _setUser(responseBody.user);
         return true;
       }
       return false;
