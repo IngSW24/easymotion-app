@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../components/chip_list/horizontal_chips_list.dart';
 import '../components/courses/course_filters.dart';
+import '../components/courses/my_courses_list_view.dart';
 
 const List<String> typeCourse = <String>[
   'ACQUAGYM',
@@ -153,7 +154,7 @@ class _MyScaffoldState extends State<MyCoursesPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Corsi a cui ti sei iscritto"),
-        backgroundColor: Colors.blue,
+        //backgroundColor: Colors.blue,
       ),
 
       //ListView = otteniamo una LISTA SCROLLABILE (cioè che basta trascinarla verso l'alto e il basso (con il dito) per scorrere gli elementi)
@@ -236,6 +237,8 @@ class _MyScaffoldState extends State<MyCoursesPage> {
 
 
           Divider(),
+
+          /*
           Column(
               children: (exampleCourses.isEmpty == true)
                   ? ([Text('Nessun corso iscritto')])
@@ -256,10 +259,15 @@ class _MyScaffoldState extends State<MyCoursesPage> {
                                         color: Colors.red))),
                             trailing: ElevatedButton(
                                 onPressed: () => context.go(
-                                    "details"), //If I click on the button "Dettagli" it open a Dialog window that shows the course details
+                                    "/details"), //If I click on the button "Dettagli" it open a Dialog window that shows the course details
                                 child: const Text('Dettagli')),
                           ))
                       .toList()),
+          */
+
+          MyCoursesListView(),
+
+
         ],
       ),
     );

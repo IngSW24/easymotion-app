@@ -65,25 +65,26 @@ class CourseListView extends HookWidget {
     return ListView.builder(
       itemCount: courseList.length,
       itemBuilder: (BuildContext ctx, int index) {
-        return ListTile(title: Text(courseList[index].name),
-          leading: Image.network(
-              'https://picsum.photos/250?image=9'),
+        return ListTile(
+          title: Text(
+            courseList[index].name,
+            overflow: TextOverflow.ellipsis,
+          ),
+          leading: Image.network('https://picsum.photos/250?image=9'),
           subtitle: ((identical('Non Attivo',
-              'Attivo')) //Check if the course is Active or NOT
+                  'Attivo')) //Check if the course is Active or NOT
               ? Text('Attivo',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green))
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.green))
               : Text('Terminato',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red))),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.red))),
           trailing: ElevatedButton(
-              onPressed: () => {},
-                  //_courseDialog(), //If I click on the button "Dettagli" it open a Dialog window that shows the course details
-              child: const Text('Dettagli')),);
+              onPressed: () => context.go("/details"),
+              //_courseDialog(), //If I click on the button "Dettagli" it open a Dialog window that shows the course details
+              child: const Text('Dettagli')),
+        );
       },
-
     );
   }
 }

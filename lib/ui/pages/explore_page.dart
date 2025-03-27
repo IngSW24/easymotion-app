@@ -128,13 +128,15 @@ class _ExplorePageState extends State<ExplorePage> {
                     ))),
           Expanded(
               child: CourseListView(
-            courseFilterType: CourseFilterType(
-                searchText: _searchText,
-                categories: _categories,
-                levels: _levels,
-                frequencies: _frequencies,
-                availabilities: _availabilities),
-          ))
+                courseFilterType: CourseFilterType(
+                  searchText: _searchText,
+                  categories: _categories,
+                  levels: _levels,
+                  frequencies: _frequencies,
+                  availabilities: _availabilities
+                ),
+            )
+          )
         ]));
   }
 }
