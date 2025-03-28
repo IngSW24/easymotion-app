@@ -1,7 +1,6 @@
 import 'package:easymotion_app/data/providers/api.provider.dart';
 import 'package:easymotion_app/ui/components/nav_bar/bottom_nav_bar.dart';
 import 'package:easymotion_app/ui/pages/course_details_page.dart';
-import 'package:easymotion_app/ui/pages/login_page.dart';
 import 'package:easymotion_app/ui/pages/my_courses_page.dart';
 import 'package:easymotion_app/ui/pages/explore_page.dart';
 import 'package:easymotion_app/ui/pages/stats_page.dart';
@@ -14,15 +13,10 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(QueryClientProvider(
       queryClient: QueryClient(),
-      child: ChangeNotifierProvider(create: (BuildContext ctx) => ApiProvider(ctx), child: const MyApp())));
+      child: Provider(create: (_) => ApiProvider(), child: const MyApp())));
 }
 
-final GoRouter _router = GoRouter(initialLocation: "/login", routes: [
-  GoRoute(
-      path: '/login',
-      builder: (BuildContext context, GoRouterState state) {
-        return LoginPage();
-      }),
+final GoRouter _router = GoRouter(routes: [
   StatefulShellRoute.indexedStack(
       builder: (BuildContext ctx, GoRouterState state,
           StatefulNavigationShell navigationShell) {
@@ -31,15 +25,18 @@ final GoRouter _router = GoRouter(initialLocation: "/login", routes: [
       branches: [
         StatefulShellBranch(routes: [
           GoRoute(
-              path: '/explore',
+              path: '/',
               builder: (BuildContext context, GoRouterState state) {
                 return ExplorePage();
               },
               routes: [
                 GoRoute(
-                  path: 'details',
+                  path: '/details/:id',
                   builder: (BuildContext context, GoRouterState state) {
-                    return CourseDetailsPage();
+                    final id = state.pathParameters['id'];
+                    return CourseDetailsPage(
+                      id: id!,
+                    );
                   },
                 )
               ])
@@ -52,9 +49,12 @@ final GoRouter _router = GoRouter(initialLocation: "/login", routes: [
               },
               routes: [
                 GoRoute(
-                  path: 'details',
+                  path: '/details/:id',
                   builder: (BuildContext context, GoRouterState state) {
-                    return CourseDetailsPage();
+                    final id = state.pathParameters['id'];
+                    return CourseDetailsPage(
+                      id: id!,
+                    );
                   },
                 )
               ])

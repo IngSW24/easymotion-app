@@ -1,4 +1,4 @@
-import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.dart';
+import 'package:easymotion_app/api-client-generated/schema.models.swagger.dart';
 import 'package:easymotion_app/data/hooks/use_courses.dart';
 import 'package:easymotion_app/ui/components/courses/course_card.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ class CourseListView extends HookWidget {
   final CourseFilterType courseFilterType;
 
   void onCourseClick(CourseEntity courseEntity, BuildContext context) {
-    context.go("/explore/details");
+    context.go("details");
   }
 
   bool includeCourse(CourseEntity course) {
@@ -62,21 +62,29 @@ class CourseListView extends HookWidget {
       return Text("Empty list");
     }
 
-    return GridView.builder(
+    return ListView.builder(
       itemCount: courseList.length,
       itemBuilder: (BuildContext ctx, int index) {
-        return Padding(
-            padding: EdgeInsets.all(6),
-            child: CourseCard(
-              course: courseList[index],
-              onClick: () => onCourseClick(courseList[index], ctx),
-            ));
+        return ListTile(
+          title: Text(
+            courseList[index].name,
+            overflow: TextOverflow.ellipsis,
+          ),
+          leading: Image.network('https://picsum.photos/250?image=9'),
+          subtitle: ((identical(courseList[index].availability.value,
+                  'ACTIVE')) //Check if the course is Active or NOT
+              ? Text('Attivo',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.green))
+              : Text('Terminato',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.red))),
+          trailing: ElevatedButton(
+              onPressed: () => context.go('/details/${courseList[index].id}'),
+              //_courseDialog(), //If I click on the button "Dettagli" it open a Dialog window that shows the course details
+              child: const Text('Dettagli')),
+        );
       },
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 600,
-          mainAxisExtent: 280,
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 8),
     );
   }
 }
