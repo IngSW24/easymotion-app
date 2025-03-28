@@ -4,30 +4,6 @@ import '../components/courses/course_filter.type.dart';
 import '../components/courses/course_filters.dart';
 import '../components/courses/my_courses_list_view.dart';
 
-const List<String> typeCourse = <String>[
-  'ACQUAGYM',
-  'CROSSFIT',
-  'PILATES',
-  'ZUMBA_FITNESS',
-  'POSTURAL_TRAINING',
-  'BODYWEIGHT_WORKOUT'
-];
-const List<String> activeCourse = <String>['Attivo', 'Non attivo'];
-
-const List<String> exampleCourses = <String>[
-  'Corso 1',
-  'Corso 2',
-  'Corso 3',
-  'Corso 4',
-  'Corso 5',
-  'Corso 6',
-  'Corso 7',
-  'Corso 8',
-  'Corso 9',
-  'Corso 10',
-  'Corso 11'
-];
-
 class MyCoursesPage extends StatefulWidget {
   @override
   State<MyCoursesPage> createState() => _MyScaffoldState();
