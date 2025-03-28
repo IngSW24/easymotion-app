@@ -5,11 +5,44 @@ import 'package:go_router/go_router.dart';
 
 import '../../../api-client-generated/schema.models.swagger.dart';
 import '../../../data/hooks/use_courses.dart';
+import 'course_filter.type.dart';
 
 class MyCoursesListView extends HookWidget {
 
+  const MyCoursesListView({super.key, required this.courseFilterType});
+
+  final CourseFilterType courseFilterType;
+
   void onCourseClick(CourseEntity courseEntity, BuildContext context) {
     context.go("details");
+  }
+
+  bool includeCourse(CourseEntity course) {
+    if (courseFilterType.searchText.isNotEmpty &&
+        !course.name
+            .toLowerCase()
+            .contains(courseFilterType.searchText.toLowerCase())) {
+      return false;
+    }
+
+    if (courseFilterType.categories.isNotEmpty &&
+        !courseFilterType.categories.contains(course.category.value)) {
+      return false;
+    }
+    if (courseFilterType.levels.isNotEmpty &&
+        !courseFilterType.levels.contains(course.level.value)) {
+      return false;
+    }
+    if (courseFilterType.frequencies.isNotEmpty &&
+        !courseFilterType.frequencies.contains(course.frequency.value)) {
+      return false;
+    }
+    if (courseFilterType.availabilities.isNotEmpty &&
+        !courseFilterType.availabilities.contains(course.availability.value)) {
+      return false;
+    }
+
+    return true;
   }
 
   @override
@@ -24,7 +57,7 @@ class MyCoursesListView extends HookWidget {
       return Text("Error: ${courses.error}");
     }
 
-    var courseList = courses.data?.data?.toList();
+    var courseList = courses.data?.data?.where(includeCourse).toList();
 
     if (courseList == null || courseList.isEmpty) {
       return Text("Empty list");
@@ -39,8 +72,8 @@ class MyCoursesListView extends HookWidget {
             overflow: TextOverflow.ellipsis,
           ),
           leading: Image.network('https://picsum.photos/250?image=9'),
-          subtitle: ((identical('Non Attivo',
-              'Attivo')) //Check if the course is Active or NOT
+          subtitle: ((identical(courseList[index].availability.value,
+              'ACTIVE')) //Check if the course is Active or NOT
               ? Text('Attivo',
               style: TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.green))
@@ -48,7 +81,7 @@ class MyCoursesListView extends HookWidget {
               style: TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.red))),
           trailing: ElevatedButton(
-              onPressed: () => context.go("/details"),
+              onPressed: () => context.go("/details/${courseList[index].id}"),
               //_courseDialog(), //If I click on the button "Dettagli" it open a Dialog window that shows the course details
               child: const Text('Dettagli')),
         );

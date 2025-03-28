@@ -31,11 +31,11 @@ final GoRouter _router = GoRouter(routes: [
               },
               routes: [
                 GoRoute(
-                  path: 'details',
+                  path: '/details/:id',
                   builder: (BuildContext context, GoRouterState state) {
-                    //final id = state.pathParameters['id']!;
+                    final id = state.pathParameters['id'];
                     return CourseDetailsPage(
-                      //id: id,
+                      id: id!,
                     );
                   },
                 )
@@ -49,9 +49,12 @@ final GoRouter _router = GoRouter(routes: [
               },
               routes: [
                 GoRoute(
-                  path: 'details',
+                  path: '/details/:id',
                   builder: (BuildContext context, GoRouterState state) {
-                    return CourseDetailsPage();
+                    final id = state.pathParameters['id'];
+                    return CourseDetailsPage(
+                      id: id!,
+                    );
                   },
                 )
               ])

@@ -1,10 +1,13 @@
+import 'package:easymotion_app/ui/components/courses/course_list_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:go_router/go_router.dart';
 
 import '../components/chip_list/horizontal_chips_list.dart';
+import '../components/courses/course_filter.type.dart';
 import '../components/courses/course_filters.dart';
+import '../components/courses/my_course_filters.dart';
 import '../components/courses/my_courses_list_view.dart';
 
 const List<String> typeCourse = <String>[
@@ -37,10 +40,18 @@ class MyCoursesPage extends StatefulWidget {
 }
 
 class _MyScaffoldState extends State<MyCoursesPage> {
-  String dropDownTypeCourseValue = typeCourse.first;
-  String dropDownActiveValue = activeCourse.first;
 
-  bool showAdvancedSearch = true;
+  ///CODICE PER I FILTRI
+  String _searchText = "";
+  List<String> _categories = [],
+      _levels = [],
+      _frequencies = [],
+      _availabilities = [];
+
+  //String dropDownTypeCourseValue = typeCourse.first;
+  //String dropDownActiveValue = activeCourse.first;
+
+  //bool showAdvancedSearch = true;
 
   DateTime? dateFilterStart;
   DateTime? dateFilterEnd;
@@ -76,19 +87,14 @@ class _MyScaffoldState extends State<MyCoursesPage> {
 
 
 
-  ///CODICE PER I FILTRI
-  String _searchText = "";
-  List<String> _categories = [],
-      _levels = [],
-      _frequencies = [],
-      _availabilities = [];
+
 
   void _openFilterBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
         return StatefulBuilder(builder: (context, setModalState) {
-          return CourseFilter(
+          return MyCourseFilter(
             selectedCategories: _categories,
             selectedLevels: _levels,
             selectedFrequencies: _frequencies,
@@ -149,18 +155,15 @@ class _MyScaffoldState extends State<MyCoursesPage> {
 
   @override
   Widget build(BuildContext context) {
-    double width50 = MediaQuery.of(context).size.width * 0.50;
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Corsi a cui ti sei iscritto"),
-        //backgroundColor: Colors.blue,
-      ),
-
-      //ListView = otteniamo una LISTA SCROLLABILE (cioè che basta trascinarla verso l'alto e il basso (con il dito) per scorrere gli elementi)
-      body: ListView(
-        //I vari componenti della LISTA "ListView" si chiamano "ListTile"
-        children: [
+        appBar: AppBar(
+          title: Text('I tuoi corsi'),
+        ),
+        /*floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: Icon(Icons.add),
+        ),*/
+        body: Column(children: [
           Padding(
               padding: EdgeInsets.all(8),
               child: TextField(
@@ -176,8 +179,6 @@ class _MyScaffoldState extends State<MyCoursesPage> {
                 ),
                 onChanged: onSearchChanged,
               )),
-
-
           if (_categories.isNotEmpty ||
               _levels.isNotEmpty ||
               _frequencies.isNotEmpty ||
@@ -210,99 +211,18 @@ class _MyScaffoldState extends State<MyCoursesPage> {
                         });
                       },
                     ))),
-
-          Row(
-            children: [
-              Text("Da: "),
-              OutlinedButton(
-                  onPressed: _selectStartDate,
-                  child: (dateFilterStart == null)
-                      ? Text("Seleziona la data")
-                      : Text(
-                      "${dateFilterStart!.day}/${dateFilterStart!.month}/${dateFilterStart!.year}"))
-            ],
-          ),
-          Row(
-            children: [
-              Text("al: "),
-              OutlinedButton(
-                  onPressed: _selectEndDate,
-                  child: (dateFilterEnd == null)
-                      ? Text("Seleziona la data")
-                      : Text(
-                      "${dateFilterEnd!.day}/${dateFilterEnd!.month}/${dateFilterEnd!.year}"))
-            ],
-          ),
-
-
-
-          Divider(),
-
-          /*
-          Column(
-              children: (exampleCourses.isEmpty == true)
-                  ? ([Text('Nessun corso iscritto')])
-                  : exampleCourses
-                      .map((i) => ListTile(
-                            title: Text(i.toString()),
-                            leading: Image.network(
-                                'https://picsum.photos/250?image=9'),
-                            subtitle: ((identical('Non Attivo',
-                                    'Attivo')) //Check if the course is Active or NOT
-                                ? Text('Attivo',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.green))
-                                : Text('Terminato',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.red))),
-                            trailing: ElevatedButton(
-                                onPressed: () => context.go(
-                                    "/details"), //If I click on the button "Dettagli" it open a Dialog window that shows the course details
-                                child: const Text('Dettagli')),
-                          ))
-                      .toList()),
-          */
-
-          MyCoursesListView(),
-
-
-        ],
-      ),
-    );
+          Expanded(
+              child: MyCoursesListView(
+                courseFilterType: CourseFilterType(
+                    searchText: _searchText,
+                    categories: _categories,
+                    levels: _levels,
+                    frequencies: _frequencies,
+                    availabilities: _availabilities
+                ),
+              )
+          )
+        ]));
   }
 
-  //Function that create a Dialog that show the details of a course.
-
-  Future<void> _courseDialog() {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Corso'),
-            content: Column(
-              children: [
-                Row(
-                  children: [
-                    Text('Dettagli corso', textAlign: TextAlign.justify)
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text('\nData:', textAlign: TextAlign.justify),
-                  ],
-                ),
-              ],
-            ),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Chiudi')),
-            ],
-          );
-        });
-  }
 }

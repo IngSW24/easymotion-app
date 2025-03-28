@@ -71,8 +71,8 @@ class CourseListView extends HookWidget {
             overflow: TextOverflow.ellipsis,
           ),
           leading: Image.network('https://picsum.photos/250?image=9'),
-          subtitle: ((identical('Non Attivo',
-                  'Attivo')) //Check if the course is Active or NOT
+          subtitle: ((identical(courseList[index].availability.value,
+                  'ACTIVE')) //Check if the course is Active or NOT
               ? Text('Attivo',
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.green))
@@ -80,7 +80,7 @@ class CourseListView extends HookWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.red))),
           trailing: ElevatedButton(
-              onPressed: () => context.go("/details"),
+              onPressed: () => context.go('/details/${courseList[index].id}'),
               //_courseDialog(), //If I click on the button "Dettagli" it open a Dialog window that shows the course details
               child: const Text('Dettagli')),
         );
