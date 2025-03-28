@@ -24,35 +24,39 @@ class CourseDetails extends HookWidget {
 
     return SingleChildScrollView(
         //This widget permit to scroll the screen if we have too much information to show
-        child: Column(
-      children: [
-        Text(
-          "${courseEntity?.name}",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-          textAlign: TextAlign.center,
-          overflow: TextOverflow.visible,
-        ),
-        Text("\n${courseEntity?.description}", textAlign: TextAlign.justify),
-        Text(
-          "\nStato: ${courseEntity?.availability.value}",
-        ),
-        Text("\nCategoria: ${courseEntity?.category.value}"),
-        Text(
-            "\nCreato il: ${courseEntity?.createdAt.year}/${courseEntity?.createdAt.month}/${courseEntity?.createdAt.day}"),
-        Text("\nCosto (in Euro): ${courseEntity?.cost}"),
-        Text("\nIstruttori: ${courseEntity?.instructors.toList()}"),
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+          Text(
+            "${courseEntity?.name}",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.visible,
+          ),
+          Text("\n${courseEntity?.description}", textAlign: TextAlign.justify),
+          Text(
+            "\nStato: ${courseEntity?.availability.value}",
+          ),
+          Text("\nCategoria: ${courseEntity?.category.value}"),
+          Text(
+              "\nCreato il: ${courseEntity?.createdAt.year}/${courseEntity?.createdAt.month}/${courseEntity?.createdAt.day}"),
+          Text("\nCosto (in Euro): ${courseEntity?.cost}"),
+          Text("\nIstruttori: ${courseEntity?.instructors.toList()}"),
 
-        /*
+          /*
 
-        TODO: Button to use to submit to the course
+          TODO: Button to use to submit to the course
 
-        ElevatedButton(
-            onPressed: (){}, 
-            child: Text("Iscriviti al corso")
-        )
+          ElevatedButton(
+              onPressed: (){},
+              child: Text("Iscriviti al corso")
+          )
 
-         */
-      ],
-    ));
+           */
+                ],
+              ),
+        ));
   }
 }
