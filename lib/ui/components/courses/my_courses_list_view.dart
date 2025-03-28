@@ -1,21 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../api-client-generated/schema.models.swagger.dart';
+import '../../../api-client-generated/api_schema.models.swagger.dart';
 import '../../../data/hooks/use_courses.dart';
 import 'course_filter.type.dart';
 
 class MyCoursesListView extends HookWidget {
-
   const MyCoursesListView({super.key, required this.courseFilterType});
 
   final CourseFilterType courseFilterType;
-
-  void onCourseClick(CourseEntity courseEntity, BuildContext context) {
-    context.go("details");
-  }
 
   bool includeCourse(CourseEntity course) {
     if (courseFilterType.searchText.isNotEmpty &&
@@ -73,15 +66,15 @@ class MyCoursesListView extends HookWidget {
           ),
           leading: Image.network('https://picsum.photos/250?image=9'),
           subtitle: ((identical(courseList[index].availability.value,
-              'ACTIVE')) //Check if the course is Active or NOT
+                  'ACTIVE')) //Check if the course is Active or NOT
               ? Text('Attivo',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.green))
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.green))
               : Text('Terminato',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.red))),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.red))),
           trailing: ElevatedButton(
-              onPressed: () => context.go("/details/${courseList[index].id}"),
+              onPressed: () => context.go("/my_courses/details/${courseList[index].id}"),
               //_courseDialog(), //If I click on the button "Dettagli" it open a Dialog window that shows the course details
               child: const Text('Dettagli')),
         );

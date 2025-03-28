@@ -38,8 +38,7 @@ class CourseDetails extends HookWidget {
         ),
         Text("\nCategoria: ${courseEntity?.category.value}"),
         Text(
-            "\nCreato il: ${courseEntity?.createdAt.year}/${courseEntity?.createdAt.month}/${courseEntity?.createdAt.day}"
-        ),
+            "\nCreato il: ${courseEntity?.createdAt.year}/${courseEntity?.createdAt.month}/${courseEntity?.createdAt.day}"),
         Text("\nCosto (in Euro): ${courseEntity?.cost}"),
         Text("\nIstruttori: ${courseEntity?.instructors.toList()}"),
 

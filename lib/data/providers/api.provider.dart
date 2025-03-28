@@ -1,6 +1,6 @@
 import 'package:chopper/chopper.dart';
 import 'package:easymotion_app/data/common/constants.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../api-client-generated/api_schema.swagger.dart';
 import '../interceptors/auth_interceptor.dart';

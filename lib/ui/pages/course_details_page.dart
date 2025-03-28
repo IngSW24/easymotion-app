@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import '../components/courses/course_details.dart';
 
 class CourseDetailsPage extends StatelessWidget {
-
-  const CourseDetailsPage({Key? key, required this.id}) : super(key: key);
+  const CourseDetailsPage({super.key, required this.id});
 
   final String id;
 
@@ -13,8 +12,6 @@ class CourseDetailsPage extends StatelessWidget {
         appBar: AppBar(
           title: Text('Course details'),
         ),
-        body: CourseDetails(
-            id: id!
-        ));
+        body: CourseDetails(id: id));
   }
 }

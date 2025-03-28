@@ -2,24 +2,21 @@
 TODO: Inserire il filtro per le DATE
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class MyCourseFilter extends StatelessWidget {
-  const MyCourseFilter(
-      {super.key,
-        required this.selectedCategories,
-        required this.selectedLevels,
-        required this.selectedFrequencies,
-        required this.selectedAvailabilities,
-        required this.onCategoriesChanged,
-        required this.onLevelsChanged,
-        required this.onFrequenciesChanged,
-        required this.onAvailabilitiesChanged,
-      });
-
-
+  const MyCourseFilter({
+    super.key,
+    required this.selectedCategories,
+    required this.selectedLevels,
+    required this.selectedFrequencies,
+    required this.selectedAvailabilities,
+    required this.onCategoriesChanged,
+    required this.onLevelsChanged,
+    required this.onFrequenciesChanged,
+    required this.onAvailabilitiesChanged,
+  });
 
   final List<String> selectedCategories,
       selectedLevels,
@@ -55,8 +52,6 @@ class MyCourseFilter extends StatelessWidget {
     "NO_LONGER_AVAILABLE": "Non disponibile",
   };
 
-
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -74,64 +69,64 @@ class MyCourseFilter extends StatelessWidget {
           Text("Categorie"),
           Column(
               children: categories.entries.map((entry) {
-                return CheckboxListTile(
-                    title: Text(entry.value),
-                    value: selectedCategories.contains(entry.key),
-                    onChanged: (bool? selected) {
-                      if (selected != null && selected) {
-                        onCategoriesChanged(selectedCategories + [entry.key]);
-                      } else {
-                        selectedCategories.remove(entry.key);
-                        onCategoriesChanged(selectedCategories);
-                      }
-                    });
-              }).toList()),
+            return CheckboxListTile(
+                title: Text(entry.value),
+                value: selectedCategories.contains(entry.key),
+                onChanged: (bool? selected) {
+                  if (selected != null && selected) {
+                    onCategoriesChanged(selectedCategories + [entry.key]);
+                  } else {
+                    selectedCategories.remove(entry.key);
+                    onCategoriesChanged(selectedCategories);
+                  }
+                });
+          }).toList()),
           Text("Livelli"),
           Column(
               children: levels.entries.map((entry) {
-                return CheckboxListTile(
-                    title: Text(entry.value),
-                    value: selectedLevels.contains(entry.key),
-                    onChanged: (bool? selected) {
-                      if (selected != null && selected) {
-                        onLevelsChanged(selectedLevels + [entry.key]);
-                      } else {
-                        selectedLevels.remove(entry.key);
-                        onLevelsChanged(selectedLevels);
-                      }
-                    });
-              }).toList()),
+            return CheckboxListTile(
+                title: Text(entry.value),
+                value: selectedLevels.contains(entry.key),
+                onChanged: (bool? selected) {
+                  if (selected != null && selected) {
+                    onLevelsChanged(selectedLevels + [entry.key]);
+                  } else {
+                    selectedLevels.remove(entry.key);
+                    onLevelsChanged(selectedLevels);
+                  }
+                });
+          }).toList()),
           Text("Frequenze"),
           Column(
               children: frequencies.entries.map((entry) {
-                return CheckboxListTile(
-                    title: Text(entry.value),
-                    value: selectedFrequencies.contains(entry.key),
-                    onChanged: (bool? selected) {
-                      if (selected != null && selected) {
-                        onFrequenciesChanged(selectedFrequencies + [entry.key]);
-                      } else {
-                        selectedFrequencies.remove(entry.key);
-                        onFrequenciesChanged(selectedFrequencies);
-                      }
-                    });
-              }).toList()),
+            return CheckboxListTile(
+                title: Text(entry.value),
+                value: selectedFrequencies.contains(entry.key),
+                onChanged: (bool? selected) {
+                  if (selected != null && selected) {
+                    onFrequenciesChanged(selectedFrequencies + [entry.key]);
+                  } else {
+                    selectedFrequencies.remove(entry.key);
+                    onFrequenciesChanged(selectedFrequencies);
+                  }
+                });
+          }).toList()),
           Text("Disponibilità"),
           Column(
               children: availabilities.entries.map((entry) {
-                return CheckboxListTile(
-                    title: Text(entry.value),
-                    value: selectedAvailabilities.contains(entry.key),
-                    onChanged: (bool? selected) {
-                      if (selected != null && selected) {
-                        onAvailabilitiesChanged(
-                            selectedAvailabilities + [entry.key]);
-                      } else {
-                        selectedAvailabilities.remove(entry.key);
-                        onAvailabilitiesChanged(selectedAvailabilities);
-                      }
-                    });
-              }).toList()),
+            return CheckboxListTile(
+                title: Text(entry.value),
+                value: selectedAvailabilities.contains(entry.key),
+                onChanged: (bool? selected) {
+                  if (selected != null && selected) {
+                    onAvailabilitiesChanged(
+                        selectedAvailabilities + [entry.key]);
+                  } else {
+                    selectedAvailabilities.remove(entry.key);
+                    onAvailabilitiesChanged(selectedAvailabilities);
+                  }
+                });
+          }).toList()),
           Text("Data"),
 
           /*
@@ -157,7 +152,6 @@ class MyCourseFilter extends StatelessWidget {
             ],
           ),
           */
-
 
           SizedBox(
             height: 12,

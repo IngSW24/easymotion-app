@@ -1,9 +1,4 @@
-import 'package:easymotion_app/ui/components/courses/course_list_view.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
-import 'package:go_router/go_router.dart';
-
 import '../components/chip_list/horizontal_chips_list.dart';
 import '../components/courses/course_filter.type.dart';
 import '../components/courses/course_filters.dart';
@@ -40,7 +35,6 @@ class MyCoursesPage extends StatefulWidget {
 }
 
 class _MyScaffoldState extends State<MyCoursesPage> {
-
   ///CODICE PER I FILTRI
   String _searchText = "";
   List<String> _categories = [],
@@ -84,10 +78,6 @@ class _MyScaffoldState extends State<MyCoursesPage> {
       dateFilterEnd = pickedDate;
     });
   }
-
-
-
-
 
   void _openFilterBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -138,20 +128,8 @@ class _MyScaffoldState extends State<MyCoursesPage> {
       _searchText = query;
     });
   }
+
   ///FINE CODICE PER FILTRI
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -190,8 +168,8 @@ class _MyScaffoldState extends State<MyCoursesPage> {
                     child: HorizontalChipsList(
                       maxWidth: 320,
                       labels: _categories
-                          .map((key) => CourseFilter.categories[key] ?? "")
-                          .toList() +
+                              .map((key) => CourseFilter.categories[key] ?? "")
+                              .toList() +
                           _levels
                               .map((key) => CourseFilter.levels[key] ?? "")
                               .toList() +
@@ -200,7 +178,7 @@ class _MyScaffoldState extends State<MyCoursesPage> {
                               .toList() +
                           _availabilities
                               .map((key) =>
-                          CourseFilter.availabilities[key] ?? "")
+                                  CourseFilter.availabilities[key] ?? "")
                               .toList(),
                       onDeleted: (String tag) {
                         setState(() {
@@ -213,16 +191,13 @@ class _MyScaffoldState extends State<MyCoursesPage> {
                     ))),
           Expanded(
               child: MyCoursesListView(
-                courseFilterType: CourseFilterType(
-                    searchText: _searchText,
-                    categories: _categories,
-                    levels: _levels,
-                    frequencies: _frequencies,
-                    availabilities: _availabilities
-                ),
-              )
-          )
+            courseFilterType: CourseFilterType(
+                searchText: _searchText,
+                categories: _categories,
+                levels: _levels,
+                frequencies: _frequencies,
+                availabilities: _availabilities),
+          ))
         ]));
   }
-
 }

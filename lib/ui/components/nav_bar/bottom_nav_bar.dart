@@ -14,7 +14,7 @@ class BottomNavBar extends StatelessWidget {
         destinations: [
           NavigationDestination(icon: Icon(Icons.explore), label: "Explore"),
           NavigationDestination(icon: Icon(Icons.home), label: "My courses"),
-          NavigationDestination(icon: Icon(Icons.trending_up), label: "Stats"),
+          //NavigationDestination(icon: Icon(Icons.trending_up), label: "Stats"),
         ],
         onDestinationSelected: (int index) {
           navigationShell.goBranch(index);

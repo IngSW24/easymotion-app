@@ -1,6 +1,5 @@
-import 'package:easymotion_app/api-client-generated/schema.models.swagger.dart';
+import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.dart';
 import 'package:easymotion_app/data/hooks/use_courses.dart';
-import 'package:easymotion_app/ui/components/courses/course_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -8,13 +7,10 @@ import 'package:go_router/go_router.dart';
 import 'course_filter.type.dart';
 
 class CourseListView extends HookWidget {
-  const CourseListView({super.key, required this.courseFilterType});
+  const CourseListView({super.key, required this.pathPrefix, required this.courseFilterType});
 
   final CourseFilterType courseFilterType;
-
-  void onCourseClick(CourseEntity courseEntity, BuildContext context) {
-    context.go("details");
-  }
+  final String pathPrefix;
 
   bool includeCourse(CourseEntity course) {
     if (courseFilterType.searchText.isNotEmpty &&
@@ -80,7 +76,7 @@ class CourseListView extends HookWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.red))),
           trailing: ElevatedButton(
-              onPressed: () => context.go('/details/${courseList[index].id}'),
+              onPressed: () => context.go('/explore/details/${courseList[index].id}'),
               //_courseDialog(), //If I click on the button "Dettagli" it open a Dialog window that shows the course details
               child: const Text('Dettagli')),
         );
