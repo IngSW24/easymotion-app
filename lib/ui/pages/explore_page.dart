@@ -1,8 +1,10 @@
+import 'package:easymotion_app/data/hooks/use_api.dart';
 import 'package:easymotion_app/ui/components/courses/course_filter.type.dart';
 import 'package:easymotion_app/ui/components/courses/course_list_view.dart';
 import 'package:easymotion_app/ui/components/courses/course_filters.dart';
 import 'package:easymotion_app/ui/components/chip_list/horizontal_chips_list.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -70,9 +72,22 @@ class _ExplorePageState extends State<ExplorePage> {
 
   @override
   Widget build(BuildContext context) {
+    final api = useApi(context);
+    final user = api.getUser();
+
     return Scaffold(
         appBar: AppBar(
-          title: Text('Easymotion'),
+          title: Text(
+              user != null ? "Benvenuto, ${user.firstName}" : 'Easymotion'),
+          actions: [
+            if (user == null)
+              IconButton(
+                  onPressed: () => context.go("/login"),
+                  icon: Icon(Icons.login))
+            else
+              IconButton(
+                  onPressed: () => api.logout(), icon: Icon(Icons.logout))
+          ],
         ),
         /*floatingActionButton: FloatingActionButton(
           onPressed: () {},
@@ -128,7 +143,7 @@ class _ExplorePageState extends State<ExplorePage> {
                     ))),
           Expanded(
               child: CourseListView(
-                pathPrefix: '/explore',
+            pathPrefix: '/explore',
             courseFilterType: CourseFilterType(
                 searchText: _searchText,
                 categories: _categories,

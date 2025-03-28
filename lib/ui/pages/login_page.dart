@@ -13,9 +13,10 @@ class LoginPage extends StatefulHookWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String _username = "", _password = "";
+  String _username = "user@easymotion.it", _password = "ingsw24easymotion!";
 
   Future<void> login(ApiProvider apiProvider, Function() onSuccess) async {
+    print("Test1");
     final status = await apiProvider
         .login(SignInDto(email: _username, password: _password));
     if (status) {
@@ -48,6 +49,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: EdgeInsets.all(8),
                 child: TextFormField(
+                  obscureText: true,
                   decoration: InputDecoration(
                     label: Text("Password"),
                   ),
@@ -62,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: EdgeInsets.all(8),
                   child: ElevatedButton(
                       onPressed: () => login(apiProvider, () {
-                            context.go("/explore");
+                            if (context.mounted) context.go("/explore");
                           }),
                       child: Text("Login"))),
               Text("Userinfo: ${apiProvider.getUser()?.firstName}"),

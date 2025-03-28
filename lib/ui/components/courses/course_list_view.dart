@@ -7,7 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'course_filter.type.dart';
 
 class CourseListView extends HookWidget {
-  const CourseListView({super.key, required this.pathPrefix, required this.courseFilterType});
+  const CourseListView(
+      {super.key, required this.pathPrefix, required this.courseFilterType});
 
   final CourseFilterType courseFilterType;
   final String pathPrefix;
@@ -76,7 +77,8 @@ class CourseListView extends HookWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.red))),
           trailing: ElevatedButton(
-              onPressed: () => context.go('/explore/details/${courseList[index].id}'),
+              onPressed: () =>
+                  context.go('/explore/details/${courseList[index].id}'),
               //_courseDialog(), //If I click on the button "Dettagli" it open a Dialog window that shows the course details
               child: const Text('Dettagli')),
         );

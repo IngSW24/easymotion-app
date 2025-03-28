@@ -1,3 +1,4 @@
+import 'package:easymotion_app/data/hooks/use_subscriptions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -40,7 +41,7 @@ class MyCoursesListView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final courses = useCourses(context);
+    final courses = useCoursesSubscribed(context);
 
     if (courses.isLoading) {
       return Text("Loading...");
@@ -74,7 +75,8 @@ class MyCoursesListView extends HookWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.red))),
           trailing: ElevatedButton(
-              onPressed: () => context.go("/my_courses/details/${courseList[index].id}"),
+              onPressed: () =>
+                  context.go("/my_courses/details/${courseList[index].id}"),
               //_courseDialog(), //If I click on the button "Dettagli" it open a Dialog window that shows the course details
               child: const Text('Dettagli')),
         );

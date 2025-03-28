@@ -18,8 +18,7 @@ void main() {
           child: const MyApp())));
 }
 
-final GoRouter _router = GoRouter(initialLocation: '/explore',
-    routes: [
+final GoRouter _router = GoRouter(initialLocation: '/explore', routes: [
   GoRoute(
     path: '/login',
     builder: (BuildContext context, GoRouterState state) {

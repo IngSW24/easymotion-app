@@ -5,6 +5,8 @@ import '../components/courses/course_filters.dart';
 import '../components/courses/my_courses_list_view.dart';
 
 class MyCoursesPage extends StatefulWidget {
+  const MyCoursesPage({super.key});
+
   @override
   State<MyCoursesPage> createState() => _MyScaffoldState();
 }

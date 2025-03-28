@@ -1,9 +1,9 @@
 import 'package:chopper/chopper.dart';
 import 'package:easymotion_app/data/common/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../api-client-generated/api_schema.swagger.dart';
 import '../interceptors/auth_interceptor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const String ACCESS_TOKEN_KEY = "access_token";
 const String REFRESH_TOKEN_KEY = "refresh_token";
@@ -20,7 +20,6 @@ class ApiProvider extends ChangeNotifier {
   late final ApiSchema schema;
 
   static final baseUrl = Uri.parse(API_URL);
-  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
   AuthUserDto? _user;
 
@@ -42,53 +41,74 @@ class ApiProvider extends ChangeNotifier {
     );
   }
 
-  Future<String?> getAccessToken() {
-    return secureStorage.read(key: ACCESS_TOKEN_KEY);
+  Future<String?> getAccessToken() async {
+    final storage = await SharedPreferences.getInstance();
+    return storage.getString(ACCESS_TOKEN_KEY);
   }
 
-  Future<void> setAccessToken(String? accessToken) {
-    return secureStorage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
+  Future<bool> setAccessToken(String? accessToken) async {
+    final storage = await SharedPreferences.getInstance();
+    if (accessToken == null) {
+      return await storage.remove(ACCESS_TOKEN_KEY);
+    }
+    return await storage.setString(ACCESS_TOKEN_KEY, accessToken);
   }
 
-  Future<String?> getRefreshToken() {
-    return secureStorage.read(key: REFRESH_TOKEN_KEY);
+  Future<String?> getRefreshToken() async {
+    final storage = await SharedPreferences.getInstance();
+    return storage.getString(REFRESH_TOKEN_KEY);
   }
 
-  Future<void> setRefreshToken(String? refreshToken) {
-    return secureStorage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
+  Future<bool> setRefreshToken(String? refreshToken) async {
+    final storage = await SharedPreferences.getInstance();
+    if (refreshToken == null) {
+      return await storage.remove(REFRESH_TOKEN_KEY);
+    }
+    return await storage.setString(REFRESH_TOKEN_KEY, refreshToken);
   }
 
   // refresh access token
   Future<void> _initialRefresh() async {
+    print("Test11");
     final refreshToken = await getRefreshToken();
-    if (refreshToken != null) {
-      final response = await schema.authRefreshPost(
-          body: RefreshTokenDto(refreshToken: refreshToken));
-      final newAccessToken = response.body?.tokens?.accessToken;
-      final newRefreshToken = response.body?.tokens?.refreshToken;
-      if (newAccessToken != null && newRefreshToken != null) {
-        setAccessToken(newAccessToken);
-        setRefreshToken(newRefreshToken);
-      } else {
-        setAccessToken(null);
-        setRefreshToken(null);
-        _setUser(null); // force re-login
-      }
+    print("Test12");
+    if (refreshToken == null) {
+      setAccessToken(null);
+      return;
+    }
+
+    final response = await schema.authRefreshPost(
+        body: RefreshTokenDto(refreshToken: refreshToken));
+    print("Test13");
+    final newAccessToken = response.body?.tokens?.accessToken;
+    final newRefreshToken = response.body?.tokens?.refreshToken;
+    if (newAccessToken != null && newRefreshToken != null) {
+      setAccessToken(newAccessToken);
+      setRefreshToken(newRefreshToken);
+      _setUser(response.body?.user);
+    } else {
+      setAccessToken(null);
+      setRefreshToken(null);
+      _setUser(null); // force re-login
     }
   }
 
   Future<bool> login(SignInDto data) async {
     try {
+      print("Test2 + ${data.email} + ${data.password}");
       final response = await schema.authLoginPost(body: data);
+      print("Test3");
       final responseBody = response.body;
       if (responseBody != null) {
         setRefreshToken(responseBody.tokens?.refreshToken);
         setAccessToken(responseBody.tokens?.accessToken);
         _setUser(responseBody.user);
+        print("Login OK");
         return true;
       }
+      print("Empty body");
       return false;
-    } on Exception catch (e, stackTrace) {
+    } catch (e, stackTrace) {
       print(e);
       print(stackTrace);
       return false;
@@ -98,6 +118,9 @@ class ApiProvider extends ChangeNotifier {
   Future<bool> logout() async {
     try {
       await schema.authLogoutPost();
+      setRefreshToken(null);
+      setAccessToken(null);
+      _setUser(null);
       return true;
     } on Exception catch (e, stackTrace) {
       print(e);

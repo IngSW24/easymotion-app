@@ -1,6 +1,7 @@
+import 'package:easymotion_app/data/hooks/use_api.dart';
+import 'package:easymotion_app/ui/components/subscriptions/subscribe_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-
 import '../../../data/hooks/use_courses.dart';
 
 class CourseDetails extends HookWidget {
@@ -10,6 +11,7 @@ class CourseDetails extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final api = useApi(context);
     final courseDetails = useCourse(context, id);
 
     if (courseDetails.isLoading) {
@@ -25,10 +27,10 @@ class CourseDetails extends HookWidget {
     return SingleChildScrollView(
         //This widget permit to scroll the screen if we have too much information to show
         child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+      padding: EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
           Text(
             "${courseEntity?.name}",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
@@ -44,19 +46,12 @@ class CourseDetails extends HookWidget {
               "\nCreato il: ${courseEntity?.createdAt.year}/${courseEntity?.createdAt.month}/${courseEntity?.createdAt.day}"),
           Text("\nCosto (in Euro): ${courseEntity?.cost}"),
           Text("\nIstruttori: ${courseEntity?.instructors.toList()}"),
-
-          /*
-
-          TODO: Button to use to submit to the course
-
-          ElevatedButton(
-              onPressed: (){},
-              child: Text("Iscriviti al corso")
-          )
-
-           */
-                ],
-              ),
-        ));
+          SizedBox(
+            height: 16,
+          ),
+          if (api.getUser() != null) SubscribeButton(courseID: id)
+        ],
+      ),
+    ));
   }
 }
