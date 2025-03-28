@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../components/chip_list/horizontal_chips_list.dart';
 import '../components/courses/course_filter.type.dart';
 import '../components/courses/course_filters.dart';
-import '../components/courses/my_course_filters.dart';
 import '../components/courses/my_courses_list_view.dart';
 
 const List<String> typeCourse = <String>[
@@ -84,7 +83,7 @@ class _MyScaffoldState extends State<MyCoursesPage> {
       context: context,
       builder: (context) {
         return StatefulBuilder(builder: (context, setModalState) {
-          return MyCourseFilter(
+          return CourseFilter(
             selectedCategories: _categories,
             selectedLevels: _levels,
             selectedFrequencies: _frequencies,
