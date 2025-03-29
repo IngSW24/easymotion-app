@@ -14,7 +14,7 @@ class AuthInterceptor implements Interceptor {
 
   @override
   FutureOr<Response<T>> intercept<T>(Chain<T> chain) async {
-    print("Intercept1");
+    print("Intercept initial");
     Request request = chain.request;
 
     final accessToken = await apiProvider.getAccessToken();
@@ -28,33 +28,28 @@ class AuthInterceptor implements Interceptor {
     }
 
     final response = await chain.proceed(request); // Try with old access token
-    print("Intercept2: $accessToken + $refreshToken");
+
     if (refreshToken == null || response.statusCode != 401) {
       return response;
     }
 
-    return response;
+    final newSchema = ApiSchema.create(baseUrl: Uri.parse(API_URL));
 
-    /*final newSchema = ApiSchema.create(baseUrl: Uri.parse(API_URL));
-
-    print("Intercept3");
     final refreshTokenResponse = await newSchema.authRefreshPost(
         body: RefreshTokenDto(refreshToken: refreshToken));
 
-    print("Intercept4");
-    final newAccessToken = refreshTokenResponse.body?.tokens?.accessToken;
-    final newRefreshToken = refreshTokenResponse.body?.tokens?.refreshToken;
-    if (newAccessToken != null && newRefreshToken != null) {
-      apiProvider.setAccessToken(newAccessToken);
-      apiProvider.setRefreshToken(newRefreshToken);
+    final tokens = refreshTokenResponse.body?.tokens;
+    if (tokens != null) {
+      apiProvider.setAccessToken(tokens.accessToken);
+      apiProvider.setRefreshToken(tokens.refreshToken);
 
       request = request.copyWith(headers: {
         ...request.headers,
-        'Authorization': 'Bearer $newAccessToken',
+        'Authorization': 'Bearer ${tokens.accessToken}',
       });
       return chain.proceed(request);
     }
 
-    return response; // will throw an Exception*/
+    return response; // will throw an Exception
   }
 }

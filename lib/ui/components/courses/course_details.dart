@@ -1,4 +1,4 @@
-import 'package:easymotion_app/data/hooks/use_api.dart';
+import 'package:easymotion_app/data/hooks/use_auth.dart';
 import 'package:easymotion_app/ui/components/subscriptions/subscribe_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -11,7 +11,7 @@ class CourseDetails extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final api = useApi(context);
+    final userInfo = useUserInfo(context);
     final courseDetails = useCourse(context, id);
 
     if (courseDetails.isLoading) {
@@ -49,7 +49,7 @@ class CourseDetails extends HookWidget {
           SizedBox(
             height: 16,
           ),
-          if (api.getUser() != null) SubscribeButton(courseID: id)
+          if (userInfo() != null) SubscribeButton(courseID: id)
         ],
       ),
     ));

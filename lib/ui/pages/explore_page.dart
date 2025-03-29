@@ -1,4 +1,4 @@
-import 'package:easymotion_app/data/hooks/use_api.dart';
+import 'package:easymotion_app/data/hooks/use_auth.dart';
 import 'package:easymotion_app/ui/components/courses/course_filter.type.dart';
 import 'package:easymotion_app/ui/components/courses/course_list_view.dart';
 import 'package:easymotion_app/ui/components/courses/course_filters.dart';
@@ -72,8 +72,9 @@ class _ExplorePageState extends State<ExplorePage> {
 
   @override
   Widget build(BuildContext context) {
-    final api = useApi(context);
-    final user = api.getUser();
+    final userInfo = useUserInfo(context);
+    final logout = useLogoutFn(context);
+    final user = userInfo();
 
     return Scaffold(
         appBar: AppBar(
@@ -85,14 +86,9 @@ class _ExplorePageState extends State<ExplorePage> {
                   onPressed: () => context.go("/login"),
                   icon: Icon(Icons.login))
             else
-              IconButton(
-                  onPressed: () => api.logout(), icon: Icon(Icons.logout))
+              IconButton(onPressed: () => logout(), icon: Icon(Icons.logout))
           ],
         ),
-        /*floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: Icon(Icons.add),
-        ),*/
         body: Column(children: [
           Padding(
               padding: EdgeInsets.all(8),

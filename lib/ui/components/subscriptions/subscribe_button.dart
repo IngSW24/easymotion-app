@@ -1,5 +1,4 @@
 import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.dart';
-import 'package:easymotion_app/data/hooks/use_api.dart';
 import 'package:easymotion_app/data/hooks/use_subscriptions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -17,7 +16,8 @@ class SubscribeButton extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final subscriptions = useUserSubscriptions(context);
-    final api = useApi(context);
+    final create = useCreateSubscription(context);
+    final delete = useDeleteSubscription(context);
 
     if (subscriptions.isLoading) {
       return Text("Loading...");
@@ -31,8 +31,7 @@ class SubscribeButton extends HookWidget {
     if (subList.any((sub) => containsCourse(sub, courseID))) {
       return FilledButton(
           onPressed: () async {
-            await api.schema.subscriptionsDelete(
-                body: SubscriptionDeleteDto(courseId: courseID));
+            await delete(SubscriptionDeleteDto(courseId: courseID));
             if (context.mounted) context.go("/my_courses");
           },
           child: Text("Unsubscribe"));
@@ -40,8 +39,7 @@ class SubscribeButton extends HookWidget {
 
     return FilledButton(
         onPressed: () async {
-          await api.schema.subscriptionsPost(
-              body: SubscriptionCreateDto(courseId: courseID));
+          await create(SubscriptionCreateDto(courseId: courseID));
           if (context.mounted) context.go("/my_courses");
         },
         child: Text("Subscribe"));
