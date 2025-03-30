@@ -1,8 +1,10 @@
+import 'package:easymotion_app/data/hooks/use_auth.dart';
 import 'package:easymotion_app/ui/components/courses/course_filter.type.dart';
 import 'package:easymotion_app/ui/components/courses/course_list_view.dart';
 import 'package:easymotion_app/ui/components/courses/course_filters.dart';
 import 'package:easymotion_app/ui/components/chip_list/horizontal_chips_list.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -70,14 +72,23 @@ class _ExplorePageState extends State<ExplorePage> {
 
   @override
   Widget build(BuildContext context) {
+    final userInfo = useUserInfo(context);
+    final logout = useLogoutFn(context);
+    final user = userInfo();
+
     return Scaffold(
         appBar: AppBar(
-          title: Text('Easymotion'),
+          title: Text(
+              user != null ? "Benvenuto, ${user.firstName}" : 'Easymotion'),
+          actions: [
+            if (user == null)
+              IconButton(
+                  onPressed: () => context.go("/login"),
+                  icon: Icon(Icons.login))
+            else
+              IconButton(onPressed: () => logout(), icon: Icon(Icons.logout))
+          ],
         ),
-        /*floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: Icon(Icons.add),
-        ),*/
         body: Column(children: [
           Padding(
               padding: EdgeInsets.all(8),
@@ -117,17 +128,18 @@ class _ExplorePageState extends State<ExplorePage> {
                               .map((key) =>
                                   CourseFilter.availabilities[key] ?? "")
                               .toList(),
-                      onDeleted: (String tag) {
+                      /*onDeleted: (String tag) {
                         setState(() {
                           _categories.remove(tag);
                           _levels.remove(tag);
                           _frequencies.remove(tag);
                           _availabilities.remove(tag);
                         });
-                      },
+                      },*/
                     ))),
           Expanded(
               child: CourseListView(
+            pathPrefix: '/explore',
             courseFilterType: CourseFilterType(
                 searchText: _searchText,
                 categories: _categories,
