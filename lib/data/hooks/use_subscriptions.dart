@@ -14,6 +14,7 @@ UseQueryResult<PaginatedResponseOfCourseEntity?, dynamic> useCoursesSubscribed(
   final userID = apiProvider.getUser()?.id;
   return useQuery(
       [coursesSubscribedQueryKey],
+      refetchInterval: Duration(seconds: 3),
       () async => (await apiProvider.schema.coursesSubscribedUserIdGet(
               page: 0, perPage: 100, userId: userID))
           .body);
@@ -24,6 +25,7 @@ UseQueryResult<PaginatedResponseOfSubscriptionDto?, dynamic>
   ApiProvider apiProvider = Provider.of<ApiProvider>(ctx, listen: false);
   return useQuery(
       [subscriptionsQueryKey],
+      refetchInterval: Duration(seconds: 3),
       () async =>
           (await apiProvider.schema.subscriptionsGet(page: 0, perPage: 100))
               .body);
