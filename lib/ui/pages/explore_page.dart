@@ -128,14 +128,14 @@ class _ExplorePageState extends State<ExplorePage> {
                               .map((key) =>
                                   CourseFilter.availabilities[key] ?? "")
                               .toList(),
-                      onDeleted: (String tag) {
+                      /*onDeleted: (String tag) {
                         setState(() {
                           _categories.remove(tag);
                           _levels.remove(tag);
                           _frequencies.remove(tag);
                           _availabilities.remove(tag);
                         });
-                      },
+                      },*/
                     ))),
           Expanded(
               child: CourseListView(

@@ -157,14 +157,14 @@ class _MyScaffoldState extends State<MyCoursesPage> {
                               .map((key) =>
                                   CourseFilter.availabilities[key] ?? "")
                               .toList(),
-                      onDeleted: (String tag) {
+                      /*onDeleted: (String tag) {
                         setState(() {
                           _categories.remove(tag);
                           _levels.remove(tag);
                           _frequencies.remove(tag);
                           _availabilities.remove(tag);
                         });
-                      },
+                      },*/
                     ))),
           Expanded(
               child: MyCoursesListView(
