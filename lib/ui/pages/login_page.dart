@@ -12,7 +12,8 @@ class LoginPage extends StatefulHookWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String _username = "user@easymotion.it", _password = "ingsw24easymotion!";
+  String _username = "", _password = "";
+  bool loginFailed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -22,45 +23,57 @@ class _LoginPageState extends State<LoginPage> {
         appBar: AppBar(
           title: Text('Login'),
         ),
-        body: Form(
-          child: Column(
-            children: [
+        body: Column(
+          children: [
+            if (loginFailed)
               Padding(
-                padding: EdgeInsets.all(8),
-                child: TextFormField(
-                  decoration: InputDecoration(label: Text("Username/e-mail")),
-                  onChanged: (String value) {
-                    setState(() {
-                      _username = value;
-                    });
-                  },
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  "Username o password non valide",
+                  style: TextStyle(color: Colors.red),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.all(8),
-                child: TextFormField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    label: Text("Password"),
-                  ),
-                  onChanged: (String value) {
-                    setState(() {
-                      _password = value;
-                    });
-                  },
-                ),
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: TextField(
+                decoration: InputDecoration(label: Text("Username/e-mail")),
+                onChanged: (String value) {
+                  setState(() {
+                    _username = value;
+                  });
+                },
               ),
-              Padding(
-                  padding: EdgeInsets.all(8),
-                  child: ElevatedButton(
-                      onPressed: () async {
-                        bool status = await login(
-                            SignInDto(email: _username, password: _password));
-                        if (status && context.mounted) context.go("/explore");
-                      },
-                      child: Text("Login"))),
-            ],
-          ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: "Password",
+                ),
+                onChanged: (String value) {
+                  setState(() {
+                    _password = value;
+                  });
+                },
+              ),
+            ),
+            Padding(
+                padding: EdgeInsets.all(8),
+                child: ElevatedButton(
+                    onPressed: () async {
+                      bool status = await login(
+                          SignInDto(email: _username, password: _password));
+                      if (!status) {
+                        setState(() {
+                          loginFailed = true;
+                        });
+                      } else if (context.mounted) {
+                        context.go("/explore");
+                      }
+                    },
+                    child: Text("Login"))),
+          ],
         ));
   }
 }
