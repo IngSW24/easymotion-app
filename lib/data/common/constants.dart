@@ -1,2 +1,2 @@
-const String API_URL = "https://api.staging.easymotion.it";
-const String STATIC_URL = "https://staging.easymotion.it";
+const String apiURL = "https://api.staging.easymotion.it";
+const String staticURL = "https://staging.easymotion.it";

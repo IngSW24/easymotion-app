@@ -30,7 +30,7 @@ class _MyScaffoldState extends State<MyCoursesPage> {
   final controllerAdvancedSearch =
       TextEditingController(); //controller for searchbar in "Ricerca avanzata"
 
-  Future<void> _selectStartDate() async {
+  /*Future<void> _selectStartDate() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -54,7 +54,7 @@ class _MyScaffoldState extends State<MyCoursesPage> {
     setState(() {
       dateFilterEnd = pickedDate;
     });
-  }
+  }*/
 
   void _openFilterBottomSheet(BuildContext context) {
     showModalBottomSheet(

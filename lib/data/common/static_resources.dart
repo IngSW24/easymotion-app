@@ -1,5 +1,5 @@
 import 'constants.dart';
 
 class StaticResources {
-  static final uri = Uri.parse(STATIC_URL);
+  static final uri = Uri.parse(staticURL);
 }

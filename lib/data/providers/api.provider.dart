@@ -5,8 +5,8 @@ import '../../api-client-generated/api_schema.swagger.dart';
 import '../interceptors/auth_interceptor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String ACCESS_TOKEN_KEY = "access_token";
-const String REFRESH_TOKEN_KEY = "refresh_token";
+const String accessTokenKey = "access_token";
+const String refreshTokenKey = "refresh_token";
 
 class ApiProvider extends ChangeNotifier {
   ApiProvider(this.ctx) {
@@ -19,7 +19,7 @@ class ApiProvider extends ChangeNotifier {
 
   late final ApiSchema schema;
 
-  static final baseUrl = Uri.parse(API_URL);
+  static final baseUrl = Uri.parse(apiURL);
 
   AuthUserDto? _user;
 
@@ -43,35 +43,33 @@ class ApiProvider extends ChangeNotifier {
 
   Future<String?> getAccessToken() async {
     final storage = await SharedPreferences.getInstance();
-    return storage.getString(ACCESS_TOKEN_KEY);
+    return storage.getString(accessTokenKey);
   }
 
   Future<bool> setAccessToken(String? accessToken) async {
     final storage = await SharedPreferences.getInstance();
     if (accessToken == null) {
-      return await storage.remove(ACCESS_TOKEN_KEY);
+      return await storage.remove(accessTokenKey);
     }
-    return await storage.setString(ACCESS_TOKEN_KEY, accessToken);
+    return await storage.setString(accessTokenKey, accessToken);
   }
 
   Future<String?> getRefreshToken() async {
     final storage = await SharedPreferences.getInstance();
-    return storage.getString(REFRESH_TOKEN_KEY);
+    return storage.getString(refreshTokenKey);
   }
 
   Future<bool> setRefreshToken(String? refreshToken) async {
     final storage = await SharedPreferences.getInstance();
     if (refreshToken == null) {
-      return await storage.remove(REFRESH_TOKEN_KEY);
+      return await storage.remove(refreshTokenKey);
     }
-    return await storage.setString(REFRESH_TOKEN_KEY, refreshToken);
+    return await storage.setString(refreshTokenKey, refreshToken);
   }
 
   // refresh access token
   Future<void> _initialRefresh() async {
-    print("Test11");
     final refreshToken = await getRefreshToken();
-    print("Test12");
     if (refreshToken == null) {
       setAccessToken(null);
       return;
@@ -79,7 +77,6 @@ class ApiProvider extends ChangeNotifier {
 
     final response = await schema.authRefreshPost(
         body: RefreshTokenDto(refreshToken: refreshToken));
-    print("Test13");
     final newAccessToken = response.body?.tokens?.accessToken;
     final newRefreshToken = response.body?.tokens?.refreshToken;
     if (newAccessToken != null && newRefreshToken != null) {
@@ -95,22 +92,18 @@ class ApiProvider extends ChangeNotifier {
 
   Future<bool> login(SignInDto data) async {
     try {
-      print("Test2 + ${data.email} + ${data.password}");
       final response = await schema.authLoginPost(body: data);
-      print("Test3");
       final responseBody = response.body;
       if (responseBody != null) {
         setRefreshToken(responseBody.tokens?.refreshToken);
         setAccessToken(responseBody.tokens?.accessToken);
         _setUser(responseBody.user);
-        print("Login OK");
         return true;
       }
-      print("Empty body");
       return false;
     } catch (e, stackTrace) {
-      print(e);
-      print(stackTrace);
+      debugPrint(e.toString());
+      debugPrintStack(stackTrace: stackTrace);
       return false;
     }
   }
@@ -123,8 +116,8 @@ class ApiProvider extends ChangeNotifier {
       _setUser(null);
       return true;
     } on Exception catch (e, stackTrace) {
-      print(e);
-      print(stackTrace);
+      debugPrint(e.toString());
+      debugPrintStack(stackTrace: stackTrace);
       return false;
     }
   }
