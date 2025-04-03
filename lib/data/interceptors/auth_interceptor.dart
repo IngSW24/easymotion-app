@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:chopper/chopper.dart';
-import 'package:easymotion_app/data/common/constants.dart';
 import 'package:easymotion_app/data/providers/api.provider.dart';
 import 'package:flutter/foundation.dart';
 import '../../api-client-generated/api_schema.swagger.dart';
@@ -32,7 +31,7 @@ class AuthInterceptor implements Interceptor {
       return response;
     }
 
-    final newSchema = ApiSchema.create(baseUrl: Uri.parse(apiURL));
+    final newSchema = ApiSchema.create(baseUrl: ApiProvider.baseUrl);
 
     final refreshTokenResponse = await newSchema.authRefreshPost(
         body: RefreshTokenDto(refreshToken: refreshToken));

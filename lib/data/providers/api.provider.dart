@@ -19,7 +19,7 @@ class ApiProvider extends ChangeNotifier {
 
   late final ApiSchema schema;
 
-  static final baseUrl = Uri.parse(apiURL);
+  static final baseUrl = Uri.parse(apiURL!);
 
   AuthUserDto? _user;
 
