@@ -49,7 +49,6 @@ class CourseFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       padding: EdgeInsets.all(16),
       height: 300,

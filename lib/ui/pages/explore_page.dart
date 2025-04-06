@@ -101,7 +101,7 @@ class _ExplorePageState extends State<ExplorePage> {
                   hintText: "Cerca corsi (es. nuoto)",
                   prefixIcon: Icon(Icons.search),
                   suffixIcon: IconButton(
-                    tooltip: "Open filters",
+                      tooltip: "Open filters",
                       onPressed: () => _openFilterBottomSheet(context),
                       icon: Icon(Icons.filter_alt_outlined)),
                   border: OutlineInputBorder(
