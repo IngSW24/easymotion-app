@@ -1,10 +1,7 @@
 import 'dart:async';
-
 import 'package:chopper/chopper.dart';
-import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.dart';
-import 'package:easymotion_app/data/common/constants.dart';
 import 'package:easymotion_app/data/providers/api.provider.dart';
-
+import 'package:flutter/foundation.dart';
 import '../../api-client-generated/api_schema.swagger.dart';
 
 class AuthInterceptor implements Interceptor {
@@ -14,7 +11,8 @@ class AuthInterceptor implements Interceptor {
 
   @override
   FutureOr<Response<T>> intercept<T>(Chain<T> chain) async {
-    print("Intercept initial");
+    debugPrint("Auth interception");
+
     Request request = chain.request;
 
     final accessToken = await apiProvider.getAccessToken();
@@ -33,7 +31,7 @@ class AuthInterceptor implements Interceptor {
       return response;
     }
 
-    final newSchema = ApiSchema.create(baseUrl: Uri.parse(API_URL));
+    final newSchema = ApiSchema.create(baseUrl: ApiProvider.baseUrl);
 
     final refreshTokenResponse = await newSchema.authRefreshPost(
         body: RefreshTokenDto(refreshToken: refreshToken));

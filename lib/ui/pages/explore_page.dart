@@ -79,14 +79,18 @@ class _ExplorePageState extends State<ExplorePage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-              user != null ? "Benvenuto, ${user.firstName}" : 'Easymotion'),
+              user != null ? "Esplora corsi, ${user.firstName}" : 'Easymotion'),
           actions: [
             if (user == null)
               IconButton(
+                  tooltip: "Login",
                   onPressed: () => context.go("/login"),
                   icon: Icon(Icons.login))
             else
-              IconButton(onPressed: () => logout(), icon: Icon(Icons.logout))
+              IconButton(
+                  tooltip: "Logout",
+                  onPressed: () => logout(),
+                  icon: Icon(Icons.logout))
           ],
         ),
         body: Column(children: [
@@ -97,6 +101,7 @@ class _ExplorePageState extends State<ExplorePage> {
                   hintText: "Cerca corsi (es. nuoto)",
                   prefixIcon: Icon(Icons.search),
                   suffixIcon: IconButton(
+                      tooltip: "Open filters",
                       onPressed: () => _openFilterBottomSheet(context),
                       icon: Icon(Icons.filter_alt_outlined)),
                   border: OutlineInputBorder(

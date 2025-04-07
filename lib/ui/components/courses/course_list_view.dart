@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../data/common/static_resources.dart';
 import 'course_filter.type.dart';
 
 class CourseListView extends HookWidget {
@@ -67,7 +68,11 @@ class CourseListView extends HookWidget {
             courseList[index].name,
             overflow: TextOverflow.ellipsis,
           ),
-          leading: Image.network('https://picsum.photos/250?image=9'),
+          leading: CircleAvatar(
+            backgroundImage: NetworkImage(
+              "${StaticResources.uri}/${courseList[index].category.value?.toLowerCase()}.jpg",
+            ),
+          ),
           subtitle: ((identical(courseList[index].availability.value,
                   'ACTIVE')) //Check if the course is Active or NOT
               ? Text('Attivo',
@@ -76,11 +81,12 @@ class CourseListView extends HookWidget {
               : Text('Terminato',
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.red))),
-          trailing: ElevatedButton(
-              onPressed: () =>
-                  context.go('/explore/details/${courseList[index].id}'),
-              //_courseDialog(), //If I click on the button "Dettagli" it open a Dialog window that shows the course details
-              child: const Text('Dettagli')),
+          trailing: IconButton(
+            tooltip: "Dettagli corso",
+            onPressed: () =>
+                context.go('/explore/details/${courseList[index].id}'),
+            icon: Icon(Icons.launch),
+          ),
         );
       },
     );

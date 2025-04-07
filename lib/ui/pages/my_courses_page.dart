@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../data/hooks/use_auth.dart';
 import '../components/chip_list/horizontal_chips_list.dart';
 import '../components/courses/course_filter.type.dart';
 import '../components/courses/course_filters.dart';
@@ -30,7 +32,7 @@ class _MyScaffoldState extends State<MyCoursesPage> {
   final controllerAdvancedSearch =
       TextEditingController(); //controller for searchbar in "Ricerca avanzata"
 
-  Future<void> _selectStartDate() async {
+  /*Future<void> _selectStartDate() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -54,7 +56,7 @@ class _MyScaffoldState extends State<MyCoursesPage> {
     setState(() {
       dateFilterEnd = pickedDate;
     });
-  }
+  }*/
 
   void _openFilterBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -110,9 +112,27 @@ class _MyScaffoldState extends State<MyCoursesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userInfo = useUserInfo(context);
+    final logout = useLogoutFn(context);
+    final user = userInfo();
+
     return Scaffold(
         appBar: AppBar(
-          title: Text('I tuoi corsi'),
+          title: Text(user != null
+              ? "I tuoi corsi, ${user.firstName}"
+              : 'I tuoi corsi'),
+          actions: [
+            if (user == null)
+              IconButton(
+                  tooltip: "Login",
+                  onPressed: () => context.go("/login"),
+                  icon: Icon(Icons.login))
+            else
+              IconButton(
+                  tooltip: "Logout",
+                  onPressed: () => logout(),
+                  icon: Icon(Icons.logout))
+          ],
         ),
         /*floatingActionButton: FloatingActionButton(
           onPressed: () {},
@@ -166,15 +186,18 @@ class _MyScaffoldState extends State<MyCoursesPage> {
                         });
                       },*/
                     ))),
-          Expanded(
-              child: MyCoursesListView(
-            courseFilterType: CourseFilterType(
-                searchText: _searchText,
-                categories: _categories,
-                levels: _levels,
-                frequencies: _frequencies,
-                availabilities: _availabilities),
-          ))
+          if (user != null)
+            Expanded(
+                child: MyCoursesListView(
+              courseFilterType: CourseFilterType(
+                  searchText: _searchText,
+                  categories: _categories,
+                  levels: _levels,
+                  frequencies: _frequencies,
+                  availabilities: _availabilities),
+            ))
+          else
+            Text("Accedi per vedere i tuoi corsi")
         ]));
   }
 }
