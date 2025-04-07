@@ -3,7 +3,7 @@
 ## Setup development environment
 
 - Install [Flutter SDK](https://docs.flutter.dev/get-started/install)
-- Test the installation by open Android Studio, then Terminal, then type `flutter doctor` and that command should exit with no errors
+- Test the installation by opening Android Studio, then Terminal, then type `flutter doctor` and that command should exit with no errors
 
 ## Run app on an emulator (or on other supported platforms)
 
@@ -32,7 +32,7 @@ To deploy a release, you need to tag the corresponding commit with the following
 
 which have to match the following regex:
 
-`v[0-9]+.[0-9]+.[0-9]+.(-beta)?`
+`v[0-9]+\.[0-9]+\.[0-9]+(-beta)?`
 
 then you need to create a new release from GitHub:
 
