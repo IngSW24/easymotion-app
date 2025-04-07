@@ -25,7 +25,7 @@ The `.env` file allows you to change some environment variables read by the mobi
 
 ### Versioning
 
-To deploy a release, you have to tag the corresponding commit with the following syntax:
+To deploy a release, you need to tag the corresponding commit with the following syntax:
 
 - `v<MAJOR>.<MINOR>.<PATCH>`: Production release
 - `v<MAJOR>.<MINOR>.<PATCH>-beta`: Staging release
@@ -33,6 +33,23 @@ To deploy a release, you have to tag the corresponding commit with the following
 which have to match the following regex:
 
 `v[0-9]+.[0-9]+.[0-9]+.(-beta)?`
+
+then you need to create a new release from GitHub:
+
+- Click on `Create a new release`
+- Choose the tag you just created
+- Add the changelog
+- Click on `Publish release`
+
+#### Changelog example
+
+```
+Release 1.2.3
+
+- Introdotta autenticazione OAuth2
+- Risolto bug navigazione tra schermate
+- Ottimizzate le query per migliorare le performance
+```
 
 #### Valid tags
 
