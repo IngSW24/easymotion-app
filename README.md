@@ -23,4 +23,29 @@ The `.env` file allows you to change some environment variables read by the mobi
 
 ## Deploy
 
-- TODO: add deployment documentation
+### Versioning
+
+To deploy a release, you have to tag the corresponding commit with the following syntax:
+
+- `v<MAJOR>.<MINOR>.<PATCH>`: Production release
+- `v<MAJOR>.<MINOR>.<PATCH>-beta`: Staging release
+
+which have to match the following regex:
+
+`v[0-9]+.[0-9]+.[0-9]+.(-beta)?`
+
+#### Valid tags
+
+- `v0.30.23`
+- `v0.30.24-beta`
+- `v1.14.23`
+- `v1.14.24-beta`
+
+### Build the release version
+
+- Android (APK):
+  - `flutter build appbundle`: Creates an [App Bundle](https://developer.android.com/guide/app-bundle)
+  - `flutter build apk --split-per-abi`: Creates an APK for each target ABI (armeabi-v7a, arm64-v8a, x86_64)
+  - `flutter build apk`: Creates a fat APK that includes all the target ABIs.
+- iOS: `flutter build ipa`: See [iOS | Flutter](https://docs.flutter.dev/deployment/ios)
+- Linux: `flutter build linux`
