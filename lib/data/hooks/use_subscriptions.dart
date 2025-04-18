@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 const String coursesSubscribedQueryKey = "courses_subscribed";
 const String subscriptionsQueryKey = "subscriptions";
 
-UseQueryResult<PaginatedResponseOfCourseEntity?, dynamic> useCoursesSubscribed(
+UseQueryResult<PaginatedResponseOfCourseDto?, dynamic> useCoursesSubscribed(
     BuildContext ctx) {
   ApiProvider apiProvider = Provider.of<ApiProvider>(ctx, listen: false);
   final userID = apiProvider.getUser()?.id;

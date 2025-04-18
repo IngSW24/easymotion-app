@@ -7,7 +7,7 @@ import '../chip_list/horizontal_chips_list.dart';
 class CourseCard extends StatelessWidget {
   const CourseCard({super.key, required this.course, required this.onClick});
 
-  final CourseEntity course;
+  final CourseDto course;
   final void Function() onClick;
 
   @override
@@ -24,7 +24,7 @@ class CourseCard extends StatelessWidget {
             ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
                 child: Image.network(
-                  "${StaticResources.uri}/${course.category.value?.toLowerCase()}.jpg",
+                  "${StaticResources.uri}/${course.category.id}.jpg",
                   height: 120,
                   width: double.infinity,
                   fit: BoxFit.cover,

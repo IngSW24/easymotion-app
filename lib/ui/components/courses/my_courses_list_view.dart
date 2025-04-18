@@ -11,7 +11,7 @@ class MyCoursesListView extends HookWidget {
 
   final CourseFilterType courseFilterType;
 
-  bool includeCourse(CourseEntity course) {
+  bool includeCourse(CourseDto course) {
     if (courseFilterType.searchText.isNotEmpty &&
         !course.name
             .toLowerCase()
@@ -20,21 +20,21 @@ class MyCoursesListView extends HookWidget {
     }
 
     if (courseFilterType.categories.isNotEmpty &&
-        !courseFilterType.categories.contains(course.category.value)) {
+        !courseFilterType.categories.contains(course.category.name)) {
       return false;
     }
     if (courseFilterType.levels.isNotEmpty &&
         !courseFilterType.levels.contains(course.level.value)) {
       return false;
     }
-    if (courseFilterType.frequencies.isNotEmpty &&
+    /*if (courseFilterType.frequencies.isNotEmpty &&
         !courseFilterType.frequencies.contains(course.frequency.value)) {
       return false;
     }
     if (courseFilterType.availabilities.isNotEmpty &&
         !courseFilterType.availabilities.contains(course.availability.value)) {
       return false;
-    }
+    }*/
 
     return true;
   }
@@ -67,17 +67,9 @@ class MyCoursesListView extends HookWidget {
           ),
           leading: CircleAvatar(
             backgroundImage: NetworkImage(
-              "${StaticResources.uri}/${courseList[index].category.value?.toLowerCase()}.jpg",
+              "${StaticResources.uri}/${courseList[index].category.id}.jpg",
             ),
           ),
-          subtitle: ((identical(courseList[index].availability.value,
-                  'ACTIVE')) //Check if the course is Active or NOT
-              ? Text('Attivo',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.green))
-              : Text('Terminato',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.red))),
           trailing: IconButton(
             tooltip: "Dettagli corso",
             onPressed: () =>
