@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 const String courseQueryKey = "course";
 
-UseQueryResult<PaginatedResponseOfCourseEntity?, dynamic> useCourses(
+UseQueryResult<PaginatedResponseOfCourseDto?, dynamic> useCourses(
     BuildContext ctx) {
   ApiProvider apiProvider = Provider.of<ApiProvider>(ctx, listen: false);
   return useQuery(
@@ -15,7 +15,7 @@ UseQueryResult<PaginatedResponseOfCourseEntity?, dynamic> useCourses(
           (await apiProvider.schema.coursesGet(page: 0, perPage: 100)).body);
 }
 
-UseQueryResult<CourseEntity?, dynamic> useCourse(BuildContext ctx, String id) {
+UseQueryResult<CourseDto?, dynamic> useCourse(BuildContext ctx, String id) {
   ApiProvider apiProvider = Provider.of<ApiProvider>(ctx, listen: false);
   return useQuery([courseQueryKey, id],
       () async => (await apiProvider.schema.coursesIdGet(id: id)).body);

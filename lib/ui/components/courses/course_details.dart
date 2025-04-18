@@ -38,13 +38,10 @@ class CourseDetails extends HookWidget {
             overflow: TextOverflow.visible,
           ),
           Text("\n${courseEntity?.description}", textAlign: TextAlign.justify),
-          Text(
-            "\nStato: ${courseEntity?.availability.value}",
-          ),
-          Text("\nCategoria: ${courseEntity?.category.value}"),
+          Text("\nCategoria: ${courseEntity?.category.name}"),
           Text(
               "\nCreato il: ${courseEntity?.createdAt.year}/${courseEntity?.createdAt.month}/${courseEntity?.createdAt.day}"),
-          Text("\nCosto (in Euro): ${courseEntity?.cost}"),
+          Text("\nCosto (in Euro): ${courseEntity?.price}"),
           Text("\nIstruttori: ${courseEntity?.instructors.toList()}"),
           SizedBox(
             height: 16,
