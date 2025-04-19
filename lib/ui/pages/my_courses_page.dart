@@ -118,20 +118,45 @@ class _MyScaffoldState extends State<MyCoursesPage> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(user != null
+
+          title: Column(
+            crossAxisAlignment:  CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(user != null
+                  ? "Welcome back"
+                  : "Qui puoi vedere"),
+              Text(user != null
+                  ? "${user.firstName}"
+                  : "i tuoi corsi", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            ],
+          ),
+
+          /*title: Text(user != null
               ? "I tuoi corsi, ${user.firstName}"
-              : 'I tuoi corsi'),
+              : 'I tuoi corsi'),*/
+
+          backgroundColor: Color(0xFF094D95),
+          titleTextStyle: TextStyle(color: Color(0xFFFDFDFD)),
+          toolbarTextStyle: TextStyle(color: Color(0xFFFDFDFD)),
           actions: [
+            CircleAvatar(
+              radius: 20,
+              backgroundImage: AssetImage(
+                'images/blankProfileImage.png'
+              ),
+            ),
             if (user == null)
               IconButton(
                   tooltip: "Login",
                   onPressed: () => context.go("/login"),
-                  icon: Icon(Icons.login))
+                  icon: Icon(Icons.login, color: Color(0xFFFDFDFD)),
+              )
             else
               IconButton(
                   tooltip: "Logout",
                   onPressed: () => logout(),
-                  icon: Icon(Icons.logout))
+                  icon: Icon(Icons.logout, color: Color(0xFFFDFDFD)))
           ],
         ),
         /*floatingActionButton: FloatingActionButton(
@@ -158,26 +183,29 @@ class _MyScaffoldState extends State<MyCoursesPage> {
               _levels.isNotEmpty ||
               _frequencies.isNotEmpty ||
               _availabilities.isNotEmpty)
-            Padding(
-                padding: EdgeInsets.all(8),
-                child: SizedBox(
-                    height: 40,
-                    child: HorizontalChipsList(
-                      maxWidth: 320,
-                      labels: _categories
+
+
+
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    child: SizedBox(
+                        height: 40,
+                        child: HorizontalChipsList(
+                          maxWidth: 320,
+                          labels: _categories
                               .map((key) => CourseFilter.categories[key] ?? "")
                               .toList() +
-                          _levels
-                              .map((key) => CourseFilter.levels[key] ?? "")
-                              .toList() +
-                          _frequencies
-                              .map((key) => CourseFilter.frequencies[key] ?? "")
-                              .toList() +
-                          _availabilities
-                              .map((key) =>
-                                  CourseFilter.availabilities[key] ?? "")
-                              .toList(),
-                      /*onDeleted: (String tag) {
+                              _levels
+                                  .map((key) => CourseFilter.levels[key] ?? "")
+                                  .toList() +
+                              _frequencies
+                                  .map((key) => CourseFilter.frequencies[key] ?? "")
+                                  .toList() +
+                              _availabilities
+                                  .map((key) =>
+                              CourseFilter.availabilities[key] ?? "")
+                                  .toList(),
+                          /*onDeleted: (String tag) {
                         setState(() {
                           _categories.remove(tag);
                           _levels.remove(tag);
@@ -185,7 +213,19 @@ class _MyScaffoldState extends State<MyCoursesPage> {
                           _availabilities.remove(tag);
                         });
                       },*/
-                    ))),
+                        ))
+
+                  ),
+
+
+
+
+          if(user != null)
+            Text(
+                "I tuoi corsi attivi",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)
+            ),
+
           if (user != null)
             Expanded(
                 child: MyCoursesListView(

@@ -61,9 +61,14 @@ class MyCoursesListView extends HookWidget {
       itemCount: courseList.length,
       itemBuilder: (BuildContext ctx, int index) {
         return ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           title: Text(
             courseList[index].name,
             overflow: TextOverflow.ellipsis,
+            style: TextStyle(color: Color(0xFF094D95), fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            courseList[index].shortDescription,
           ),
           leading: CircleAvatar(
             backgroundImage: NetworkImage(

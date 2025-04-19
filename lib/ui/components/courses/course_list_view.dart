@@ -60,13 +60,41 @@ class CourseListView extends HookWidget {
       return Text("Empty list");
     }
 
-    return ListView.builder(
+    return GridView.count(
+      crossAxisCount: 1,
+      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+      crossAxisSpacing: 5,
+      mainAxisSpacing: 0,
+      children: List.generate(courseList.length, (index) {
+        return Container(
+
+            child: Column(
+              children: [
+                Image.network("${StaticResources.uri}/${courseList[index].category.id}.jpg"),
+                Center(
+                  child: Text("${courseList[index].name}", style: TextStyle(color: Color(0xFF094D95), fontWeight: FontWeight.bold),),
+                ),
+                Text("${courseList[index].shortDescription}"),
+              ]
+              
+            ),
+
+        );
+      }),
+    );
+
+    /*return ListView.builder(
       itemCount: courseList.length,
       itemBuilder: (BuildContext ctx, int index) {
         return ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           title: Text(
             courseList[index].name,
             overflow: TextOverflow.ellipsis,
+            style: TextStyle(color: Color(0xFF094D95), fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            courseList[index].shortDescription,
           ),
           leading: CircleAvatar(
             backgroundImage: NetworkImage(
@@ -81,6 +109,6 @@ class CourseListView extends HookWidget {
           ),
         );
       },
-    );
+    );*/
   }
 }
