@@ -66,8 +66,8 @@ class CourseListView extends HookWidget {
       crossAxisSpacing: 5,
       mainAxisSpacing: 0,
       children: List.generate(courseList.length, (index) {
-        return Container(
-
+        return Padding(
+            padding: EdgeInsets.all(8),
             child: Column(
               children: [
                 Image.network("${StaticResources.uri}/${courseList[index].category.id}.jpg"),
@@ -75,6 +75,19 @@ class CourseListView extends HookWidget {
                   child: Text("${courseList[index].name}", style: TextStyle(color: Color(0xFF094D95), fontWeight: FontWeight.bold),),
                 ),
                 Text("${courseList[index].shortDescription}"),
+
+                FilledButton(
+
+                    onPressed: () =>
+                    context.go('/explore/details/${courseList[index].id}'),
+                
+                    child: Row(
+                      children: [
+                        Icon(Icons.launch),
+                        Text("  Dettagli corso"),
+                      ],
+                    ),
+                )
               ]
               
             ),
