@@ -12,8 +12,8 @@ class BottomNavBar extends StatelessWidget {
       body: navigationShell,
       bottomNavigationBar: NavigationBar(
         destinations: [
-          NavigationDestination(icon: Icon(Icons.explore), label: "Explore"),
-          NavigationDestination(icon: Icon(Icons.home), label: "My courses"),
+          NavigationDestination(icon: Icon(Icons.explore), label: "Explore", selectedIcon: Icon(Icons.explore, color: Color(0xFF094D95) )),
+          NavigationDestination(icon: Icon(Icons.home), label: "My courses", selectedIcon: Icon(Icons.explore, color: Color(0xFF094D95) )),
           //NavigationDestination(icon: Icon(Icons.trending_up), label: "Stats"),
         ],
         onDestinationSelected: (int index) {

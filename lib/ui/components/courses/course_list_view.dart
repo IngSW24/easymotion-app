@@ -44,6 +44,7 @@ class CourseListView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final courses = useCourses(context);
 
     if (courses.isLoading) {
@@ -60,39 +61,49 @@ class CourseListView extends HookWidget {
       return Text("Empty list");
     }
 
+
     return GridView.count(
       crossAxisCount: 1,
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-      crossAxisSpacing: 5,
-      mainAxisSpacing: 0,
+
+      mainAxisSpacing: 25,
       children: List.generate(courseList.length, (index) {
-        return Padding(
-            padding: EdgeInsets.all(8),
-            child: Column(
-              children: [
-                Image.network("${StaticResources.uri}/${courseList[index].category.id}.jpg"),
-                Center(
-                  child: Text("${courseList[index].name}", style: TextStyle(color: Color(0xFF094D95), fontWeight: FontWeight.bold),),
-                ),
-                Text("${courseList[index].shortDescription}"),
 
-                FilledButton(
-
-                    onPressed: () =>
-                    context.go('/explore/details/${courseList[index].id}'),
-                
-                    child: Row(
-                      children: [
-                        Icon(Icons.launch),
-                        Text("  Dettagli corso"),
-                      ],
-                    ),
-                )
-              ]
-              
+        return IntrinsicHeight(child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black, width: 1), // Black border
+              borderRadius: BorderRadius.circular(20.0),
             ),
 
-        );
+            padding: EdgeInsets.all(15),
+
+            child: Column(
+                        children: [
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child: Image.network("${StaticResources.uri}/${courseList[index].category.id}.jpg"),
+                          ),
+
+                          Center(
+                            child: Text("${courseList[index].name}", style: TextStyle(color: Color(0xFF094D95), fontWeight: FontWeight.bold),),
+                          ),
+                          Text("${courseList[index].shortDescription}"),
+
+                          FilledButton(
+
+                              onPressed: () =>
+                              context.go('/explore/details/${courseList[index].id}'),
+
+                              child: Row(
+                                children: [
+                                  Icon(Icons.launch),
+                                  Text("  Dettagli corso"),
+                                ],
+                              ),
+                          )
+                        ]
+
+                      ),
+        ));
       }),
     );
 
