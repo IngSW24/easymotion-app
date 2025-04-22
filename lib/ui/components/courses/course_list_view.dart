@@ -68,19 +68,15 @@ class CourseListView extends HookWidget {
       mainAxisSpacing: 25,
       children: List.generate(courseList.length, (index) {
 
-        return IntrinsicHeight(child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1), // Black border
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-
-            padding: EdgeInsets.all(15),
-
+        return  Flexible(
+          child: Padding(
+            padding: EdgeInsets.all(10),
             child: Column(
                         children: [
+
                           ClipRRect(
-                              borderRadius: BorderRadius.circular(20.0),
-                              child: Image.network("${StaticResources.uri}/${courseList[index].category.id}.jpg"),
+                            borderRadius: BorderRadius.circular(20.0),
+                            child: Image.network("${StaticResources.uri}/${courseList[index].category.id}.jpg"),
                           ),
 
                           Center(
@@ -88,18 +84,25 @@ class CourseListView extends HookWidget {
                           ),
                           Text("${courseList[index].shortDescription}"),
 
-                          FilledButton(
+                          ElevatedButton(
 
-                              onPressed: () =>
-                              context.go('/explore/details/${courseList[index].id}'),
+                            style: ButtonStyle(
+                              backgroundColor: WidgetStatePropertyAll(Color(0xFF094D95))
+                            ),
+                            onPressed: () =>
+                                context.go('/explore/details/${courseList[index].id}'),
 
-                              child: Row(
-                                children: [
-                                  Icon(Icons.launch),
-                                  Text("  Dettagli corso"),
-                                ],
-                              ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.launch, color: Color(0xFFFDFDFD)),
+                                Center(
+                                  child: Text("  Dettagli corso", style: TextStyle(color: Color(0xFFFDFDFD), fontWeight: FontWeight.bold)),
+                                )
+
+                              ],
+                            ),
                           )
+
                         ]
 
                       ),

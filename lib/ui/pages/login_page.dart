@@ -20,11 +20,22 @@ class _LoginPageState extends State<LoginPage> {
     final login = useLoginFn(context);
 
     return Scaffold(
+
         appBar: AppBar(
-          title: Text('Login'),
+          title: Center( child: Text('Login', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25) )),
         ),
         body: Column(
           children: [
+
+            Padding(
+                padding: EdgeInsets.all(20),
+                child: Text(
+                    "Bentornato! \nInserisci le tue credenziali per accedere al tuo account Easymotion",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16)
+                ),
+            ),
+            
             if (loginFailed)
               Padding(
                 padding: EdgeInsets.all(16),
@@ -34,9 +45,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             Padding(
-              padding: EdgeInsets.all(8),
+              padding: EdgeInsets.all(20),
               child: TextField(
-                decoration: InputDecoration(label: Text("Username/e-mail")),
+                decoration: InputDecoration(
+                    label: Text("Username/e-mail"),
+                    border: OutlineInputBorder()
+                ),
                 onChanged: (String value) {
                   setState(() {
                     _username = value;
@@ -45,11 +59,12 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8),
+              padding: EdgeInsets.all(20),
               child: TextField(
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: "Password",
+                  border: OutlineInputBorder()
                 ),
                 onChanged: (String value) {
                   setState(() {
@@ -72,7 +87,10 @@ class _LoginPageState extends State<LoginPage> {
                         context.go("/explore");
                       }
                     },
-                    child: Text("Login"))),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Color(0xFF094D95))
+                    ),
+                    child: Text("Login", style: TextStyle(color: Color(0xFFFDFDFD), fontWeight: FontWeight.bold)))),
           ],
         ));
   }

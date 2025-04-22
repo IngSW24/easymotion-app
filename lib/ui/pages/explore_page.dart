@@ -79,7 +79,7 @@ class _ExplorePageState extends State<ExplorePage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-              user != null ? "Esplora corsi, ${user.firstName}" : 'Easymotion',
+              user != null ? "Esplora corsi - ${user.firstName}" : 'Easymotion',
             style: TextStyle(color: Color(0xFF094D95), fontWeight: FontWeight.bold)),
           actions: [
             if (user == null)
