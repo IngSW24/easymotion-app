@@ -4,6 +4,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import '../../../api-client-generated/api_schema.models.swagger.dart';
 import '../../../data/common/static_resources.dart';
+import '../utility/error_alert.dart';
+import '../utility/loading.dart';
 import 'course_filter.type.dart';
 
 class MyCoursesListView extends HookWidget {
@@ -44,16 +46,17 @@ class MyCoursesListView extends HookWidget {
     final courses = useCoursesSubscribed(context);
 
     if (courses.isLoading) {
-      return Text("Loading...");
+      return LoadingIndicator();
     }
 
-    if (courses.isError) {
-      return Text("Error: ${courses.error}");
+    final fullCourseList = courses.data?.data;
+    if (courses.isError || fullCourseList == null) {
+      return ErrorAlert();
     }
 
-    var courseList = courses.data?.data?.where(includeCourse).toList();
+    final courseList = fullCourseList.where(includeCourse).toList();
 
-    if (courseList == null || courseList.isEmpty) {
+    if (courseList.isEmpty) {
       return Text("Empty list");
     }
 
@@ -72,8 +75,7 @@ class MyCoursesListView extends HookWidget {
           ),
           trailing: IconButton(
             tooltip: "Dettagli corso",
-            onPressed: () =>
-                context.go('/my_courses/details/${courseList[index].id}'),
+            onPressed: () => context.push('/details/${courseList[index].id}'),
             icon: Icon(Icons.launch),
           ),
         );

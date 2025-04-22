@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
         SnackBar(content: Text('Impossibile aprire l\'URL: $uri')),
       );
     } else {
-      debugPrint("Impossibile aprire l\'URL: $uri");
+      debugPrint("Impossibile aprire l'URL: $uri");
     }
   }
 

@@ -16,10 +16,7 @@ class MyCoursesPage extends StatefulWidget {
 class _MyScaffoldState extends State<MyCoursesPage> {
   ///CODICE PER I FILTRI
   String _searchText = "";
-  List<String> _categories = [],
-      _levels = [],
-      _frequencies = [],
-      _availabilities = [];
+  List<String> _categories = [], _levels = [];
 
   //String dropDownTypeCourseValue = typeCourse.first;
   //String dropDownActiveValue = activeCourse.first;
@@ -66,8 +63,6 @@ class _MyScaffoldState extends State<MyCoursesPage> {
           return CourseFilter(
             selectedCategories: _categories,
             selectedLevels: _levels,
-            selectedFrequencies: _frequencies,
-            selectedAvailabilities: _availabilities,
             onCategoriesChanged: (List<String> value) {
               setModalState(() {
                 setState(() {
@@ -79,20 +74,6 @@ class _MyScaffoldState extends State<MyCoursesPage> {
               setModalState(() {
                 setState(() {
                   _levels = value;
-                });
-              });
-            },
-            onFrequenciesChanged: (List<String> value) {
-              setModalState(() {
-                setState(() {
-                  _frequencies = value;
-                });
-              });
-            },
-            onAvailabilitiesChanged: (List<String> value) {
-              setModalState(() {
-                setState(() {
-                  _availabilities = value;
                 });
               });
             },
@@ -154,47 +135,30 @@ class _MyScaffoldState extends State<MyCoursesPage> {
                 ),
                 onChanged: onSearchChanged,
               )),
-          if (_categories.isNotEmpty ||
-              _levels.isNotEmpty ||
-              _frequencies.isNotEmpty ||
-              _availabilities.isNotEmpty)
+          if (_categories.isNotEmpty || _levels.isNotEmpty)
             Padding(
                 padding: EdgeInsets.all(8),
                 child: SizedBox(
                     height: 40,
                     child: HorizontalChipsList(
-                      maxWidth: 320,
-                      labels: _categories
-                              .map((key) => CourseFilter.categories[key] ?? "")
-                              .toList() +
-                          _levels
-                              .map((key) => CourseFilter.levels[key] ?? "")
-                              .toList() +
-                          _frequencies
-                              .map((key) => CourseFilter.frequencies[key] ?? "")
-                              .toList() +
-                          _availabilities
-                              .map((key) =>
-                                  CourseFilter.availabilities[key] ?? "")
-                              .toList(),
-                      /*onDeleted: (String tag) {
-                        setState(() {
-                          _categories.remove(tag);
-                          _levels.remove(tag);
-                          _frequencies.remove(tag);
-                          _availabilities.remove(tag);
-                        });
-                      },*/
-                    ))),
+                        maxWidth: 320,
+                        labels: _categories
+                                .map(
+                                    (key) => CourseFilter.categories[key] ?? "")
+                                .toList() +
+                            _levels
+                                .map((key) => CourseFilter.levels[key] ?? "")
+                                .toList()))),
           if (user != null)
             Expanded(
                 child: MyCoursesListView(
               courseFilterType: CourseFilterType(
-                  searchText: _searchText,
-                  categories: _categories,
-                  levels: _levels,
-                  frequencies: _frequencies,
-                  availabilities: _availabilities),
+                searchText: _searchText,
+                categories: _categories,
+                levels: _levels,
+                //frequencies: _frequencies,
+                //availabilities: _availabilities
+              ),
             ))
           else
             Text("Accedi per vedere i tuoi corsi")

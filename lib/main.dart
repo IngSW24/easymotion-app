@@ -27,6 +27,15 @@ final GoRouter _router = GoRouter(initialLocation: '/explore', routes: [
       return LoginPage();
     },
   ),
+  GoRoute(
+    path: '/details/:id',
+    builder: (BuildContext context, GoRouterState state) {
+      final id = state.pathParameters['id'];
+      return CourseDetailsPage(
+        id: id!,
+      );
+    },
+  ),
   StatefulShellRoute.indexedStack(
       builder: (BuildContext ctx, GoRouterState state,
           StatefulNavigationShell navigationShell) {
@@ -35,39 +44,19 @@ final GoRouter _router = GoRouter(initialLocation: '/explore', routes: [
       branches: [
         StatefulShellBranch(routes: [
           GoRoute(
-              path: '/explore',
-              builder: (BuildContext context, GoRouterState state) {
-                return ExplorePage();
-              },
-              routes: [
-                GoRoute(
-                  path: 'details/:id',
-                  builder: (BuildContext context, GoRouterState state) {
-                    final id = state.pathParameters['id'];
-                    return CourseDetailsPage(
-                      id: id!,
-                    );
-                  },
-                )
-              ])
+            path: '/explore',
+            builder: (BuildContext context, GoRouterState state) {
+              return ExplorePage();
+            },
+          )
         ]),
         StatefulShellBranch(routes: [
           GoRoute(
-              path: '/my_courses',
-              builder: (BuildContext context, GoRouterState state) {
-                return MyCoursesPage();
-              },
-              routes: [
-                GoRoute(
-                  path: 'details/:id',
-                  builder: (BuildContext context, GoRouterState state) {
-                    final id = state.pathParameters['id'];
-                    return CourseDetailsPage(
-                      id: id!,
-                    );
-                  },
-                )
-              ])
+            path: '/my_courses',
+            builder: (BuildContext context, GoRouterState state) {
+              return MyCoursesPage();
+            },
+          )
         ]),
         /*StatefulShellBranch(routes: [
           GoRoute(

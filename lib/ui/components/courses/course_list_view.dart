@@ -1,5 +1,7 @@
 import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.dart';
 import 'package:easymotion_app/data/hooks/use_courses.dart';
+import 'package:easymotion_app/ui/components/utility/error_alert.dart';
+import 'package:easymotion_app/ui/components/utility/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -8,11 +10,9 @@ import '../../../data/common/static_resources.dart';
 import 'course_filter.type.dart';
 
 class CourseListView extends HookWidget {
-  const CourseListView(
-      {super.key, required this.pathPrefix, required this.courseFilterType});
+  const CourseListView({super.key, required this.courseFilterType});
 
   final CourseFilterType courseFilterType;
-  final String pathPrefix;
 
   bool includeCourse(CourseDto course) {
     if (courseFilterType.searchText.isNotEmpty &&
@@ -30,14 +30,6 @@ class CourseListView extends HookWidget {
         !courseFilterType.levels.contains(course.level.value)) {
       return false;
     }
-    /*if (courseFilterType.frequencies.isNotEmpty &&
-        !courseFilterType.frequencies.contains(course.frequency.value)) {
-      return false;
-    }
-    if (courseFilterType.availabilities.isNotEmpty &&
-        !courseFilterType.availabilities.contains(course.availability.value)) {
-      return false;
-    }*/
 
     return true;
   }
@@ -47,16 +39,17 @@ class CourseListView extends HookWidget {
     final courses = useCourses(context);
 
     if (courses.isLoading) {
-      return Text("Loading...");
+      return LoadingIndicator();
     }
 
-    if (courses.isError) {
-      return Text("Error: ${courses.error}");
+    final fullCourseList = courses.data?.data;
+    if (courses.isError || fullCourseList == null) {
+      return ErrorAlert();
     }
 
-    var courseList = courses.data?.data?.where(includeCourse).toList();
+    final courseList = fullCourseList.where(includeCourse).toList();
 
-    if (courseList == null || courseList.isEmpty) {
+    if (courseList.isEmpty) {
       return Text("Empty list");
     }
 
@@ -75,8 +68,7 @@ class CourseListView extends HookWidget {
           ),
           trailing: IconButton(
             tooltip: "Dettagli corso",
-            onPressed: () =>
-                context.go('/explore/details/${courseList[index].id}'),
+            onPressed: () => context.push('/details/${courseList[index].id}'),
             icon: Icon(Icons.launch),
           ),
         );
