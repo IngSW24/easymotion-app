@@ -68,22 +68,29 @@ class CourseListView extends HookWidget {
       mainAxisSpacing: 25,
       children: List.generate(courseList.length, (index) {
 
-        return  Flexible(
-          child: Padding(
-            padding: EdgeInsets.all(10),
-            child: Column(
-                        children: [
+        return  Card(
 
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(20.0),
-                            child: Image.network("${StaticResources.uri}/${courseList[index].category.id}.jpg"),
-                          ),
+          child: InkWell(
+            onTap: () =>
+                context.go('/explore/details/${courseList[index].id}'),
 
-                          Center(
-                            child: Text("${courseList[index].name}", style: TextStyle(color: Color(0xFF094D95), fontWeight: FontWeight.bold),),
-                          ),
-                          Text("${courseList[index].shortDescription}"),
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
 
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Image.network("${StaticResources.uri}/${courseList[index].category.id}.jpg"),
+                    ),
+
+                    Center(
+                      child: Text("\n${courseList[index].name}", style: TextStyle(color: Color(0xFF094D95), fontWeight: FontWeight.bold),),
+                    ),
+                    Text("${courseList[index].shortDescription}"),
+
+                          /*
                           ElevatedButton(
 
                             style: ButtonStyle(
@@ -102,11 +109,15 @@ class CourseListView extends HookWidget {
                               ],
                             ),
                           )
+                          */
 
-                        ]
+                  ]
 
-                      ),
-        ));
+              ),
+            ),
+          )
+
+        );
       }),
     );
 
