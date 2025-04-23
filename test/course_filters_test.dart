@@ -22,7 +22,7 @@ void main() {
     ))));
 
     for (var item in testCategoriesListExtended) {
-      final itemFinder = find.text(CourseFilter.categories[item]!);
+      final itemFinder = find.text(CourseFilter.levels[item]!);
       await tester.scrollUntilVisible(itemFinder, 100);
       expect(itemFinder, findsOneWidget);
     }

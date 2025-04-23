@@ -22,21 +22,13 @@ class MyCoursesListView extends HookWidget {
     }
 
     if (courseFilterType.categories.isNotEmpty &&
-        !courseFilterType.categories.contains(course.category.name)) {
+        !courseFilterType.categories.contains(course.category.id)) {
       return false;
     }
     if (courseFilterType.levels.isNotEmpty &&
         !courseFilterType.levels.contains(course.level.value)) {
       return false;
     }
-    /*if (courseFilterType.frequencies.isNotEmpty &&
-        !courseFilterType.frequencies.contains(course.frequency.value)) {
-      return false;
-    }
-    if (courseFilterType.availabilities.isNotEmpty &&
-        !courseFilterType.availabilities.contains(course.availability.value)) {
-      return false;
-    }*/
 
     return true;
   }

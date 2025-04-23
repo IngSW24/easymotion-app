@@ -17,8 +17,7 @@ class ErrorAlert extends HookWidget {
         Icon(Icons.error_outline, color: Colors.red, size: 60),
         Padding(
           padding: const EdgeInsets.only(top: 16),
-          child:
-              Text('Si è verificato un errore', textAlign: TextAlign.center),
+          child: Text('Si è verificato un errore', textAlign: TextAlign.center),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),

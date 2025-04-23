@@ -23,7 +23,7 @@ class CourseListView extends HookWidget {
     }
 
     if (courseFilterType.categories.isNotEmpty &&
-        !courseFilterType.categories.contains(course.category.name)) {
+        !courseFilterType.categories.contains(course.category.id)) {
       return false;
     }
     if (courseFilterType.levels.isNotEmpty &&

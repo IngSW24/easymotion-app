@@ -1,12 +1,16 @@
+import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.dart';
 import 'package:easymotion_app/data/hooks/use_auth.dart';
+import 'package:easymotion_app/data/hooks/use_categories.dart';
 import 'package:easymotion_app/ui/components/courses/course_filter.type.dart';
 import 'package:easymotion_app/ui/components/courses/course_list_view.dart';
 import 'package:easymotion_app/ui/components/courses/course_filters.dart';
-import 'package:easymotion_app/ui/components/chip_list/horizontal_chips_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 
-class ExplorePage extends StatefulWidget {
+import '../components/chip_list/horizontal_cancellable_filter_chip_list.dart';
+
+class ExplorePage extends StatefulHookWidget {
   const ExplorePage({super.key});
 
   @override
@@ -15,7 +19,7 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState extends State<ExplorePage> {
   String _searchText = "";
-  List<String> _categories = [], _levels = [];
+  List<String> _selectedCategories = [], _selectedLevels = [];
 
   void _openFilterBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -23,19 +27,19 @@ class _ExplorePageState extends State<ExplorePage> {
       builder: (context) {
         return StatefulBuilder(builder: (context, setModalState) {
           return CourseFilter(
-            selectedCategories: _categories,
-            selectedLevels: _levels,
+            selectedCategories: _selectedCategories,
+            selectedLevels: _selectedLevels,
             onCategoriesChanged: (List<String> value) {
               setModalState(() {
                 setState(() {
-                  _categories = value;
+                  _selectedCategories = value;
                 });
               });
             },
             onLevelsChanged: (List<String> value) {
               setModalState(() {
                 setState(() {
-                  _levels = value;
+                  _selectedLevels = value;
                 });
               });
             },
@@ -51,11 +55,21 @@ class _ExplorePageState extends State<ExplorePage> {
     });
   }
 
+  CourseCategoryDto? findLabel(List<CourseCategoryDto> categories, String key) {
+    for (final cat in categories) {
+      if (cat.id == key) return cat;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final userInfo = useUserInfo(context);
     final logout = useLogoutFn(context);
     final user = userInfo();
+    final categories = useCategories(context).data;
+
+    if (categories == null) return SizedBox();
 
     return Scaffold(
         appBar: AppBar(
@@ -91,26 +105,37 @@ class _ExplorePageState extends State<ExplorePage> {
                 ),
                 onChanged: onSearchChanged,
               )),
-          if (_categories.isNotEmpty || _levels.isNotEmpty)
+          if (_selectedCategories.isNotEmpty || _selectedLevels.isNotEmpty)
             Padding(
                 padding: EdgeInsets.all(8),
                 child: SizedBox(
                     height: 40,
-                    child: HorizontalChipsList(
-                        maxWidth: 320,
-                        labels: _categories
-                                .map(
-                                    (key) => CourseFilter.categories[key] ?? "")
-                                .toList() +
-                            _levels
-                                .map((key) => CourseFilter.levels[key] ?? "")
-                                .toList()))),
+                    child: HorizontalCancellableFilterChipList(
+                      maxWidth: 320,
+                      items: _selectedCategories
+                              .map((key) => FilterChipItem(
+                                  key: key,
+                                  label:
+                                      findLabel(categories, key)?.name ?? "-"))
+                              .toList() +
+                          _selectedLevels
+                              .map((key) => FilterChipItem(
+                                  key: key,
+                                  label: CourseFilter.levels[key] ?? "-"))
+                              .toList(),
+                      onDeleted: (String s) {
+                        setState(() {
+                          _selectedCategories.remove(s);
+                          _selectedLevels.remove(s);
+                        });
+                      },
+                    ))),
           Expanded(
               child: CourseListView(
             courseFilterType: CourseFilterType(
               searchText: _searchText,
-              categories: _categories,
-              levels: _levels,
+              categories: _selectedCategories,
+              levels: _selectedLevels,
               //frequencies: _frequencies,
               //availabilities: _availabilities
             ),
