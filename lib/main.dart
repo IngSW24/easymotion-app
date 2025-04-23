@@ -21,6 +21,7 @@ Future<void> main() async {
 }
 
 final GoRouter _router = GoRouter(initialLocation: '/explore', routes: [
+
   GoRoute(
     path: '/login',
     builder: (BuildContext context, GoRouterState state) {
