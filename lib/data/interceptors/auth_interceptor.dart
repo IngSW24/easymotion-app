@@ -48,6 +48,6 @@ class AuthInterceptor implements Interceptor {
       return chain.proceed(request);
     }
 
-    return response; // will throw an Exception
+    return response; // invalid refresh token, it will throw an Exception
   }
 }

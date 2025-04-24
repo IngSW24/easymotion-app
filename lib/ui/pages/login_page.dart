@@ -43,78 +43,76 @@ class _LoginPageState extends State<LoginPage> {
         ),
         body: SingleChildScrollView(
             child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Text(
-                      "Bentornato! \nInserisci le tue credenziali per accedere al tuo account Easymotion",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16)),
+          children: [
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                  "Bentornato! \nInserisci le tue credenziali per accedere al tuo account Easymotion",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16)),
+            ),
+            if (loginFailed)
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  "Username o password non valide",
+                  style: TextStyle(color: Colors.red),
                 ),
-                if (loginFailed)
-                  Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Text(
-                      "Username o password non valide",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ),
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: TextField(
-                    decoration: InputDecoration(
-                        label: Text("Username/e-mail"),
-                        border: OutlineInputBorder()),
-                    onChanged: (String value) {
-                      setState(() {
-                        _username = value;
-                      });
+              ),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: TextField(
+                decoration: InputDecoration(
+                    label: Text("Username/e-mail"),
+                    border: OutlineInputBorder()),
+                onChanged: (String value) {
+                  setState(() {
+                    _username = value;
+                  });
+                },
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                    labelText: "Password", border: OutlineInputBorder()),
+                onChanged: (String value) {
+                  setState(() {
+                    _password = value;
+                  });
+                },
+              ),
+            ),
+            Padding(
+                padding: EdgeInsets.all(8),
+                child: ElevatedButton(
+                    onPressed: () async {
+                      bool status = await login(
+                          SignInDto(email: _username, password: _password));
+                      if (!status) {
+                        setState(() {
+                          loginFailed = true;
+                        });
+                      } else if (context.mounted) {
+                        context.go("/explore");
+                      }
                     },
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: TextField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                        labelText: "Password", border: OutlineInputBorder()),
-                    onChanged: (String value) {
-                      setState(() {
-                        _password = value;
-                      });
-                    },
-                  ),
-                ),
-                Padding(
-                    padding: EdgeInsets.all(8),
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          bool status = await login(
-                              SignInDto(email: _username, password: _password));
-                          if (!status) {
-                            setState(() {
-                              loginFailed = true;
-                            });
-                          } else if (context.mounted) {
-                            context.go("/explore");
-                          }
-                        },
-                        style: ButtonStyle(
-                            backgroundColor:
-                                WidgetStatePropertyAll(Color(0xFF094D95))),
-                        child: Text("Login",
-                            style: TextStyle(
-                                color: Color(0xFFFDFDFD),
-                                fontWeight: FontWeight.bold)))),
-                Padding(
-                  padding: EdgeInsets.all(8),
-                  child: TextButton(
-                      onPressed: onRegisterClick,
-                      child: Text("Registati a Easymotion")),
-                )
-              ],
+                    style: ButtonStyle(
+                        backgroundColor:
+                            WidgetStatePropertyAll(Color(0xFF094D95))),
+                    child: Text("Login",
+                        style: TextStyle(
+                            color: Color(0xFFFDFDFD),
+                            fontWeight: FontWeight.bold)))),
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: TextButton(
+                  onPressed: onRegisterClick,
+                  child: Text("Registati a Easymotion")),
             )
-        )
-    );
+          ],
+        )));
   }
 }

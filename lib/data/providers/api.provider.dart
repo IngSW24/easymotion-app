@@ -22,13 +22,23 @@ class ApiProvider extends ChangeNotifier {
   static final baseUrl = Uri.parse(apiURL!);
 
   AuthUserDto? _user;
+  bool _isLoading = true;
 
   AuthUserDto? getUser() {
     return _user;
   }
 
+  bool isLoading() {
+    return _isLoading;
+  }
+
   void _setUser(AuthUserDto? user) {
     _user = user;
+    notifyListeners();
+  }
+
+  void _setLoading(bool isLoading) {
+    _isLoading = isLoading;
     notifyListeners();
   }
 
@@ -83,10 +93,12 @@ class ApiProvider extends ChangeNotifier {
       setAccessToken(newAccessToken);
       setRefreshToken(newRefreshToken);
       _setUser(response.body?.user);
+      _setLoading(false);
     } else {
       setAccessToken(null);
       setRefreshToken(null);
       _setUser(null); // force re-login
+      _setLoading(false);
     }
   }
 
@@ -98,6 +110,7 @@ class ApiProvider extends ChangeNotifier {
         setRefreshToken(responseBody.tokens?.refreshToken);
         setAccessToken(responseBody.tokens?.accessToken);
         _setUser(responseBody.user);
+        _setLoading(false);
         return true;
       }
       return false;

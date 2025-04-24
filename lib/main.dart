@@ -4,6 +4,7 @@ import 'package:easymotion_app/ui/pages/course_details_page.dart';
 import 'package:easymotion_app/ui/pages/login_page.dart';
 import 'package:easymotion_app/ui/pages/my_courses_page.dart';
 import 'package:easymotion_app/ui/pages/explore_page.dart';
+import 'package:easymotion_app/ui/pages/user_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -35,6 +36,12 @@ final GoRouter _router = GoRouter(initialLocation: '/explore', routes: [
       return CourseDetailsPage(
         id: id!,
       );
+    },
+  ),
+  GoRoute(
+    path: '/profile',
+    builder: (BuildContext context, GoRouterState state) {
+      return UserProfilePage();
     },
   ),
   StatefulShellRoute.indexedStack(

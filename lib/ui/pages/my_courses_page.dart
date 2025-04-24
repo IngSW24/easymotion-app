@@ -105,15 +105,16 @@ class _MyScaffoldState extends State<MyCoursesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final userInfo = useUserInfo(context);
-    final logout = useLogoutFn(context);
-    final user = userInfo();
+    final user = useUserInfo(context).call();
+    final userIsLoading = useIsLoading(context).call();
     final categories = useCategories(context).data;
 
     if (user == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.go('/login');
-      });
+      if (!userIsLoading) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          context.go('/login');
+        });
+      }
       return LoadingPage();
     }
 
@@ -137,14 +138,11 @@ class _MyScaffoldState extends State<MyCoursesPage> {
           titleTextStyle: TextStyle(color: Color(0xFFFDFDFD)),
           toolbarTextStyle: TextStyle(color: Color(0xFFFDFDFD)),
           actions: [
-            CircleAvatar(
-              radius: 20,
-              backgroundImage: AssetImage('images/blankProfileImage.png'),
-            ),
             IconButton(
-                tooltip: "Logout",
-                onPressed: () => logout(),
-                icon: Icon(Icons.logout, color: Color(0xFFFDFDFD)))
+              //icon: ImageIcon(AssetImage('images/blankProfileImage.png')), // TODO: person icon?
+              icon: Icon(Icons.person),
+              onPressed: () => context.push("/profile"),
+            ),
           ],
         ),
         /*floatingActionButton: FloatingActionButton(

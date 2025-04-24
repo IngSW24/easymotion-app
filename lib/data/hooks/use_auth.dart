@@ -8,6 +8,12 @@ AuthUserDto? Function() useUserInfo(BuildContext ctx) {
   return () => api.getUser();
 }
 
+bool Function() useIsLoading(BuildContext ctx) {
+  final api = useApi(ctx);
+
+  return () => api.isLoading();
+}
+
 Future<bool> Function(SignInDto user) useLoginFn(BuildContext ctx) {
   final api = useApi(ctx);
 
