@@ -19,7 +19,7 @@ class BottomNavBar extends StatelessWidget {
           NavigationDestination(
               icon: Icon(Icons.home),
               label: "My courses",
-              selectedIcon: Icon(Icons.explore, color: Color(0xFF094D95))),
+              selectedIcon: Icon(Icons.home, color: Color(0xFF094D95))),
           //NavigationDestination(icon: Icon(Icons.trending_up), label: "Stats"),
         ],
         onDestinationSelected: (int index) {

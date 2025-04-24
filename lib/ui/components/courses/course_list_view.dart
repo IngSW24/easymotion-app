@@ -76,7 +76,7 @@ class CourseListView extends HookWidget {
                       color: Color(0xFF094D95), fontWeight: FontWeight.bold),
                 ),
               ),
-              Text("${courseList[index].shortDescription}"),
+              Text(courseList[index].shortDescription),
 
               /*
                           ElevatedButton(

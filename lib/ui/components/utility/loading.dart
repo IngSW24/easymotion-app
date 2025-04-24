@@ -6,6 +6,8 @@ class LoadingIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-        alignment: Alignment.topCenter, child: CircularProgressIndicator());
+        alignment: Alignment.topCenter,
+        child: Padding(
+            padding: EdgeInsets.all(8), child: CircularProgressIndicator()));
   }
 }

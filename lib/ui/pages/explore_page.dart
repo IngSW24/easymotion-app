@@ -4,10 +4,11 @@ import 'package:easymotion_app/data/hooks/use_categories.dart';
 import 'package:easymotion_app/ui/components/courses/course_filter.type.dart';
 import 'package:easymotion_app/ui/components/courses/course_list_view.dart';
 import 'package:easymotion_app/ui/components/courses/course_filters.dart';
+import 'package:easymotion_app/ui/components/utility/loading.dart';
+import 'package:easymotion_app/ui/pages/loading_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
-
 import '../components/chip_list/horizontal_cancellable_filter_chip_list.dart';
 
 class ExplorePage extends StatefulHookWidget {
@@ -69,81 +70,84 @@ class _ExplorePageState extends State<ExplorePage> {
     final user = userInfo();
     final categories = useCategories(context).data;
 
-    if (categories == null) return SizedBox();
+    if (user == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.go('/login');
+      });
+      return LoadingPage();
+    }
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(
-              user != null ? "Esplora corsi - ${user.firstName}" : 'Easymotion',
+          title: Text("Esplora corsi - ${user.firstName}",
               style: TextStyle(
                   color: Color(0xFF094D95), fontWeight: FontWeight.bold)),
           actions: [
-            if (user == null)
-              IconButton(
-                  tooltip: "Login",
-                  onPressed: () => context.go("/login"),
-                  icon: Icon(Icons.login))
-            else
-              IconButton(
-                  tooltip: "Logout",
-                  onPressed: () => logout(),
-                  icon: Icon(Icons.logout))
+            IconButton(
+                tooltip: "Logout",
+                onPressed: () => logout(),
+                icon: Icon(Icons.logout))
           ],
         ),
-        body: Column(children: [
-          Padding(
-              padding: EdgeInsets.all(8),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Cerca corsi (es. nuoto)",
-                  prefixIcon: Icon(Icons.search),
-                  suffixIcon: IconButton(
-                      tooltip: "Open filters",
-                      onPressed: () => _openFilterBottomSheet(context),
-                      icon: Icon(Icons.filter_alt_outlined)),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(32),
+        body: categories == null
+            ? LoadingIndicator()
+            : Column(children: [
+                Padding(
+                    padding: EdgeInsets.all(8),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "Cerca corsi (es. nuoto)",
+                        prefixIcon: Icon(Icons.search),
+                        suffixIcon: IconButton(
+                            tooltip: "Open filters",
+                            onPressed: () => _openFilterBottomSheet(context),
+                            icon: Icon(Icons.filter_alt_outlined)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                      ),
+                      onChanged: onSearchChanged,
+                    )),
+                if (_selectedCategories.isNotEmpty ||
+                    _selectedLevels.isNotEmpty)
+                  Padding(
+                      padding: EdgeInsets.all(8),
+                      child: SizedBox(
+                          height: 40,
+                          child: HorizontalCancellableFilterChipList(
+                            maxWidth: 320,
+                            items: _selectedCategories
+                                    .map((key) => FilterChipItem(
+                                        key: key,
+                                        label:
+                                            findLabel(categories, key)?.name ??
+                                                "-"))
+                                    .toList() +
+                                _selectedLevels
+                                    .map((key) => FilterChipItem(
+                                        key: key,
+                                        label: CourseFilter.levels[key] ?? "-"))
+                                    .toList(),
+                            onDeleted: (String s) {
+                              setState(() {
+                                _selectedCategories.remove(s);
+                                _selectedLevels.remove(s);
+                              });
+                            },
+                          ))),
+                Text("Suggeriti per te",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                Expanded(
+                    child: CourseListView(
+                  courseFilterType: CourseFilterType(
+                    searchText: _searchText,
+                    categories: _selectedCategories,
+                    levels: _selectedLevels,
+                    //frequencies: _frequencies,
+                    //availabilities: _availabilities
                   ),
-                ),
-                onChanged: onSearchChanged,
-              )),
-          if (_selectedCategories.isNotEmpty || _selectedLevels.isNotEmpty)
-            Padding(
-                padding: EdgeInsets.all(8),
-                child: SizedBox(
-                    height: 40,
-                    child: HorizontalCancellableFilterChipList(
-                      maxWidth: 320,
-                      items: _selectedCategories
-                              .map((key) => FilterChipItem(
-                                  key: key,
-                                  label:
-                                      findLabel(categories, key)?.name ?? "-"))
-                              .toList() +
-                          _selectedLevels
-                              .map((key) => FilterChipItem(
-                                  key: key,
-                                  label: CourseFilter.levels[key] ?? "-"))
-                              .toList(),
-                      onDeleted: (String s) {
-                        setState(() {
-                          _selectedCategories.remove(s);
-                          _selectedLevels.remove(s);
-                        });
-                      },
-                    ))),
-          Text("Suggeriti per te",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-          Expanded(
-              child: CourseListView(
-            courseFilterType: CourseFilterType(
-              searchText: _searchText,
-              categories: _selectedCategories,
-              levels: _selectedLevels,
-              //frequencies: _frequencies,
-              //availabilities: _availabilities
-            ),
-          ))
-        ]));
+                ))
+              ]));
   }
 }

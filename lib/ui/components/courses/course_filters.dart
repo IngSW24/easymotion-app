@@ -1,4 +1,5 @@
 import 'package:easymotion_app/data/hooks/use_categories.dart';
+import 'package:easymotion_app/ui/components/utility/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -24,7 +25,7 @@ class CourseFilter extends HookWidget {
   Widget build(BuildContext context) {
     final categories = useCategories(context).data;
 
-    if (categories == null) return SizedBox();
+    if (categories == null) return LoadingIndicator();
 
     return Container(
       padding: EdgeInsets.all(16),
