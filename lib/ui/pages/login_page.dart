@@ -41,7 +41,8 @@ class _LoginPageState extends State<LoginPage> {
               child: Text('Login',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25))),
         ),
-        body: Column(
+        body: SingleChildScrollView(
+        child: Column(
           children: [
             Padding(
               padding: EdgeInsets.all(20),
@@ -112,6 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text("Registati a Easymotion")),
             )
           ],
-        ));
+        ))
+    );
   }
 }
