@@ -16,7 +16,15 @@ class LoginPage extends StatefulHookWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String _username = "", _password = "";
-  bool loginFailed = false;
+  bool _loginFailed = false, _obscurePassword = true;
+  late final TextEditingController _usernameController, _passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    _usernameController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
 
   Future<void> onRegisterClick() async {
     final Uri uri = Uri.parse(registerUrl!);
@@ -51,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16)),
             ),
-            if (loginFailed)
+            if (_loginFailed)
               Padding(
                 padding: EdgeInsets.all(16),
                 child: Text(
@@ -62,6 +70,7 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
               padding: EdgeInsets.all(20),
               child: TextField(
+                controller: _usernameController,
                 decoration: InputDecoration(
                     label: Text("Username/e-mail"),
                     border: OutlineInputBorder()),
@@ -75,9 +84,20 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
               padding: EdgeInsets.all(20),
               child: TextField(
-                obscureText: true,
+                controller: _passwordController,
+                obscureText: _obscurePassword,
                 decoration: InputDecoration(
-                    labelText: "Password", border: OutlineInputBorder()),
+                    labelText: "Password",
+                    border: OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
+                        icon: Icon(_obscurePassword
+                            ? Icons.visibility
+                            : Icons.visibility_off))),
                 onChanged: (String value) {
                   setState(() {
                     _password = value;
@@ -93,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                           SignInDto(email: _username, password: _password));
                       if (!status) {
                         setState(() {
-                          loginFailed = true;
+                          _loginFailed = true;
                         });
                       } else if (context.mounted) {
                         context.go("/explore");

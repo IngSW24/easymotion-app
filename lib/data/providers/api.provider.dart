@@ -82,6 +82,8 @@ class ApiProvider extends ChangeNotifier {
     final refreshToken = await getRefreshToken();
     if (refreshToken == null) {
       setAccessToken(null);
+      _setUser(null); // force re-login
+      _setLoading(false);
       return;
     }
 
