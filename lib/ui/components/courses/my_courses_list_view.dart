@@ -4,6 +4,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import '../../../api-client-generated/api_schema.models.swagger.dart';
 import '../../../data/common/static_resources.dart';
+import '../utility/empty_alert.dart';
+import '../utility/error_alert.dart';
+import '../utility/loading.dart';
 import 'course_filter.type.dart';
 
 class MyCoursesListView extends HookWidget {
@@ -20,21 +23,13 @@ class MyCoursesListView extends HookWidget {
     }
 
     if (courseFilterType.categories.isNotEmpty &&
-        !courseFilterType.categories.contains(course.category.name)) {
+        !courseFilterType.categories.contains(course.category.id)) {
       return false;
     }
     if (courseFilterType.levels.isNotEmpty &&
         !courseFilterType.levels.contains(course.level.value)) {
       return false;
     }
-    /*if (courseFilterType.frequencies.isNotEmpty &&
-        !courseFilterType.frequencies.contains(course.frequency.value)) {
-      return false;
-    }
-    if (courseFilterType.availabilities.isNotEmpty &&
-        !courseFilterType.availabilities.contains(course.availability.value)) {
-      return false;
-    }*/
 
     return true;
   }
@@ -44,26 +39,33 @@ class MyCoursesListView extends HookWidget {
     final courses = useCoursesSubscribed(context);
 
     if (courses.isLoading) {
-      return Text("Loading...");
+      return LoadingIndicator();
     }
 
-    if (courses.isError) {
-      return Text("Error: ${courses.error}");
+    final fullCourseList = courses.data?.data;
+    if (courses.isError || fullCourseList == null) {
+      return ErrorAlert();
     }
 
-    var courseList = courses.data?.data?.where(includeCourse).toList();
+    final courseList = fullCourseList.where(includeCourse).toList();
 
-    if (courseList == null || courseList.isEmpty) {
-      return Text("Empty list");
+    if (courseList.isEmpty) {
+      return EmptyAlert();
     }
 
     return ListView.builder(
       itemCount: courseList.length,
       itemBuilder: (BuildContext ctx, int index) {
         return ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           title: Text(
             courseList[index].name,
             overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                color: Color(0xFF094D95), fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            courseList[index].shortDescription,
           ),
           leading: CircleAvatar(
             backgroundImage: NetworkImage(
@@ -72,8 +74,7 @@ class MyCoursesListView extends HookWidget {
           ),
           trailing: IconButton(
             tooltip: "Dettagli corso",
-            onPressed: () =>
-                context.go('/my_courses/details/${courseList[index].id}'),
+            onPressed: () => context.push('/details/${courseList[index].id}'),
             icon: Icon(Icons.launch),
           ),
         );
