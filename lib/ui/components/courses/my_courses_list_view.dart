@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import '../../../api-client-generated/api_schema.models.swagger.dart';
 import '../../../data/common/static_resources.dart';
+import '../utility/empty_alert.dart';
 import '../utility/error_alert.dart';
 import '../utility/loading.dart';
 import 'course_filter.type.dart';
@@ -49,7 +50,7 @@ class MyCoursesListView extends HookWidget {
     final courseList = fullCourseList.where(includeCourse).toList();
 
     if (courseList.isEmpty) {
-      return Text("Empty list");
+      return EmptyAlert();
     }
 
     return ListView.builder(

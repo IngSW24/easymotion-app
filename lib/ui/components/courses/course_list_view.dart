@@ -1,5 +1,6 @@
 import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.dart';
 import 'package:easymotion_app/data/hooks/use_courses.dart';
+import 'package:easymotion_app/ui/components/utility/empty_alert.dart';
 import 'package:easymotion_app/ui/components/utility/error_alert.dart';
 import 'package:easymotion_app/ui/components/utility/loading.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class CourseListView extends HookWidget {
     final courseList = fullCourseList.where(includeCourse).toList();
 
     if (courseList.isEmpty) {
-      return Text("Empty list");
+      return EmptyAlert();
     }
 
     return GridView.count(

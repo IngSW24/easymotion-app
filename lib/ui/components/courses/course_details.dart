@@ -1,5 +1,7 @@
 import 'package:easymotion_app/data/hooks/use_auth.dart';
 import 'package:easymotion_app/ui/components/subscriptions/subscribe_button.dart';
+import 'package:easymotion_app/ui/components/utility/error_alert.dart';
+import 'package:easymotion_app/ui/components/utility/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../../data/common/static_resources.dart';
@@ -16,11 +18,11 @@ class CourseDetails extends HookWidget {
     final courseDetails = useCourse(context, id);
 
     if (courseDetails.isLoading) {
-      return Text("Loading...");
+      return LoadingIndicator();
     }
 
     if (courseDetails.isError) {
-      return Text("Error: ${courseDetails.error}");
+      return ErrorAlert();
     }
 
     var courseEntity = courseDetails.data;
