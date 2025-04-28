@@ -32,12 +32,15 @@ class UserProfilePage extends HookWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildProfileInfo("Nome completo", "${user.firstName} ${user.middleName != null ? "${user.middleName} " : ""}${user.lastName}", icon: Icons.person),
+            _buildProfileInfo("Nome completo",
+                "${user.firstName} ${user.middleName != null ? "${user.middleName} " : ""}${user.lastName}",
+                icon: Icons.person),
             if (user.birthDate != null)
               _buildProfileInfo("Data di nascita", user.birthDate ?? ""),
             _buildProfileInfo("Email", user.email, icon: Icons.email),
             if (user.phoneNumber != null)
-              _buildProfileInfo("Telefono", user.phoneNumber ?? "", icon: Icons.phone),
+              _buildProfileInfo("Telefono", user.phoneNumber ?? "",
+                  icon: Icons.phone),
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: ElevatedButton(
