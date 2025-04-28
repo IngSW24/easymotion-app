@@ -27,20 +27,63 @@ class UserProfilePage extends HookWidget {
       appBar: AppBar(
         title: Text(user.firstName + user.lastName),
       ),
-      body: Column(
-        children: [
-          Text("Nome: ${user.firstName}"),
-          if (user.middleName != null) Text("Secondo nome: ${user.middleName}"),
-          Text("Cognome: ${user.lastName}"),
-          Text("Data di nascita: ${user.birthDate}"),
-          Text("Email: ${user.email}"),
-          Text("Telefono: ${user.phoneNumber}"),
-          TextButton(
-              onPressed: logout,
-              child: Text(
-                "Logout",
-                style: TextStyle(color: Colors.red),
-              ))
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildProfileInfo("Nome completo", "${user.firstName} ${user.middleName != null ? "${user.middleName} " : ""}${user.lastName}", icon: Icons.person),
+            if (user.birthDate != null)
+              _buildProfileInfo("Data di nascita", user.birthDate ?? ""),
+            _buildProfileInfo("Email", user.email, icon: Icons.email),
+            if (user.phoneNumber != null)
+              _buildProfileInfo("Telefono", user.phoneNumber ?? "", icon: Icons.phone),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: ElevatedButton(
+                onPressed: logout, // Chiama la funzione di logout
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.redAccent,
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  textStyle: const TextStyle(fontSize: 18),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                ),
+                child: const Text(
+                  'Logout',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileInfo(String label, String value, {IconData? icon}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Icon(icon, color: Colors.grey.shade600),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  label,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.grey.shade700),
+                ),
+                const SizedBox(height: 4),
+                Text(value),
+              ],
+            ),
+          ),
         ],
       ),
     );

@@ -6,7 +6,6 @@ class EmptyAlert extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
