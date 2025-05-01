@@ -5,7 +5,6 @@ import '../../api-client-generated/api_schema.swagger.dart';
 import '../interceptors/auth_interceptor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String accessTokenKey = "access_token";
 const String refreshTokenKey = "refresh_token";
 
 class ApiProvider extends ChangeNotifier {
@@ -16,13 +15,11 @@ class ApiProvider extends ChangeNotifier {
   }
 
   final BuildContext ctx;
-
   late final ApiSchema schema;
-
   static final baseUrl = Uri.parse(apiURL!);
-
   AuthUserDto? _user;
   bool _isLoading = true;
+  String? _accessToken;
 
   AuthUserDto? getUser() {
     return _user;
@@ -51,17 +48,12 @@ class ApiProvider extends ChangeNotifier {
     );
   }
 
-  Future<String?> getAccessToken() async {
-    final storage = await SharedPreferences.getInstance();
-    return storage.getString(accessTokenKey);
+  String? getAccessToken() {
+    return _accessToken;
   }
 
-  Future<bool> setAccessToken(String? accessToken) async {
-    final storage = await SharedPreferences.getInstance();
-    if (accessToken == null) {
-      return await storage.remove(accessTokenKey);
-    }
-    return await storage.setString(accessTokenKey, accessToken);
+  void setAccessToken(String? accessToken) {
+    _accessToken = accessToken;
   }
 
   Future<String?> getRefreshToken() async {
