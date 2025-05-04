@@ -4,6 +4,7 @@ import 'package:easymotion_app/ui/components/utility/error_alert.dart';
 import 'package:easymotion_app/ui/components/utility/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import '../../../data/common/static_resources.dart';
 import '../../../data/hooks/use_courses.dart';
 
@@ -25,7 +26,13 @@ class CourseDetails extends HookWidget {
       return ErrorAlert();
     }
 
-    var courseEntity = courseDetails.data;
+    final courseEntity = courseDetails.data;
+    if (courseEntity == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.go('/explore');
+      });
+      return LoadingIndicator();
+    }
 
     return SingleChildScrollView(
         //This widget permit to scroll the screen if we have too much information to show
@@ -35,7 +42,7 @@ class CourseDetails extends HookWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            "${courseEntity?.name}\n",
+            courseEntity.name,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
             textAlign: TextAlign.center,
             overflow: TextOverflow.visible,
@@ -43,64 +50,30 @@ class CourseDetails extends HookWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
             child: Image.network(
-                "${StaticResources.uri}/${courseEntity?.category.id}.jpg"),
+                "${StaticResources.uri}/${courseEntity.category.id}.jpg"),
           ),
-          Text("\nDescrizione:", style: TextStyle(fontWeight: FontWeight.bold)),
-          Text("\n${courseEntity?.description}", textAlign: TextAlign.justify),
-          RichText(
-            text: TextSpan(
-                style: TextStyle(color: Colors.black, fontSize: 14),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: "\nCategoria: ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: "${courseEntity?.category.name}"),
-                ]),
+          _buildCourseInfo("Descrizione breve", courseEntity.shortDescription),
+          _buildCourseInfo("Descrizione", courseEntity.description),
+          _buildCourseInfo("Categoria", courseEntity.category.name),
+          _buildCourseInfo(
+              "Creato il", courseEntity.createdAt.toLocal().toString()),
+          _buildCourseInfo("Costo", "€ ${courseEntity.price.toString()}"),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "Istruttori",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.grey.shade700),
+                ),
+                const SizedBox(height: 4),
+                ...courseEntity.instructors
+                    .map((item) => Text(courseEntity.instructors[0]))
+              ],
+            ),
           ),
-          RichText(
-            text: TextSpan(
-                style: TextStyle(color: Colors.black, fontSize: 14),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: "\nCreato il: ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
-                      text:
-                          "${courseEntity?.createdAt.year}/${courseEntity?.createdAt.month}/${courseEntity?.createdAt.day}"),
-                ]),
-          ),
-          RichText(
-            text: TextSpan(
-                style: TextStyle(color: Colors.black, fontSize: 14),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: "\nCosto (in Euro): ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: "${courseEntity?.price}"),
-                ]),
-          ),
-          RichText(
-            text: TextSpan(
-                style: TextStyle(color: Colors.black, fontSize: 14),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: "\nIstruttori: ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: "${courseEntity?.instructors.toList()}"),
-                ]),
-          ),
-
-          /*
-          Text("\nCategoria: ${courseEntity?.category.name}"),
-          Text("\nCreato il: ${courseEntity?.createdAt.year}/${courseEntity?.createdAt.month}/${courseEntity?.createdAt.day}"),
-          Text("\nCosto (in Euro): ${courseEntity?.price}"),
-          Text("\nIstruttori: ${courseEntity?.instructors.toList()}"),
-          */
-
           SizedBox(
             height: 16,
           ),
@@ -108,5 +81,34 @@ class CourseDetails extends HookWidget {
         ],
       ),
     ));
+  }
+
+  Widget _buildCourseInfo(String label, String value, {IconData? icon}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: <Widget>[
+          if (icon != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Icon(icon, color: Colors.grey.shade600),
+            ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  label,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.grey.shade700),
+                ),
+                const SizedBox(height: 4),
+                Text(value),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

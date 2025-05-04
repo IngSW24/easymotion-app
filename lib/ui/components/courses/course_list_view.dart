@@ -55,7 +55,7 @@ class CourseListView extends HookWidget {
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 340,
-          childAspectRatio: 3 / 5,
+          childAspectRatio: 3 / 4,
           crossAxisSpacing: 8,
           mainAxisSpacing: 8),
       itemCount: courseList.length,

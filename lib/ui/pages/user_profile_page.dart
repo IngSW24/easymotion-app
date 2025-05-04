@@ -25,7 +25,7 @@ class UserProfilePage extends HookWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(user.firstName + user.lastName),
+        title: Text("Profilo paziente"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

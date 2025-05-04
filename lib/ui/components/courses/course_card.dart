@@ -15,20 +15,24 @@ class CourseCard extends StatelessWidget {
       onTap: () => context.push('/details/${course.id}'),
       child: Padding(
         padding: EdgeInsets.all(10),
-        child: Column(children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
             child: Image.network(
                 "${StaticResources.uri}/${course.category.id}.jpg"),
           ),
-          Center(
-            child: Text(
-              "\n${course.name}",
-              style: TextStyle(
-                  color: Color(0xFF094D95), fontWeight: FontWeight.bold),
-            ),
+          SizedBox(
+            height: 16,
           ),
-          Text(course.shortDescription),
+          Text(
+            course.name,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                color: Color(0xFF094D95), fontWeight: FontWeight.bold),
+          ),
+          Text(course.shortDescription,
+              maxLines: 2, overflow: TextOverflow.ellipsis),
         ]),
       ),
     ));
