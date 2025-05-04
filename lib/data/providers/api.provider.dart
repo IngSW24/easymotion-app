@@ -1,5 +1,6 @@
 import 'package:chopper/chopper.dart';
 import 'package:easymotion_app/data/common/constants.dart';
+import 'package:easymotion_app/data/common/login_response.dart';
 import 'package:flutter/material.dart';
 import '../../api-client-generated/api_schema.swagger.dart';
 import '../interceptors/auth_interceptor.dart';
@@ -96,13 +97,35 @@ class ApiProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> login(SignInDto data) async {
+  Future<LoginResponse> login(SignInDto data) async {
     try {
       final response = await schema.authLoginPost(body: data);
       final responseBody = response.body;
       if (responseBody != null) {
         setRefreshToken(responseBody.tokens?.refreshToken);
         setAccessToken(responseBody.tokens?.accessToken);
+        _setUser(responseBody.user);
+        _setLoading(false);
+        return responseBody.requiresOtp
+            ? LoginResponse.needOtp
+            : LoginResponse.success;
+      }
+      return LoginResponse.error;
+    } catch (e, stackTrace) {
+      debugPrint(e.toString());
+      debugPrintStack(stackTrace: stackTrace);
+      return LoginResponse.error;
+    }
+  }
+
+  Future<bool> loginOtp(OtpLoginDto data) async {
+    try {
+      final response = await schema.authLoginOtpPost(body: data);
+      final responseBody = response.body;
+      final tokens = responseBody?.tokens;
+      if (responseBody != null && tokens != null && !responseBody.requiresOtp) {
+        setRefreshToken(tokens.refreshToken);
+        setAccessToken(tokens.accessToken);
         _setUser(responseBody.user);
         _setLoading(false);
         return true;

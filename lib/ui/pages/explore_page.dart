@@ -75,6 +75,7 @@ class _ExplorePageState extends State<ExplorePage> {
           context.go('/login');
         });
       }
+
       return LoadingPage();
     }
 

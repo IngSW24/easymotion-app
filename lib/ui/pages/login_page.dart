@@ -1,4 +1,5 @@
 import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.dart';
+import 'package:easymotion_app/data/common/login_response.dart';
 import 'package:easymotion_app/data/hooks/use_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -51,6 +52,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         body: SingleChildScrollView(
             child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
               padding: EdgeInsets.all(20),
@@ -106,29 +108,37 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             Padding(
-                padding: EdgeInsets.all(8),
-                child: ElevatedButton(
+                padding: EdgeInsets.all(16),
+                child: FilledButton.icon(
+                    icon: Icon(Icons.login),
                     onPressed: () async {
-                      bool status = await login(
+                      LoginResponse status = await login(
                           SignInDto(email: _username, password: _password));
-                      if (!status) {
+                      if (status == LoginResponse.error) {
                         setState(() {
                           _loginFailed = true;
                         });
                       } else if (context.mounted) {
-                        context.go("/explore");
+                        if (status == LoginResponse.success) {
+                          context.go("/explore");
+                        } else if (status == LoginResponse.needOtp) {
+                          context.go("/login/otp/$_username");
+                        } else {
+                          debugPrint("Error: unknown login response");
+                        }
+                      } else {
+                        debugPrint("Error: unmounted context");
                       }
                     },
-                    style: ButtonStyle(
-                        backgroundColor:
-                            WidgetStatePropertyAll(Color(0xFF094D95))),
-                    child: Text("Login",
-                        style: TextStyle(
-                            color: Color(0xFFFDFDFD),
-                            fontWeight: FontWeight.bold)))),
+                    label: Text(
+                      "Login",
+                    ))),
             Padding(
-              padding: EdgeInsets.all(8),
+              padding: EdgeInsets.all(16),
               child: TextButton(
+                  style: ButtonStyle(
+                      foregroundColor: WidgetStatePropertyAll(
+                          Theme.of(context).colorScheme.secondary)),
                   onPressed: onRegisterClick,
                   child: Text("Registati a Easymotion")),
             )

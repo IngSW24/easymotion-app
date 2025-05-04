@@ -115,6 +115,7 @@ class _MyScaffoldState extends State<MyCoursesPage> {
           context.go('/login');
         });
       }
+
       return LoadingPage();
     }
 

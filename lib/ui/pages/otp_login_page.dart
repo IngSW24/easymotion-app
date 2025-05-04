@@ -1,0 +1,82 @@
+import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.dart';
+import 'package:easymotion_app/data/hooks/use_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:go_router/go_router.dart';
+
+class OTPLoginPage extends StatefulHookWidget {
+  const OTPLoginPage({super.key, required this.email});
+
+  final String email;
+
+  @override
+  State<OTPLoginPage> createState() => _OTPLoginPageState();
+}
+
+class _OTPLoginPageState extends State<OTPLoginPage> {
+  String? _otpCode;
+  bool _loginFailed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final loginOtp = useLoginOtpFn(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("OTP Login"),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                "Inserisci il codice a 6 cifre che abbiamo inviato a: ${widget.email}",
+              ),
+            ),
+            if (_loginFailed)
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  "Codice OTP non valido",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            OtpTextField(
+              numberOfFields: 6,
+              showFieldAsBox: true,
+              clearText: true,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              onSubmit: (value) => _otpCode = value,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: FilledButton.icon(
+                icon: Icon(Icons.login),
+                onPressed: () async {
+                  if (_otpCode == null) return;
+
+                  bool status = await loginOtp(
+                      OtpLoginDto(email: widget.email, otp: _otpCode!));
+                  if (!status) {
+                    setState(() {
+                      _loginFailed = true;
+                    });
+                  } else if (context.mounted) {
+                    context.go("/explore");
+                  } else {
+                    debugPrint("Error: unmounted context");
+                  }
+                },
+                label: Text("Login"),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

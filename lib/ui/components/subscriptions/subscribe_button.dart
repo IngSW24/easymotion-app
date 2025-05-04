@@ -1,5 +1,7 @@
 import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.dart';
 import 'package:easymotion_app/data/hooks/use_subscriptions.dart';
+import 'package:easymotion_app/ui/components/utility/error_alert.dart';
+import 'package:easymotion_app/ui/components/utility/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -20,28 +22,33 @@ class SubscribeButton extends HookWidget {
     final delete = useDeleteSubscription(context);
 
     if (subscriptions.isLoading) {
-      return Text("Loading...");
+      return LoadingIndicator();
     }
 
     final subList = subscriptions.data?.data;
     if (subscriptions.isError || subList == null) {
-      return Text("Error: ${subscriptions.error}");
+      return ErrorAlert();
     }
 
     if (subList.any((sub) => containsCourse(sub, courseID))) {
-      return FilledButton(
+      return FilledButton.icon(
+          icon: Icon(Icons.close),
+          style: ButtonStyle(
+              backgroundColor:
+                  WidgetStatePropertyAll(Theme.of(context).colorScheme.error)),
           onPressed: () async {
             await delete(SubscriptionDeleteDto(courseId: courseID));
             if (context.mounted) context.go("/my_courses");
           },
-          child: Text("Unsubscribe"));
+          label: Text("Unsubscribe"));
     }
 
-    return FilledButton(
+    return FilledButton.icon(
+        icon: Icon(Icons.check),
         onPressed: () async {
           await create(SubscriptionCreateDto(courseId: courseID));
           if (context.mounted) context.go("/my_courses");
         },
-        child: Text("Subscribe"));
+        label: Text("Subscribe"));
   }
 }

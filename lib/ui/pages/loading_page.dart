@@ -6,10 +6,6 @@ class LoadingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Welcome to Easymotion"),
-        ),
-        body: LoadingIndicator());
+    return Scaffold(appBar: AppBar(), body: LoadingIndicator());
   }
 }
