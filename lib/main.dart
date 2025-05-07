@@ -24,20 +24,19 @@ Future<void> main() async {
 
 final GoRouter _router = GoRouter(initialLocation: '/explore', routes: [
   GoRoute(
-    path: '/login',
-    builder: (BuildContext context, GoRouterState state) {
-      return LoginPage();
-    },
-    routes: [
-      GoRoute(
-        path: 'otp/:email',
-        builder: (BuildContext context, GoRouterState state) {
-          final email = state.pathParameters['email'];
-          return OTPLoginPage(email: email!);
-        },
-      ),
-    ]
-  ),
+      path: '/login',
+      builder: (BuildContext context, GoRouterState state) {
+        return LoginPage();
+      },
+      routes: [
+        GoRoute(
+          path: 'otp/:email',
+          builder: (BuildContext context, GoRouterState state) {
+            final email = state.pathParameters['email'];
+            return OTPLoginPage(email: email!);
+          },
+        ),
+      ]),
   GoRoute(
     path: '/details/:id',
     builder: (BuildContext context, GoRouterState state) {

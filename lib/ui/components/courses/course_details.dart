@@ -1,5 +1,5 @@
 import 'package:easymotion_app/data/hooks/use_auth.dart';
-import 'package:easymotion_app/ui/components/subscriptions/subscribe_button.dart';
+import 'package:easymotion_app/ui/components/subscriptions/subscription_details.dart';
 import 'package:easymotion_app/ui/components/utility/error_alert.dart';
 import 'package:easymotion_app/ui/components/utility/loading.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +77,7 @@ class CourseDetails extends HookWidget {
           SizedBox(
             height: 16,
           ),
-          if (userInfo() != null) SubscribeButton(courseID: id)
+          if (userInfo() != null) SubscriptionDetails(courseID: id)
         ],
       ),
     ));

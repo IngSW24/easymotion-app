@@ -11,7 +11,6 @@ class AuthInterceptor implements Interceptor {
 
   @override
   FutureOr<Response<T>> intercept<T>(Chain<T> chain) async {
-    debugPrint("Auth interception");
 
     Request request = chain.request;
 
@@ -25,9 +24,11 @@ class AuthInterceptor implements Interceptor {
 
     final response = await chain.proceed(request); // Try with the access token
 
+    debugPrint("Auth interception: " + request.uri.toString());
     if (response.statusCode != 401) {
       return response;
     }
+
 
     final refreshToken = await apiProvider.getRefreshToken();
     if (refreshToken == null) {

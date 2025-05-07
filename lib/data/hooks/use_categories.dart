@@ -11,6 +11,5 @@ UseQueryResult<List<CourseCategoryDto>?, dynamic> useCategories(
   ApiProvider apiProvider = Provider.of<ApiProvider>(ctx, listen: false);
   return useQuery(
       [categoriesQueryKey],
-      refetchInterval: Duration(seconds: 3),
       () async => (await apiProvider.schema.categoriesGet()).body);
 }

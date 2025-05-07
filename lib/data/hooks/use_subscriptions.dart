@@ -20,30 +20,30 @@ UseQueryResult<PaginatedResponseOfCourseDto?, dynamic> useCoursesSubscribed(
           .body);
 }
 
-UseQueryResult<PaginatedResponseOfSubscriptionDto?, dynamic>
+UseQueryResult<PaginatedResponseOfSubscriptionDtoWithCourse?, dynamic>
     useUserSubscriptions(BuildContext ctx) {
   ApiProvider apiProvider = Provider.of<ApiProvider>(ctx, listen: false);
   return useQuery(
       [subscriptionsQueryKey],
       refetchInterval: Duration(seconds: 3),
       () async =>
-          (await apiProvider.schema.subscriptionsGet(page: 0, perPage: 100))
+          (await apiProvider.schema.subscriptionsGet(page: 0, perPage: 10))
               .body);
 }
 
-Future<void> Function(SubscriptionCreateDto sub) useCreateSubscription(
+Future<void> Function(SubscriptionRequestDto sub) useCreateSubscription(
     BuildContext ctx) {
   final queryClient = useQueryClient();
   final api = useApi(ctx);
 
-  return (SubscriptionCreateDto sub) async {
-    await api.schema.subscriptionsPost(body: sub);
+  return (SubscriptionRequestDto sub) async {
+    await api.schema.subscriptionsRequestPost(body: sub);
     queryClient
         .invalidateQueries([coursesSubscribedQueryKey, subscriptionsQueryKey]);
   };
 }
 
-Future<void> Function(SubscriptionDeleteDto sub) useDeleteSubscription(
+/*Future<void> Function(SubscriptionDeleteDto sub) useDeleteSubscription(
     BuildContext ctx) {
   final queryClient = useQueryClient();
   final api = useApi(ctx);
@@ -53,4 +53,4 @@ Future<void> Function(SubscriptionDeleteDto sub) useDeleteSubscription(
     queryClient
         .invalidateQueries([coursesSubscribedQueryKey, subscriptionsQueryKey]);
   };
-}
+}*/
