@@ -46,6 +46,8 @@ class _OTPLoginPageState extends State<OTPLoginPage> {
                 ),
               ),
             OtpTextField(
+              borderColor: Colors.grey,
+              enabledBorderColor: Colors.grey,
               numberOfFields: 6,
               showFieldAsBox: true,
               clearText: true,
