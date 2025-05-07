@@ -9,7 +9,6 @@ const String categoriesQueryKey = "categories";
 UseQueryResult<List<CourseCategoryDto>?, dynamic> useCategories(
     BuildContext ctx) {
   ApiProvider apiProvider = Provider.of<ApiProvider>(ctx, listen: false);
-  return useQuery(
-      [categoriesQueryKey],
+  return useQuery([categoriesQueryKey],
       () async => (await apiProvider.schema.categoriesGet()).body);
 }

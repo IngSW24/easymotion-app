@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:chopper/chopper.dart';
 import 'package:easymotion_app/data/providers/api.provider.dart';
-import 'package:flutter/foundation.dart';
 import '../../api-client-generated/api_schema.swagger.dart';
 
 class AuthInterceptor implements Interceptor {
@@ -11,7 +10,6 @@ class AuthInterceptor implements Interceptor {
 
   @override
   FutureOr<Response<T>> intercept<T>(Chain<T> chain) async {
-
     Request request = chain.request;
 
     final accessToken = apiProvider.getAccessToken();
@@ -24,11 +22,9 @@ class AuthInterceptor implements Interceptor {
 
     final response = await chain.proceed(request); // Try with the access token
 
-    debugPrint("Auth interception: " + request.uri.toString());
     if (response.statusCode != 401) {
       return response;
     }
-
 
     final refreshToken = await apiProvider.getRefreshToken();
     if (refreshToken == null) {

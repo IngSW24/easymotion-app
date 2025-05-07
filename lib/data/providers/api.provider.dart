@@ -11,10 +11,10 @@ const String refreshTokenKey = "refresh_token";
 class ApiProvider extends ChangeNotifier {
   ApiProvider(this.ctx) {
     schema = ApiSchema.create(client: _getChopperClient());
-
-    _initialRefresh();
+    _initialSetup();
   }
 
+  late final SharedPreferences storage;
   final BuildContext ctx;
   late final ApiSchema schema;
   static final baseUrl = Uri.parse(apiURL!);
@@ -58,12 +58,10 @@ class ApiProvider extends ChangeNotifier {
   }
 
   Future<String?> getRefreshToken() async {
-    final storage = await SharedPreferences.getInstance();
     return storage.getString(refreshTokenKey);
   }
 
   Future<bool> setRefreshToken(String? refreshToken) async {
-    final storage = await SharedPreferences.getInstance();
     if (refreshToken == null) {
       return await storage.remove(refreshTokenKey);
     }
@@ -71,7 +69,8 @@ class ApiProvider extends ChangeNotifier {
   }
 
   // refresh access token
-  Future<void> _initialRefresh() async {
+  Future<void> _initialSetup() async {
+    storage = await SharedPreferences.getInstance();
     final refreshToken = await getRefreshToken();
     if (refreshToken == null) {
       setAccessToken(null);

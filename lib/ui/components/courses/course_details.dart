@@ -50,6 +50,8 @@ class CourseDetails extends HookWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
             child: Image.network(
+                fit: BoxFit.contain,
+                height: 320,
                 "${StaticResources.uri}/${courseEntity.category.id}.jpg"),
           ),
           _buildCourseInfo("Descrizione breve", courseEntity.shortDescription),

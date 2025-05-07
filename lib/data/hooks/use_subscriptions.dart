@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 const String coursesSubscribedQueryKey = "courses_subscribed";
 const String subscriptionsQueryKey = "subscriptions";
+const String subscriptionsPendingQueryKey = "subscriptions_pending";
 
 UseQueryResult<PaginatedResponseOfCourseDto?, dynamic> useCoursesSubscribed(
     BuildContext ctx) {
@@ -31,6 +32,17 @@ UseQueryResult<PaginatedResponseOfSubscriptionDtoWithCourse?, dynamic>
               .body);
 }
 
+UseQueryResult<PaginatedResponseOfSubscriptionDtoWithCourse?, dynamic>
+    usePendingSubscriptions(BuildContext ctx) {
+  ApiProvider apiProvider = Provider.of<ApiProvider>(ctx, listen: false);
+  return useQuery(
+      [subscriptionsPendingQueryKey],
+      refetchInterval: Duration(seconds: 3),
+      () async => (await apiProvider.schema
+              .subscriptionsPendingGet(page: 0, perPage: 10))
+          .body);
+}
+
 Future<void> Function(SubscriptionRequestDto sub) useCreateSubscription(
     BuildContext ctx) {
   final queryClient = useQueryClient();
@@ -38,19 +50,10 @@ Future<void> Function(SubscriptionRequestDto sub) useCreateSubscription(
 
   return (SubscriptionRequestDto sub) async {
     await api.schema.subscriptionsRequestPost(body: sub);
-    queryClient
-        .invalidateQueries([coursesSubscribedQueryKey, subscriptionsQueryKey]);
+    queryClient.invalidateQueries([
+      coursesSubscribedQueryKey,
+      subscriptionsQueryKey,
+      subscriptionsPendingQueryKey
+    ]);
   };
 }
-
-/*Future<void> Function(SubscriptionDeleteDto sub) useDeleteSubscription(
-    BuildContext ctx) {
-  final queryClient = useQueryClient();
-  final api = useApi(ctx);
-
-  return (SubscriptionDeleteDto sub) async {
-    await api.schema.subscriptionsDelete(body: sub);
-    queryClient
-        .invalidateQueries([coursesSubscribedQueryKey, subscriptionsQueryKey]);
-  };
-}*/

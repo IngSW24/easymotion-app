@@ -142,13 +142,16 @@ class _ExplorePageState extends State<ExplorePage> {
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                 Expanded(
-                    child: CourseListView(
-                  courseFilterType: CourseFilterType(
-                    searchText: _searchText,
-                    categories: _selectedCategories,
-                    levels: _selectedLevels,
-                    //frequencies: _frequencies,
-                    //availabilities: _availabilities
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CourseListView(
+                    courseFilterType: CourseFilterType(
+                      searchText: _searchText,
+                      categories: _selectedCategories,
+                      levels: _selectedLevels,
+                      //frequencies: _frequencies,
+                      //availabilities: _availabilities
+                    ),
                   ),
                 ))
               ]));
