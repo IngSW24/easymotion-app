@@ -13,10 +13,12 @@ import 'package:fquery/fquery.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+final queryClient = QueryClient();
+
 Future<void> main() async {
   await dotenv.load();
   runApp(QueryClientProvider(
-      queryClient: QueryClient(),
+      queryClient: queryClient,
       child: ChangeNotifierProvider(
           create: (BuildContext ctx) => ApiProvider(ctx),
           child: const MyApp())));

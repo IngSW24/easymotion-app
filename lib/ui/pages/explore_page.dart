@@ -5,6 +5,7 @@ import 'package:easymotion_app/ui/components/courses/course_filter.type.dart';
 import 'package:easymotion_app/ui/components/courses/course_list_view.dart';
 import 'package:easymotion_app/ui/components/courses/course_filters.dart';
 import 'package:easymotion_app/ui/components/utility/loading.dart';
+import 'package:easymotion_app/ui/components/utility/refresh_button.dart';
 import 'package:easymotion_app/ui/pages/loading_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -85,6 +86,7 @@ class _ExplorePageState extends State<ExplorePage> {
               style: TextStyle(
                   color: Color(0xFF094D95), fontWeight: FontWeight.bold)),
           actions: [
+            RefreshButton(),
             IconButton(
               //icon: ImageIcon(AssetImage('images/blankProfileImage.png')), // TODO: person icon?
               icon: Icon(Icons.person),

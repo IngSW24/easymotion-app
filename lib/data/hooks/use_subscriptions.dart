@@ -15,7 +15,6 @@ UseQueryResult<PaginatedResponseOfCourseDto?, dynamic> useCoursesSubscribed(
   final userID = apiProvider.getUser()?.id;
   return useQuery(
       [coursesSubscribedQueryKey],
-      refetchInterval: Duration(seconds: 3),
       () async => (await apiProvider.schema.coursesSubscribedUserIdGet(
               page: 0, perPage: 100, userId: userID))
           .body);
@@ -26,7 +25,6 @@ UseQueryResult<PaginatedResponseOfSubscriptionDtoWithCourse?, dynamic>
   ApiProvider apiProvider = Provider.of<ApiProvider>(ctx, listen: false);
   return useQuery(
       [subscriptionsQueryKey],
-      refetchInterval: Duration(seconds: 3),
       () async =>
           (await apiProvider.schema.subscriptionsGet(page: 0, perPage: 10))
               .body);
@@ -37,7 +35,6 @@ UseQueryResult<PaginatedResponseOfSubscriptionDtoWithCourse?, dynamic>
   ApiProvider apiProvider = Provider.of<ApiProvider>(ctx, listen: false);
   return useQuery(
       [subscriptionsPendingQueryKey],
-      refetchInterval: Duration(seconds: 3),
       () async => (await apiProvider.schema
               .subscriptionsPendingGet(page: 0, perPage: 10))
           .body);
@@ -52,8 +49,10 @@ Future<void> Function(SubscriptionRequestDto sub) useCreateSubscription(
     await api.schema.subscriptionsRequestPost(body: sub);
     queryClient.invalidateQueries([
       coursesSubscribedQueryKey,
-      subscriptionsQueryKey,
-      subscriptionsPendingQueryKey
     ]);
+    queryClient.invalidateQueries([
+      subscriptionsQueryKey,
+    ]);
+    queryClient.invalidateQueries([subscriptionsPendingQueryKey]);
   };
 }

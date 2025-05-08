@@ -26,10 +26,14 @@ class ErrorAlert extends HookWidget {
             onPressed: () {
               queryClient.invalidateQueries([
                 courseQueryKey,
-                subscriptionsQueryKey,
-                coursesSubscribedQueryKey,
-                categoriesQueryKey
               ]);
+              queryClient.invalidateQueries([
+                subscriptionsQueryKey,
+              ]);
+              queryClient.invalidateQueries([
+                coursesSubscribedQueryKey,
+              ]);
+              queryClient.invalidateQueries([categoriesQueryKey]);
             },
             child: Text('Riprova'),
           ),

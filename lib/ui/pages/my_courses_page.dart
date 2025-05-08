@@ -9,6 +9,7 @@ import '../components/courses/course_filter.type.dart';
 import '../components/courses/course_filters.dart';
 import '../components/courses/my_courses_list_view.dart';
 import '../components/utility/loading.dart';
+import '../components/utility/refresh_button.dart';
 import 'loading_page.dart';
 
 class MyCoursesPage extends StatefulHookWidget {
@@ -135,10 +136,11 @@ class _MyScaffoldState extends State<MyCoursesPage> {
               ? "I tuoi corsi, ${user.firstName}"
               : 'I tuoi corsi'),*/
 
-          backgroundColor: Color(0xFF094D95),
+          backgroundColor: Color(0xFF094D95), // TODO: low contrast
           titleTextStyle: TextStyle(color: Color(0xFFFDFDFD)),
           toolbarTextStyle: TextStyle(color: Color(0xFFFDFDFD)),
           actions: [
+            RefreshButton(),
             IconButton(
               //icon: ImageIcon(AssetImage('images/blankProfileImage.png')), // TODO: person icon?
               icon: Icon(Icons.person),
