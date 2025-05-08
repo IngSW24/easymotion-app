@@ -55,6 +55,8 @@ class MyCoursesListView extends HookWidget {
 
     return ListView.builder(
       itemCount: courseList.length,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemBuilder: (BuildContext ctx, int index) {
         return ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),

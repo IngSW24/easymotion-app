@@ -1,2 +1,0 @@
-/home/nicola/Documents/UNIUD/IngSWLab/easymotion-app/android/app/.cxx/Debug/h5v2a1g2/x86/CMakeFiles/edit_cache.dir
-/home/nicola/Documents/UNIUD/IngSWLab/easymotion-app/android/app/.cxx/Debug/h5v2a1g2/x86/CMakeFiles/rebuild_cache.dir

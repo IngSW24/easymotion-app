@@ -4,6 +4,7 @@ import 'package:easymotion_app/ui/pages/course_details_page.dart';
 import 'package:easymotion_app/ui/pages/login_page.dart';
 import 'package:easymotion_app/ui/pages/my_courses_page.dart';
 import 'package:easymotion_app/ui/pages/explore_page.dart';
+import 'package:easymotion_app/ui/pages/otp_login_page.dart';
 import 'package:easymotion_app/ui/pages/user_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -12,23 +13,32 @@ import 'package:fquery/fquery.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+final queryClient = QueryClient();
+
 Future<void> main() async {
   await dotenv.load();
   runApp(QueryClientProvider(
-      queryClient: QueryClient(),
+      queryClient: queryClient,
       child: ChangeNotifierProvider(
           create: (BuildContext ctx) => ApiProvider(ctx),
           child: const MyApp())));
 }
 
 final GoRouter _router = GoRouter(initialLocation: '/explore', routes: [
-
   GoRoute(
-    path: '/login',
-    builder: (BuildContext context, GoRouterState state) {
-      return LoginPage();
-    },
-  ),
+      path: '/login',
+      builder: (BuildContext context, GoRouterState state) {
+        return LoginPage();
+      },
+      routes: [
+        GoRoute(
+          path: 'otp/:email',
+          builder: (BuildContext context, GoRouterState state) {
+            final email = state.pathParameters['email'];
+            return OTPLoginPage(email: email!);
+          },
+        ),
+      ]),
   GoRoute(
     path: '/details/:id',
     builder: (BuildContext context, GoRouterState state) {

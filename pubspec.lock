@@ -498,6 +498,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  otp_input_editor:
+    dependency: "direct main"
+    description:
+      name: otp_input_editor
+      sha256: "6b0ddbf9507a62a13459a7cab8a7ac065e7bfba570df4ca9f986d3b297f20429"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9"
   package_config:
     dependency: transitive
     description:
