@@ -33,7 +33,9 @@ class _LoginPageState extends State<LoginPage> {
       await launchUrl(uri);
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Impossibile aprire l\'URL: $uri')),
+        SnackBar(
+            content: Text(
+                'Impossibile aprire il link. Assicurati di aver installato Google Chrome, o un altro browser')),
       );
     } else {
       debugPrint("Impossibile aprire l'URL: $uri");

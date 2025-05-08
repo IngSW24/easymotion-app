@@ -59,6 +59,8 @@ class CourseListView extends HookWidget {
           crossAxisSpacing: 8,
           mainAxisSpacing: 8),
       itemCount: courseList.length,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         return CourseCard(course: courseList[index]);
       },

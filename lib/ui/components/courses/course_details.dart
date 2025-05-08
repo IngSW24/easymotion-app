@@ -47,13 +47,10 @@ class CourseDetails extends HookWidget {
             textAlign: TextAlign.center,
             overflow: TextOverflow.visible,
           ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: Image.network(
-                fit: BoxFit.contain,
-                height: 320,
-                "${StaticResources.uri}/${courseEntity.category.id}.jpg"),
-          ),
+          Image.network(
+              fit: BoxFit.contain,
+              height: 240,
+              "${StaticResources.uri}/${courseEntity.category.id}.jpg"),
           _buildCourseInfo("Descrizione breve", courseEntity.shortDescription),
           _buildCourseInfo("Descrizione", courseEntity.description),
           _buildCourseInfo("Categoria", courseEntity.category.name),
