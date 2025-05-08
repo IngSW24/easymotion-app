@@ -1,10 +1,9 @@
 import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.dart';
 import 'package:easymotion_app/data/hooks/use_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otp_input_editor/otp_input_editor.dart';
 
 class OTPLoginPage extends StatefulHookWidget {
   const OTPLoginPage({super.key, required this.email});
@@ -39,23 +38,30 @@ class _OTPLoginPageState extends State<OTPLoginPage> {
             ),
             if (_loginFailed)
               Padding(
-                padding: EdgeInsets.all(16),
-                child: Text(
-                  "Codice OTP non valido",
-                  style: TextStyle(color: Colors.red),
+                padding: EdgeInsets.only(bottom: 16),
+                child: Center(
+                  child: Text(
+                    "Codice OTP non valido",
+                    style: TextStyle(color: Colors.red),
+                  ),
                 ),
               ),
-            OtpTextField(
-              borderColor: Colors.grey,
-              enabledBorderColor: Colors.grey,
-              numberOfFields: 6,
-              showFieldAsBox: true,
-              clearText: true,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              onSubmit: (value) => _otpCode = value,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: OtpInputEditor(
+                otpLength: 6,
+                onOtpChanged: (value) => setState(() {
+                  _otpCode = value;
+                }),
+                obscureText: false,
+                boxDecoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1.5),
+                    borderRadius: BorderRadius.all(Radius.circular(8))),
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.only(
+                  left: 16, right: 16, top: 32, bottom: 16),
               child: FilledButton.icon(
                 icon: Icon(Icons.login),
                 onPressed: () async {
