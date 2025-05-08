@@ -7,7 +7,9 @@ import '../../../data/hooks/use_courses.dart';
 import '../../../data/hooks/use_subscriptions.dart';
 
 class RefreshButton extends HookWidget {
-  const RefreshButton({super.key});
+  const RefreshButton({super.key, required this.icon});
+
+  final Icon icon;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,6 @@ class RefreshButton extends HookWidget {
           ]);
           queryClient.invalidateQueries([categoriesQueryKey]);
         },
-        icon: Icon(Icons.refresh));
+        icon: icon);
   }
 }

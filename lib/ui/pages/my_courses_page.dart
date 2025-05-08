@@ -136,14 +136,17 @@ class _MyScaffoldState extends State<MyCoursesPage> {
               ? "I tuoi corsi, ${user.firstName}"
               : 'I tuoi corsi'),*/
 
-          backgroundColor: Color(0xFF094D95), // TODO: low contrast
+          backgroundColor: Color(0xFF094D95),
           titleTextStyle: TextStyle(color: Color(0xFFFDFDFD)),
           toolbarTextStyle: TextStyle(color: Color(0xFFFDFDFD)),
           actions: [
-            RefreshButton(),
+            RefreshButton(icon: Icon(Icons.refresh, color: Color(0xFFFDFDFD))),
             IconButton(
               //icon: ImageIcon(AssetImage('images/blankProfileImage.png')), // TODO: person icon?
-              icon: Icon(Icons.person),
+              icon: Icon(
+                Icons.person,
+                color: Color(0xFFFDFDFD),
+              ),
               onPressed: () => context.push("/profile"),
             ),
           ],

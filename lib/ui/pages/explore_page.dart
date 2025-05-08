@@ -86,7 +86,7 @@ class _ExplorePageState extends State<ExplorePage> {
               style: TextStyle(
                   color: Color(0xFF094D95), fontWeight: FontWeight.bold)),
           actions: [
-            RefreshButton(),
+            RefreshButton(icon: Icon(Icons.refresh)),
             IconButton(
               //icon: ImageIcon(AssetImage('images/blankProfileImage.png')), // TODO: person icon?
               icon: Icon(Icons.person),
