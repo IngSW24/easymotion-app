@@ -1,10 +1,10 @@
-import 'package:easymotion_app/data/hooks/use_auth.dart';
 import 'package:easymotion_app/ui/components/subscriptions/subscription_details.dart';
 import 'package:easymotion_app/ui/components/utility/error_alert.dart';
 import 'package:easymotion_app/ui/components/utility/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import '../../../data/common/datetime/datetime2local.dart';
 import '../../../data/common/static_resources.dart';
 import '../../../data/hooks/use_courses.dart';
 
@@ -15,7 +15,6 @@ class CourseDetails extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userInfo = useUserInfo(context);
     final courseDetails = useCourse(context, id);
 
     if (courseDetails.isLoading) {
@@ -54,8 +53,7 @@ class CourseDetails extends HookWidget {
           _buildCourseInfo("Descrizione breve", courseEntity.shortDescription),
           _buildCourseInfo("Descrizione", courseEntity.description),
           _buildCourseInfo("Categoria", courseEntity.category.name),
-          _buildCourseInfo(
-              "Creato il", courseEntity.createdAt.toLocal().toString()),
+          _buildCourseInfo("Creato il", datetime2local(courseEntity.createdAt)),
           _buildCourseInfo("Costo", "€ ${courseEntity.price.toString()}"),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -76,7 +74,7 @@ class CourseDetails extends HookWidget {
           SizedBox(
             height: 16,
           ),
-          if (userInfo() != null) SubscriptionDetails(courseID: id)
+          SubscriptionDetails(courseDetails: courseEntity)
         ],
       ),
     ));

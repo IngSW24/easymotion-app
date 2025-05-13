@@ -18,11 +18,11 @@ class ApiProvider extends ChangeNotifier {
   final BuildContext ctx;
   late final ApiSchema schema;
   static final baseUrl = Uri.parse(apiURL!);
-  AuthUserDto? _user;
+  BaseAuthUserDto? _user;
   bool _isLoading = true;
   String? _accessToken;
 
-  AuthUserDto? getUser() {
+  BaseAuthUserDto? getUser() {
     return _user;
   }
 
@@ -30,7 +30,7 @@ class ApiProvider extends ChangeNotifier {
     return _isLoading;
   }
 
-  void _setUser(AuthUserDto? user) {
+  void _setUser(BaseAuthUserDto? user) {
     _user = user;
     notifyListeners();
   }
