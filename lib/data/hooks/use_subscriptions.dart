@@ -1,5 +1,4 @@
 import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.dart';
-import 'package:easymotion_app/data/hooks/use_api.dart';
 import 'package:easymotion_app/data/providers/api.provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fquery/fquery.dart';
@@ -43,10 +42,10 @@ UseQueryResult<PaginatedResponseOfSubscriptionDtoWithCourse?, dynamic>
 Future<void> Function(SubscriptionRequestDto sub) useCreateSubscription(
     BuildContext ctx) {
   final queryClient = useQueryClient();
-  final api = useApi(ctx);
+  ApiProvider apiProvider = Provider.of<ApiProvider>(ctx, listen: false);
 
   return (SubscriptionRequestDto sub) async {
-    await api.schema.subscriptionsRequestPost(body: sub);
+    await apiProvider.schema.subscriptionsRequestPost(body: sub);
     queryClient.invalidateQueries([
       coursesSubscribedQueryKey,
     ]);

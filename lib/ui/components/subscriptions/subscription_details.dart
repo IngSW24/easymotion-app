@@ -4,12 +4,12 @@ import 'package:easymotion_app/ui/components/utility/error_alert.dart';
 import 'package:easymotion_app/ui/components/utility/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
+import '../../../data/common/datetime/datetime2local.dart';
 
 class SubscriptionDetails extends HookWidget {
-  SubscriptionDetails({super.key, required this.courseID});
+  SubscriptionDetails({super.key, required this.courseDetails});
 
-  final String courseID;
+  final CourseDto courseDetails;
   final reqMessgaeController = TextEditingController();
 
   @override
@@ -34,7 +34,7 @@ class SubscriptionDetails extends HookWidget {
     SubscriptionDtoWithCourse? subscriptionDetails;
     try {
       subscriptionDetails = subList.firstWhere((e) {
-        return e.course.id == courseID;
+        return e.course.id == courseDetails.id;
       });
     } catch (e) {
       debugPrint(e.toString());
@@ -43,80 +43,21 @@ class SubscriptionDetails extends HookWidget {
     SubscriptionDtoWithCourse? subscriptionPendingDetails;
     try {
       subscriptionPendingDetails = subListPending.firstWhere((e) {
-        return e.course.id == courseID;
+        return e.course.id == courseDetails.id;
       });
     } catch (e) {
       debugPrint(e.toString());
     }
 
     if (subscriptionDetails != null) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Divider(),
-          Text(
-            "Dettagli iscrizione",
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.shade700),
-          ),
-          _buildSubscriptionInfo(
-              "Creato il", subscriptionDetails.createdAt.toLocal().toString())
-        ],
-      );
+      return _buildSubscriptionDetails(subscriptionDetails);
     }
 
     if (subscriptionPendingDetails != null) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Divider(),
-          Text(
-            "Dettagli richiesta iscrizione",
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.shade700),
-          ),
-          _buildSubscriptionInfo("Inviata il",
-              subscriptionPendingDetails.createdAt.toLocal().toString())
-        ],
-      );
+      return _buildSubscriptionPendingDetails(subscriptionPendingDetails);
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Divider(),
-        Text(
-          "Invia richiesta iscrizione al fisioterapista",
-          style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey.shade700),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: TextField(
-            controller: reqMessgaeController,
-            decoration: InputDecoration(
-              labelText: "Messaggio per il fisioterapista (opzionale)",
-              border: OutlineInputBorder(),
-            ),
-          ),
-        ),
-        FilledButton.icon(
-            icon: Icon(Icons.check),
-            onPressed: () async {
-              await create(SubscriptionRequestDto(
-                  courseId: courseID,
-                  subscriptionRequestMessage: reqMessgaeController.text));
-              if (context.mounted) context.go("/my_courses");
-            },
-            label: Text("Subscribe")),
-      ],
-    );
+    return _buildCreateSubscriptionDetails(create);
   }
 
   Widget _buildSubscriptionInfo(String label, String value) {
@@ -134,6 +75,133 @@ class SubscriptionDetails extends HookWidget {
           Text(value),
         ],
       ),
+    );
+  }
+
+  Widget _buildSubscriptionDetails(
+      SubscriptionDtoWithCourse subscriptionDetails) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Divider(),
+        Text(
+          "Dettagli iscrizione",
+          style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey.shade700),
+        ),
+        _buildSubscriptionInfo(
+            "Creato il", datetime2local((subscriptionDetails.createdAt)))
+      ],
+    );
+  }
+
+  Widget _buildSubscriptionPendingDetails(
+      SubscriptionDtoWithCourse subscriptionPendingDetails) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Divider(),
+        Text(
+          "Dettagli richiesta iscrizione",
+          style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey.shade700),
+        ),
+        _buildSubscriptionInfo(
+            "Inviata il", datetime2local(subscriptionPendingDetails.createdAt))
+      ],
+    );
+  }
+
+  String _getAvailableSlots(CourseDto course) {
+    return courseDetails.maxSubscribers == null
+        ? "Nessun limite"
+        : "${(courseDetails.maxSubscribers! - courseDetails.currentSubscribers).toInt()}/${courseDetails.maxSubscribers!.toInt()}";
+  }
+
+  String _getAvailableTime(CourseDto course) {
+    final seconds =
+        course.subscriptionEndDate.difference(DateTime.now()).inSeconds;
+    if (seconds > (Duration.secondsPerHour * Duration.hoursPerDay)) {
+      final hours = seconds ~/ (Duration.secondsPerHour * Duration.hoursPerDay);
+      return "$hours giorni";
+    }
+
+    if (seconds > Duration.secondsPerHour) {
+      final hours = seconds ~/ Duration.secondsPerHour;
+      return "$hours ore";
+    }
+
+    if (seconds > Duration.secondsPerMinute) {
+      final minutes = seconds ~/ Duration.secondsPerMinute;
+      return "$minutes minuti";
+    }
+    return "$seconds secondi";
+  }
+
+  Widget _buildCreateSubscriptionDetails(
+      Future<void> Function(SubscriptionRequestDto) create) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Divider(),
+        Text(
+          "Informazione sull'iscrizione",
+          style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey.shade700),
+        ),
+        _buildSubscriptionInfo(
+            "Iscritti", courseDetails.currentSubscribers.toInt().toString()),
+        _buildSubscriptionInfo(
+            "Posti disponibili", _getAvailableSlots(courseDetails)),
+        _buildSubscriptionInfo("Apertura iscrizioni",
+            datetime2local(courseDetails.subscriptionStartDate)),
+        _buildSubscriptionInfo("Chiusura iscrizioni",
+            datetime2local(courseDetails.subscriptionEndDate)),
+        _buildSubscriptionInfo(
+            "Le iscrizioni scadono fra", _getAvailableTime(courseDetails)),
+        if (courseDetails.subscriptionEndDate.isAfter(DateTime.now()))
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Divider(),
+              Text(
+                "Invia la richiesta di iscrizione al fisioterapista",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade700),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: TextField(
+                  controller: reqMessgaeController,
+                  decoration: InputDecoration(
+                    labelText: "Messaggio per il fisioterapista (opzionale)",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: FilledButton.icon(
+                    icon: Icon(Icons.check),
+                    onPressed: () async {
+                      await create(SubscriptionRequestDto(
+                          courseId: courseDetails.id,
+                          subscriptionRequestMessage:
+                              reqMessgaeController.text));
+                    },
+                    label: Text("Iscriviti")),
+              ),
+            ],
+          )
+      ],
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:easymotion_app/data/common/login_response.dart';
 import 'package:easymotion_app/data/hooks/use_api.dart';
 import 'package:flutter/material.dart';
 
-AuthUserDto? Function() useUserInfo(BuildContext ctx) {
+BaseAuthUserDto? Function() useUserInfo(BuildContext ctx) {
   final api = useApi(ctx);
 
   return () => api.getUser();
