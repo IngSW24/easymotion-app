@@ -1,34 +1,42 @@
 import 'package:chopper/chopper.dart';
 import 'package:easymotion_app/data/common/constants.dart';
+import 'package:easymotion_app/data/common/login_response.dart';
 import 'package:flutter/material.dart';
 import '../../api-client-generated/api_schema.swagger.dart';
 import '../interceptors/auth_interceptor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String accessTokenKey = "access_token";
 const String refreshTokenKey = "refresh_token";
 
 class ApiProvider extends ChangeNotifier {
   ApiProvider(this.ctx) {
     schema = ApiSchema.create(client: _getChopperClient());
-
-    _initialRefresh();
+    _initialSetup();
   }
 
+  late final SharedPreferences storage;
   final BuildContext ctx;
-
   late final ApiSchema schema;
-
   static final baseUrl = Uri.parse(apiURL!);
+  BaseAuthUserDto? _user;
+  bool _isLoading = true;
+  String? _accessToken;
 
-  AuthUserDto? _user;
-
-  AuthUserDto? getUser() {
+  BaseAuthUserDto? getUser() {
     return _user;
   }
 
-  void _setUser(AuthUserDto? user) {
+  bool isLoading() {
+    return _isLoading;
+  }
+
+  void _setUser(BaseAuthUserDto? user) {
     _user = user;
+    notifyListeners();
+  }
+
+  void _setLoading(bool isLoading) {
+    _isLoading = isLoading;
     notifyListeners();
   }
 
@@ -41,26 +49,19 @@ class ApiProvider extends ChangeNotifier {
     );
   }
 
-  Future<String?> getAccessToken() async {
-    final storage = await SharedPreferences.getInstance();
-    return storage.getString(accessTokenKey);
+  String? getAccessToken() {
+    return _accessToken;
   }
 
-  Future<bool> setAccessToken(String? accessToken) async {
-    final storage = await SharedPreferences.getInstance();
-    if (accessToken == null) {
-      return await storage.remove(accessTokenKey);
-    }
-    return await storage.setString(accessTokenKey, accessToken);
+  void setAccessToken(String? accessToken) {
+    _accessToken = accessToken;
   }
 
   Future<String?> getRefreshToken() async {
-    final storage = await SharedPreferences.getInstance();
     return storage.getString(refreshTokenKey);
   }
 
   Future<bool> setRefreshToken(String? refreshToken) async {
-    final storage = await SharedPreferences.getInstance();
     if (refreshToken == null) {
       return await storage.remove(refreshTokenKey);
     }
@@ -68,10 +69,13 @@ class ApiProvider extends ChangeNotifier {
   }
 
   // refresh access token
-  Future<void> _initialRefresh() async {
+  Future<void> _initialSetup() async {
+    storage = await SharedPreferences.getInstance();
     final refreshToken = await getRefreshToken();
     if (refreshToken == null) {
       setAccessToken(null);
+      _setUser(null); // force re-login
+      _setLoading(false);
       return;
     }
 
@@ -83,14 +87,16 @@ class ApiProvider extends ChangeNotifier {
       setAccessToken(newAccessToken);
       setRefreshToken(newRefreshToken);
       _setUser(response.body?.user);
+      _setLoading(false);
     } else {
       setAccessToken(null);
       setRefreshToken(null);
       _setUser(null); // force re-login
+      _setLoading(false);
     }
   }
 
-  Future<bool> login(SignInDto data) async {
+  Future<LoginResponse> login(SignInDto data) async {
     try {
       final response = await schema.authLoginPost(body: data);
       final responseBody = response.body;
@@ -98,6 +104,29 @@ class ApiProvider extends ChangeNotifier {
         setRefreshToken(responseBody.tokens?.refreshToken);
         setAccessToken(responseBody.tokens?.accessToken);
         _setUser(responseBody.user);
+        _setLoading(false);
+        return responseBody.requiresOtp
+            ? LoginResponse.needOtp
+            : LoginResponse.success;
+      }
+      return LoginResponse.error;
+    } catch (e, stackTrace) {
+      debugPrint(e.toString());
+      debugPrintStack(stackTrace: stackTrace);
+      return LoginResponse.error;
+    }
+  }
+
+  Future<bool> loginOtp(OtpLoginDto data) async {
+    try {
+      final response = await schema.authLoginOtpPost(body: data);
+      final responseBody = response.body;
+      final tokens = responseBody?.tokens;
+      if (responseBody != null && tokens != null && !responseBody.requiresOtp) {
+        setRefreshToken(tokens.refreshToken);
+        setAccessToken(tokens.accessToken);
+        _setUser(responseBody.user);
+        _setLoading(false);
         return true;
       }
       return false;

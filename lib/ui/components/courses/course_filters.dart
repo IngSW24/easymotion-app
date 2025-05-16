@@ -1,54 +1,32 @@
+import 'package:easymotion_app/data/hooks/use_categories.dart';
+import 'package:easymotion_app/ui/components/utility/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 
-class CourseFilter extends StatelessWidget {
+class CourseFilter extends HookWidget {
   const CourseFilter(
       {super.key,
       required this.selectedCategories,
       required this.selectedLevels,
-      required this.selectedFrequencies,
-      required this.selectedAvailabilities,
       required this.onCategoriesChanged,
-      required this.onLevelsChanged,
-      required this.onFrequenciesChanged,
-      required this.onAvailabilitiesChanged});
+      required this.onLevelsChanged});
 
-  final List<String> selectedCategories,
-      selectedLevels,
-      selectedFrequencies,
-      selectedAvailabilities;
-  final void Function(List<String>) onCategoriesChanged,
-      onLevelsChanged,
-      onFrequenciesChanged,
-      onAvailabilitiesChanged;
+  final List<String> selectedCategories, selectedLevels;
+  final void Function(List<String>) onCategoriesChanged, onLevelsChanged;
 
-  static const Map<String, String> categories = {
-    "ACQUAGYM": "Acquagym",
-    "CROSSFIT": "Crossfit",
-    "PILATES": "Pilates",
-    "ZUMBA_FITNESS": "Zumba Fitness",
-    "POSTURAL_TRAINING": "Training Posturale",
-    "BODYWEIGHT_WORKOUT": "Workout Corpo Libero"
-  };
   static const Map<String, String> levels = {
     "BASIC": "Base",
     "MEDIUM": "Intermedio",
     "ADVANCED": "Avanzato"
   };
-  static const Map<String, String> frequencies = {
-    "SINGLE_SESSION": "Sessione singola",
-    "WEEKLY": "Settimanale",
-    "MONTHLY": "Mensile",
-  };
-
-  static const Map<String, String> availabilities = {
-    "ACTIVE": "Attivo",
-    "COMING_SOON": "Disponibile a breve",
-    "NO_LONGER_AVAILABLE": "Non disponibile",
-  };
 
   @override
   Widget build(BuildContext context) {
+    final categories = useCategories(context).data;
+
+    if (categories == null) return LoadingIndicator();
+
     return Container(
       padding: EdgeInsets.all(16),
       height: 300,
@@ -62,20 +40,20 @@ class CourseFilter extends StatelessWidget {
           ),
           Text("Categorie"),
           Column(
-              children: categories.entries.map((entry) {
+              children: categories.map((category) {
             return CheckboxListTile(
-                title: Text(entry.value),
-                value: selectedCategories.contains(entry.key),
+                title: Text(category.name),
+                value: selectedCategories.contains(category.id),
                 onChanged: (bool? selected) {
                   if (selected != null && selected) {
-                    onCategoriesChanged(selectedCategories + [entry.key]);
+                    onCategoriesChanged(selectedCategories + [category.id]);
                   } else {
-                    selectedCategories.remove(entry.key);
+                    selectedCategories.remove(category.id);
                     onCategoriesChanged(selectedCategories);
                   }
                 });
           }).toList()),
-          Text("Livelli"),
+          Text("Livelli di difficoltà"),
           Column(
               children: levels.entries.map((entry) {
             return CheckboxListTile(
@@ -87,37 +65,6 @@ class CourseFilter extends StatelessWidget {
                   } else {
                     selectedLevels.remove(entry.key);
                     onLevelsChanged(selectedLevels);
-                  }
-                });
-          }).toList()),
-          Text("Frequenze"),
-          Column(
-              children: frequencies.entries.map((entry) {
-            return CheckboxListTile(
-                title: Text(entry.value),
-                value: selectedFrequencies.contains(entry.key),
-                onChanged: (bool? selected) {
-                  if (selected != null && selected) {
-                    onFrequenciesChanged(selectedFrequencies + [entry.key]);
-                  } else {
-                    selectedFrequencies.remove(entry.key);
-                    onFrequenciesChanged(selectedFrequencies);
-                  }
-                });
-          }).toList()),
-          Text("Disponibilità"),
-          Column(
-              children: availabilities.entries.map((entry) {
-            return CheckboxListTile(
-                title: Text(entry.value),
-                value: selectedAvailabilities.contains(entry.key),
-                onChanged: (bool? selected) {
-                  if (selected != null && selected) {
-                    onAvailabilitiesChanged(
-                        selectedAvailabilities + [entry.key]);
-                  } else {
-                    selectedAvailabilities.remove(entry.key);
-                    onAvailabilitiesChanged(selectedAvailabilities);
                   }
                 });
           }).toList()),
