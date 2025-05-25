@@ -1,10 +1,10 @@
-import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.dart';
 import 'package:easymotion_app/data/hooks/new.dart';
 import 'package:easymotion_app/data/hooks/use_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import '../../../../api-client-generated/api_schema.models.swagger.dart';
 import '../../../Theme/Theme.dart';
-import '../../utility/button.dart';
+import '../../utility/Button.dart';
 import '../field_descriptor.dart';
 import 'field_builder.dart';
 import 'profile_edit_controller.dart';
@@ -19,7 +19,7 @@ class EditModalProfile extends HookWidget {
 
   final String title;
   final List<FieldDefinition> schema;
-  final Map<String, dynamic> initialData;
+  final AuthUserDto initialData;
 
   @override
   Widget build(BuildContext context) {
@@ -37,24 +37,17 @@ class EditModalProfile extends HookWidget {
     void handleSave () async {
       if (!controller.validate()) return;
 
-      final updated = controller.collectUpdates();
+      final AuthUserDto updated = controller.collectUpdates();
 
-      print("UPDATED START");
-      print(updated);
-      print("UPDATED END");
+      final update = UpdateAuthUserDto.fromJson(updated.toJson());
 
-      await patient.update.mutate(UpdateAuthUserDto.fromJson({"patient": updated}));
+      final sispera = update.toJson();
+      print("UPDATE $sispera");
+      patient.update.mutate(update);
+      print(patient.query.refetch);
+      print(patient.query.data);
       if (context.mounted) Navigator.pop(context);
     }
-
-    // per i dati personali il problema è l'update
-    // per i dati sanitari il problema è UpdateAuthUserDto.fromJson che imposta a null patient
-
-    //final pa = {...dto.patient, ...nuovi};
-
-    //final patiente = {...controller.initialData, ...updates};
-    //print("IL PATIENT è $patiente");
-    //print("IL DTO è $dto");
 
     return SafeArea(
       child: Padding(

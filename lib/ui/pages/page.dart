@@ -10,7 +10,6 @@ import '../components/profile_page_utils/field_descriptor.dart';
 import '../components/profile_page_utils/profile_avatar.dart';
 import '../components/profile_page_utils/profile_section.dart';
 import '../components/profile_page_utils/user_profile_modal/profile_edit_modal.dart';
-import '../components/profile_page_utils/user_profile_schema/healthy_profile_initializer.dart';
 import '../components/utility/button.dart';
 
 class NuovaProfilePage extends HookWidget {
@@ -22,18 +21,9 @@ class NuovaProfilePage extends HookWidget {
     final patient = usePatient(context, user.id);
     final logoutFn = useLogoutFn(context);
 
-    final blank = useMemoized(buildEmptyProfile);
     final patientDto = patient.query.data?.patient;
 
     if (patient.query.isLoading) return const LoadingPage();
-
-    final merged = useMemoized(() => {
-      ...blank,
-      ...user.toJson(),
-      ...(patientDto?.toJson() ?? {}),
-    }, [user, patientDto]);
-
-    final formData = useState<Map<String, dynamic>>(merged);
 
     final personalMap = <String, dynamic>{
       'firstName' : patient.query.data?.firstName,
@@ -53,7 +43,7 @@ class NuovaProfilePage extends HookWidget {
         builder: (_) => EditModalProfile(
           title: title,
           schema: schema,
-          initialData: patient.query.data!.toJson(), //formData.value;
+          initialData: patient.query.data!, //formData.value;
         ),
       );
     }
@@ -69,7 +59,6 @@ class NuovaProfilePage extends HookWidget {
               const ProfileAvatar(),
               const SizedBox(height: 16),
               Text(
-                //'${formData.value["firstName"]} ${formData.value["lastName"]}',
                 '${patient.query.data?.firstName} ${patient.query.data?.lastName}',
                 style: DesignTokens.title,
                 textAlign: TextAlign.center,
@@ -90,7 +79,6 @@ class NuovaProfilePage extends HookWidget {
                 title: 'Informazioni sanitarie',
                 icon: Icons.favorite,
                 schema: healthSchema,
-                //data: formData.value, CAMBIATO
                 data: healthMap,
                 onEdit: () => handleEdit('Informazioni sanitarie', healthSchema),
               ),
