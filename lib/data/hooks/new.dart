@@ -11,12 +11,10 @@ class Patient {
   Patient({
     required this.query,
     required this.update,
-    required this.isLoading,
   });
 
   final UseQueryResult<AuthUserDto?, dynamic> query;
   final UseMutationResult<AuthUserDto, dynamic, UpdateAuthUserDto> update;
-  bool Function() isLoading;
 }
 
 Patient usePatient(BuildContext ctx, String id) {
@@ -43,13 +41,8 @@ Patient usePatient(BuildContext ctx, String id) {
     },
   );
 
-  bool Function() isLoading(BuildContext ctx) {
-    return () => api.isLoading();
-  }
-
   return Patient(
     query: query,
     update: update,
-    isLoading: isLoading(ctx),
   );
 }

@@ -11,7 +11,7 @@ import '../components/profile_page_utils/profile_avatar.dart';
 import '../components/profile_page_utils/profile_section.dart';
 import '../components/profile_page_utils/user_profile_modal/profile_edit_modal.dart';
 import '../components/profile_page_utils/user_profile_schema/healthy_profile_initializer.dart';
-import '../components/utility/Button.dart';
+import '../components/utility/button.dart';
 
 class NuovaProfilePage extends HookWidget {
   const NuovaProfilePage({super.key});
@@ -25,7 +25,7 @@ class NuovaProfilePage extends HookWidget {
     final blank = useMemoized(buildEmptyProfile);
     final patientDto = patient.query.data?.patient;
 
-    if (patient.isLoading()) return const LoadingPage();
+    if (patient.query.isLoading) return const LoadingPage();
 
     final merged = useMemoized(() => {
       ...blank,
@@ -60,6 +60,7 @@ class NuovaProfilePage extends HookWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),

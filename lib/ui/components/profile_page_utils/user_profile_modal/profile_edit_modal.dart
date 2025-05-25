@@ -1,9 +1,10 @@
+import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.dart';
 import 'package:easymotion_app/data/hooks/new.dart';
 import 'package:easymotion_app/data/hooks/use_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../../Theme/Theme.dart';
-import '../../utility/Button.dart';
+import '../../utility/button.dart';
 import '../field_descriptor.dart';
 import 'field_builder.dart';
 import 'profile_edit_controller.dart';
@@ -38,7 +39,11 @@ class EditModalProfile extends HookWidget {
 
       final updated = controller.collectUpdates();
 
-      //await patient.update.mutate(updated);
+      print("UPDATED START");
+      print(updated);
+      print("UPDATED END");
+
+      await patient.update.mutate(UpdateAuthUserDto.fromJson({"patient": updated}));
       if (context.mounted) Navigator.pop(context);
     }
 
