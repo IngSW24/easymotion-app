@@ -3,7 +3,7 @@ import 'package:easymotion_app/data/hooks/use_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../../../api-client-generated/api_schema.models.swagger.dart';
-import '../../../Theme/Theme.dart';
+import '../../../Theme/theme.dart';
 import '../../utility/button.dart';
 import '../field_descriptor.dart';
 import 'field_builder.dart';
@@ -27,7 +27,7 @@ class EditModalProfile extends HookWidget {
 
     // Controller per i campi
     final controller = useMemoized(
-          () => ProfileEditController(
+      () => ProfileEditController(
         schema: schema,
         initialData: initialData,
       ),
@@ -35,21 +35,21 @@ class EditModalProfile extends HookWidget {
     );
 
     // Query & mutation del paziente loggato
-    final user    = useUserInfo(context).call()!;
+    final user = useUserInfo(context).call()!;
     final patient = usePatient(context, user.id);
 
     // Stato di salvataggio per disabilitare il tasto e mostrare feedback
     final isSaving = useState(false);
 
     void handleSave() async {
-      if (isSaving.value) return;            // evita tap multipli
-      if (!controller.validate()) return;   // campi non validi
+      if (isSaving.value) return; // evita tap multipli
+      if (!controller.validate()) return; // campi non validi
 
       isSaving.value = true;
 
       try {
-        final dto     = controller.collectUpdates();
-        final update  = UpdateAuthUserDto.fromJson(dto.toJson());
+        final dto = controller.collectUpdates();
+        final update = UpdateAuthUserDto.fromJson(dto.toJson());
 
         // 1. mutation REST
         await patient.update.mutate(update);
@@ -81,12 +81,10 @@ class EditModalProfile extends HookWidget {
                   const SizedBox(height: 16),
                   Text(title, style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 24),
-
                   for (final def in controller.schema) ...[
                     FieldBuilder(controller: controller, def: def),
                     const SizedBox(height: 16),
                   ],
-
                   const SizedBox(height: 8),
                   Button(
                     label: isSaving.value ? 'Saving…' : 'Save',

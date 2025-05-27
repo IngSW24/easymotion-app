@@ -14,13 +14,13 @@ class SectionCard extends StatelessWidget {
     this.onEdit,
   });
 
-  final String        title;
-  final IconData      icon;
-  final Color         iconColor;
-  final List<Widget>  children;
-  final Color         backgroundColor;
-  final Color         foregroundTextColor;
-  final Color         editButtonColor;
+  final String title;
+  final IconData icon;
+  final Color iconColor;
+  final List<Widget> children;
+  final Color backgroundColor;
+  final Color foregroundTextColor;
+  final Color editButtonColor;
   final VoidCallback? onEdit;
 
   @override
@@ -33,7 +33,10 @@ class SectionCard extends StatelessWidget {
       ),
       padding: const EdgeInsets.all(20),
       child: DefaultTextStyle(
-        style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: foregroundTextColor),
+        style: Theme.of(context)
+            .textTheme
+            .bodyMedium!
+            .copyWith(color: foregroundTextColor),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -44,9 +47,9 @@ class SectionCard extends StatelessWidget {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: foregroundTextColor,
-                    fontWeight: FontWeight.w600,
-                  ),
+                        color: foregroundTextColor,
+                        fontWeight: FontWeight.w600,
+                      ),
                 ),
               ],
             ),
@@ -55,10 +58,10 @@ class SectionCard extends StatelessWidget {
             if (onEdit != null) ...[
               const SizedBox(height: 24),
               Button(
-                label          : 'Modifica',
-                onPressed      : onEdit!,
-                background     : editButtonColor,
-                foreground     : Colors.black,
+                label: 'Modifica',
+                onPressed: onEdit!,
+                background: editButtonColor,
+                foreground: Colors.black,
               ),
             ],
           ],

@@ -66,7 +66,8 @@ class ProfileEditController {
         }
       } else {
         if (def.key == 'smoker') {
-          if (smokerNotifier.value != (update['patient']['smoker'] as bool? ?? false)) {
+          if (smokerNotifier.value !=
+              (update['patient']['smoker'] as bool? ?? false)) {
             update['patient']['smoker'] = smokerNotifier.value;
           }
         }

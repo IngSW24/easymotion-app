@@ -2,7 +2,7 @@ import '../field_descriptor.dart';
 import 'schemas.dart';
 
 Map<String, dynamic> buildEmptyProfile() {
-  dynamic _default(FieldDefinition def) {
+  dynamic get(FieldDefinition def) {
     switch (def.type) {
       case FieldDataType.string:
         return null;
@@ -18,6 +18,6 @@ Map<String, dynamic> buildEmptyProfile() {
   final allDef = {...personalSchema, ...healthSchema}.toList();
 
   return {
-    for (final def in allDef) def.key: _default(def),
+    for (final def in allDef) def.key: get(def),
   };
 }

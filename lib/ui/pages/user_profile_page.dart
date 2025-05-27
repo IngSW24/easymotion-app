@@ -5,7 +5,7 @@ import 'package:easymotion_app/data/hooks/use_auth.dart';
 import 'package:easymotion_app/ui/pages/loading_page.dart';
 import 'package:easymotion_app/ui/components/profile_page_utils/user_profile_schema/schemas.dart';
 import '../../data/hooks/use_patient.dart';
-import '../Theme/Theme.dart';
+import '../Theme/theme.dart';
 import '../components/profile_page_utils/field_descriptor.dart';
 import '../components/profile_page_utils/profile_avatar.dart';
 import '../components/profile_page_utils/profile_section.dart';
@@ -26,11 +26,11 @@ class ProfilePage extends HookWidget {
     if (patient.query.isLoading) return const LoadingPage();
 
     final personalMap = <String, dynamic>{
-      'firstName' : patient.query.data?.firstName,
+      'firstName': patient.query.data?.firstName,
       'middleName': patient.query.data?.middleName,
-      'lastName'  : patient.query.data?.lastName,
-      'email'     : patient.query.data?.email,
-      'birthDate' : patient.query.data?.birthDate,
+      'lastName': patient.query.data?.lastName,
+      'email': patient.query.data?.email,
+      'birthDate': patient.query.data?.birthDate,
     };
 
     final healthMap = patientDto?.toJson() ?? {};
@@ -80,7 +80,8 @@ class ProfilePage extends HookWidget {
                 icon: Icons.favorite,
                 schema: healthSchema,
                 data: healthMap,
-                onEdit: () => handleEdit('Informazioni sanitarie', healthSchema),
+                onEdit: () =>
+                    handleEdit('Informazioni sanitarie', healthSchema),
               ),
               const SizedBox(height: 32),
               SizedBox(

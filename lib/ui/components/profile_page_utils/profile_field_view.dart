@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../Theme/Theme.dart';
+import '../../Theme/theme.dart';
 import 'field_descriptor.dart';
 
 class ProfileFieldView extends StatelessWidget {
@@ -15,9 +15,9 @@ class ProfileFieldView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locale  = Localizations.localeOf(context).languageCode;
+    final locale = Localizations.localeOf(context).languageCode;
     final dateFmt = DateFormat.yMMMMd(locale);
-    final raw     = dataSource[definition.key];
+    final raw = dataSource[definition.key];
 
     String display = "";
     if (raw == null) {
@@ -54,7 +54,6 @@ class ProfileFieldView extends StatelessWidget {
           break;
         case FieldDataType.date:
           display = dateFmt.format(DateTime.parse(raw.toString()));
-          print("DISPLAY $display");
           break;
         case FieldDataType.boolean:
           display = raw.toString();

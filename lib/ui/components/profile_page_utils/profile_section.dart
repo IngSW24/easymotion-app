@@ -2,7 +2,7 @@ import 'package:easymotion_app/ui/components/profile_page_utils/profile_field_vi
 import 'package:easymotion_app/ui/components/profile_page_utils/section_card.dart';
 import 'package:flutter/material.dart';
 
-import '../../Theme/Theme.dart';
+import '../../Theme/theme.dart';
 import 'field_descriptor.dart';
 
 class ProfileSection extends StatelessWidget {

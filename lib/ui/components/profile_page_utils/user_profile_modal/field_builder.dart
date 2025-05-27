@@ -32,7 +32,9 @@ class FieldBuilder extends StatelessWidget {
         items: const [
           DropdownMenuItem(value: 'MALE', child: Text('Maschio')),
           DropdownMenuItem(value: 'FEMALE', child: Text('Femmina')),
-          DropdownMenuItem(value: 'OTHER', child: Text('Altro / Preferisco non specificare')),
+          DropdownMenuItem(
+              value: 'OTHER',
+              child: Text('Altro / Preferisco non specificare')),
         ],
         onChanged: (v) {
           controller.textCtrls['sex']!.text = v ?? '';
@@ -96,13 +98,14 @@ class FieldBuilder extends StatelessWidget {
       return StatefulBuilder(
         builder: (context, setState) {
           double current = double.tryParse(
-            controller.textCtrls['sportFrequency']!.text,
-          ) ??
+                controller.textCtrls['sportFrequency']!.text,
+              ) ??
               0;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Frequenza attività sportiva: ${current.round()} volte/settimana'),
+              Text(
+                  'Frequenza attività sportiva: ${current.round()} volte/settimana'),
               Slider.adaptive(
                 min: 0,
                 max: 7,
@@ -111,7 +114,8 @@ class FieldBuilder extends StatelessWidget {
                 value: current,
                 onChanged: (v) {
                   setState(() {});
-                  controller.textCtrls['sportFrequency']!.text = v.round().toString();
+                  controller.textCtrls['sportFrequency']!.text =
+                      v.round().toString();
                 },
               ),
             ],
@@ -125,8 +129,8 @@ class FieldBuilder extends StatelessWidget {
       return StatefulBuilder(
         builder: (context, setState) {
           double current = double.tryParse(
-            controller.textCtrls['painIntensity']!.text,
-          ) ??
+                controller.textCtrls['painIntensity']!.text,
+              ) ??
               0;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +144,8 @@ class FieldBuilder extends StatelessWidget {
                 value: current,
                 onChanged: (v) {
                   setState(() {});
-                  controller.textCtrls['painIntensity']!.text = v.round().toString();
+                  controller.textCtrls['painIntensity']!.text =
+                      v.round().toString();
                 },
               ),
             ],
@@ -160,7 +165,8 @@ class FieldBuilder extends StatelessWidget {
           border: OutlineInputBorder(),
         ),
         items: const [
-          DropdownMenuItem(value: 'Intermittente', child: Text('Intermittente')),
+          DropdownMenuItem(
+              value: 'Intermittente', child: Text('Intermittente')),
           DropdownMenuItem(value: 'Continuo', child: Text('Continuo')),
           DropdownMenuItem(value: 'Notturno', child: Text('Notturno')),
         ],
@@ -175,8 +181,8 @@ class FieldBuilder extends StatelessWidget {
       return StatefulBuilder(
         builder: (context, setState) {
           double current = double.tryParse(
-            controller.textCtrls['perceivedStress']!.text,
-          ) ??
+                controller.textCtrls['perceivedStress']!.text,
+              ) ??
               0;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,7 +196,8 @@ class FieldBuilder extends StatelessWidget {
                 value: current,
                 onChanged: (v) {
                   setState(() {});
-                  controller.textCtrls['perceivedStress']!.text = v.round().toString();
+                  controller.textCtrls['perceivedStress']!.text =
+                      v.round().toString();
                 },
               ),
             ],
@@ -215,7 +222,9 @@ class FieldBuilder extends StatelessWidget {
         validator: (value) {
           if (value == null || value.isEmpty) return null;
           final regex = RegExp(r'^\d{2,3}/\d{2,3}$');
-          return regex.hasMatch(value) ? null : 'Formato non valido (es. 120/80)';
+          return regex.hasMatch(value)
+              ? null
+              : 'Formato non valido (es. 120/80)';
         },
       );
     }
@@ -226,7 +235,8 @@ class FieldBuilder extends StatelessWidget {
         return TextFormField(
           controller: controller.textCtrls[def.key],
           decoration: InputDecoration(
-            labelText: def.unit != null ? '${def.label} (${def.unit})' : def.label,
+            labelText:
+                def.unit != null ? '${def.label} (${def.unit})' : def.label,
             border: const OutlineInputBorder(),
           ),
           maxLines: def.key == 'notes' || def.key == 'personalGoals' ? 4 : 1,
@@ -236,7 +246,8 @@ class FieldBuilder extends StatelessWidget {
         return TextFormField(
           controller: controller.textCtrls[def.key],
           decoration: InputDecoration(
-            labelText: def.unit != null ? '${def.label} (${def.unit})' : def.label,
+            labelText:
+                def.unit != null ? '${def.label} (${def.unit})' : def.label,
             border: const OutlineInputBorder(),
           ),
           keyboardType: const TextInputType.numberWithOptions(decimal: true),

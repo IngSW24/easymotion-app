@@ -23,11 +23,11 @@ Patient usePatient(BuildContext ctx, String id) {
 
   final query = useQuery<AuthUserDto?, dynamic>(
     [patientQueryKey, id],
-        () async => (await api.schema.profileGet()).body,
+    () async => (await api.schema.profileGet()).body,
   );
 
   final update = useMutation<AuthUserDto, dynamic, UpdateAuthUserDto, void>(
-        (updatedPatient) async {
+    (updatedPatient) async {
       final res = await api.schema.profilePut(
         body: updatedPatient,
       );
