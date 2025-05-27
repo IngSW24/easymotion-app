@@ -19,13 +19,33 @@ class ProfileFieldView extends StatelessWidget {
     final dateFmt = DateFormat.yMMMMd(locale);
     final raw     = dataSource[definition.key];
 
-    String display;
+    String display = "";
     if (raw == null) {
       display = '—';
     } else {
       switch (definition.type) {
         case FieldDataType.string:
-          display = raw.toString();
+          if (raw.toString() == "MALE") {
+            display = "Maschio";
+          } else if (raw.toString() == "FEMALE") {
+            display = "Femmina";
+          } else if (raw.toString() == "OTHER") {
+            display = "Altro / Preferisco non specificare";
+          } else if (raw.toString() == "LOW") {
+            display = "Base";
+          } else if (raw.toString() == "MEDIUM") {
+            display = "Intermedio";
+          } else if (raw.toString() == "HIGH") {
+            display = "Avanzato";
+          } else if (raw.toString() == "LIMITED") {
+            display = "Basso";
+          } else if (raw.toString() == "MODERATE") {
+            display = "Moderato";
+          } else if (raw.toString() == "FULL") {
+            display = "Totale";
+          } else {
+            display = raw.toString();
+          }
           break;
         case FieldDataType.number:
           final num n = raw as num;
@@ -34,6 +54,10 @@ class ProfileFieldView extends StatelessWidget {
           break;
         case FieldDataType.date:
           display = dateFmt.format(DateTime.parse(raw.toString()));
+          print("DISPLAY $display");
+          break;
+        case FieldDataType.boolean:
+          display = raw.toString();
           break;
       }
     }

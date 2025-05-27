@@ -1,4 +1,4 @@
-enum FieldDataType { string, number, date }
+enum FieldDataType { string, number, date, boolean }
 
 class FieldDefinition {
   final String key;         // chiave JSON/DTO

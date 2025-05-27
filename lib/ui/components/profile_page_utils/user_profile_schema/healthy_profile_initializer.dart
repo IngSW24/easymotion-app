@@ -10,6 +10,8 @@ Map<String, dynamic> buildEmptyProfile() {
         return 0;
       case FieldDataType.date:
         return null;
+      case FieldDataType.boolean:
+        return false;
     }
   }
 

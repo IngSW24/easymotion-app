@@ -16,14 +16,21 @@ class ProfileEditController {
   }) {
     // crea i text controllers solo per lo schema passato
     textCtrls = {
-      for (final def in schema)
-        def.key: TextEditingController(
-          text: initialData.toJson()[def.key]?.toString() ?? '',
-        ),
+      if (schema.length == 6) ...{
+        for (final def in schema)
+          def.key: TextEditingController(
+            text: initialData.toJson()[def.key]?.toString() ?? '',
+          ),
+      } else ...{
+        for (final def in schema)
+          def.key: TextEditingController(
+            text: initialData.toJson()['patient'][def.key]?.toString() ?? '',
+          ),
+      },
     };
 
     smokerNotifier = ValueNotifier<bool>(
-      initialData.toJson()['smoker'] as bool? ?? false,
+      initialData.toJson()['patient']['smoker'] == "true",
     );
   }
 
@@ -35,6 +42,8 @@ class ProfileEditController {
   AuthUserDto collectUpdates() {
     final Map<String, dynamic> update = initialData.toJson();
 
+    //print("INITIALDATA $update");
+    //print(initialData.toJson()['patient']['smoker']?.toString());
     for (final def in schema) {
       final txt = textCtrls[def.key]!.text.trim();
 
@@ -52,6 +61,8 @@ class ProfileEditController {
           case FieldDataType.date:
             update[def.key] = txt;
             break;
+          case FieldDataType.boolean:
+            update[def.key] = (txt.toLowerCase() == 'true');
         }
       } else {
         if (def.key == 'smoker') {
@@ -72,17 +83,20 @@ class ProfileEditController {
           case FieldDataType.date:
             update['patient'][def.key] = txt;
             break;
+          case FieldDataType.boolean:
+            update['patient'][def.key] = (txt.toLowerCase() == 'true');
+            break;
         }
       }
 
-      final data = update['birthDate'];
-      print("DATE: $data");
+      //final data = update['birthDate'];
+      //print("DATE: $data");
     }
-    final postData = update;
-    print("DOPO INITIAL DATA TO JSON $postData");
+    //final postData = update;
+    //print("DOPO INITIAL DATA TO JSON $postData");
 
     final updated = AuthUserDto.fromJson(update);
-    print(updated.toJson());
+    //print(updated.toJson());
     return updated;
   }
 }

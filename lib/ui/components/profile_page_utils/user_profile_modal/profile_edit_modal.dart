@@ -1,4 +1,4 @@
-import 'package:easymotion_app/data/hooks/new.dart';
+import 'package:easymotion_app/data/hooks/use_patient.dart';
 import 'package:easymotion_app/data/hooks/use_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -24,6 +24,8 @@ class EditModalProfile extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final insets = MediaQuery.of(context).viewInsets;
+
+    // Controller per i campi
     final controller = useMemoized(
           () => ProfileEditController(
         schema: schema,
@@ -31,22 +33,35 @@ class EditModalProfile extends HookWidget {
       ),
       [schema, initialData],
     );
-    final user   = useUserInfo(context).call()!;
+
+    // Query & mutation del paziente loggato
+    final user    = useUserInfo(context).call()!;
     final patient = usePatient(context, user.id);
 
-    void handleSave () async {
-      if (!controller.validate()) return;
+    // Stato di salvataggio per disabilitare il tasto e mostrare feedback
+    final isSaving = useState(false);
 
-      final AuthUserDto updated = controller.collectUpdates();
+    void handleSave() async {
+      if (isSaving.value) return;            // evita tap multipli
+      if (!controller.validate()) return;   // campi non validi
 
-      final update = UpdateAuthUserDto.fromJson(updated.toJson());
+      isSaving.value = true;
 
-      final sispera = update.toJson();
-      print("UPDATE $sispera");
-      patient.update.mutate(update);
-      print(patient.query.refetch);
-      print(patient.query.data);
-      if (context.mounted) Navigator.pop(context);
+      try {
+        final dto     = controller.collectUpdates();
+        final update  = UpdateAuthUserDto.fromJson(dto.toJson());
+
+        // 1. mutation REST
+        await patient.update.mutate(update);
+
+        // 2. refetch della query per propagare i nuovi dati a chi ascolta
+        await patient.query.refetch();
+
+        // 3. chiudi il modal restituendo un flag di riuscita
+        if (context.mounted) Navigator.pop(context, true);
+      } finally {
+        isSaving.value = false;
+      }
     }
 
     return SafeArea(
@@ -54,11 +69,9 @@ class EditModalProfile extends HookWidget {
         padding: EdgeInsets.only(bottom: insets.bottom),
         child: Material(
           color: Colors.white,
-          borderRadius:
-          const BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           child: SingleChildScrollView(
-            keyboardDismissBehavior:
-            ScrollViewKeyboardDismissBehavior.onDrag,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
             child: Form(
               key: controller.formKey,
@@ -76,7 +89,7 @@ class EditModalProfile extends HookWidget {
 
                   const SizedBox(height: 8),
                   Button(
-                    label: 'Save',
+                    label: isSaving.value ? 'Saving…' : 'Save',
                     background: DesignTokens.primaryBlue,
                     foreground: Colors.white,
                     onPressed: handleSave,

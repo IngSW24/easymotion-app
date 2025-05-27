@@ -1,14 +1,15 @@
-/**import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+
 import 'package:easymotion_app/data/hooks/use_auth.dart';
 import 'package:easymotion_app/ui/pages/loading_page.dart';
-import 'package:easymotion_app/ui/components/profile_page_utils/user_profile_modal/profile_edit_modal.dart';
 import 'package:easymotion_app/ui/components/profile_page_utils/user_profile_schema/schemas.dart';
-import '../../data/hooks/new.dart';
+import '../../data/hooks/use_patient.dart';
 import '../Theme/Theme.dart';
+import '../components/profile_page_utils/field_descriptor.dart';
 import '../components/profile_page_utils/profile_avatar.dart';
 import '../components/profile_page_utils/profile_section.dart';
-import '../components/profile_page_utils/field_descriptor.dart';
+import '../components/profile_page_utils/user_profile_modal/profile_edit_modal.dart';
 import '../components/utility/button.dart';
 
 class ProfilePage extends HookWidget {
@@ -20,7 +21,19 @@ class ProfilePage extends HookWidget {
     final patient = usePatient(context, user.id);
     final logoutFn = useLogoutFn(context);
 
-    if (patient.isLoading()) return const LoadingPage();
+    final patientDto = patient.query.data?.patient;
+
+    if (patient.query.isLoading) return const LoadingPage();
+
+    final personalMap = <String, dynamic>{
+      'firstName' : patient.query.data?.firstName,
+      'middleName': patient.query.data?.middleName,
+      'lastName'  : patient.query.data?.lastName,
+      'email'     : patient.query.data?.email,
+      'birthDate' : patient.query.data?.birthDate,
+    };
+
+    final healthMap = patientDto?.toJson() ?? {};
 
     void handleEdit(String title, List<FieldDefinition> schema) {
       showModalBottomSheet(
@@ -30,30 +43,14 @@ class ProfilePage extends HookWidget {
         builder: (_) => EditModalProfile(
           title: title,
           schema: schema,
-          initialData: user.toJson(),
-          onSave: () async {
-            if (!controller.validate()) return;
-
-            final updates = controller.collectUpdates();
-            if (updates.isEmpty) {
-              Navigator.pop(context);
-              return;
-            }
-
-            final dto = UpdateAuthUserDto.fromJson(
-              {...controller.initialData, ...updates},
-            );
-
-            await patient.update.mutate(dto);
-
-            if (context.mounted) Navigator.pop(context);
-          },
+          initialData: patient.query.data!,
         ),
       );
     }
 
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -62,7 +59,7 @@ class ProfilePage extends HookWidget {
               const ProfileAvatar(),
               const SizedBox(height: 16),
               Text(
-                '${user.firstName} ${user.lastName}',
+                '${patient.query.data?.firstName} ${patient.query.data?.lastName}',
                 style: DesignTokens.title,
                 textAlign: TextAlign.center,
               ),
@@ -71,15 +68,18 @@ class ProfilePage extends HookWidget {
                 title: 'Informazioni personali',
                 icon: Icons.person,
                 schema: personalSchema,
-                data: user.toJson(),
-                onEdit: () => handleEdit('Informazioni personali', personalSchema),
+                data: personalMap,
+                onEdit: () => handleEdit(
+                  'Informazioni personali',
+                  personalSchema,
+                ),
               ),
               const SizedBox(height: 24),
               ProfileSection(
                 title: 'Informazioni sanitarie',
                 icon: Icons.favorite,
                 schema: healthSchema,
-                data: user.toJson(),
+                data: healthMap,
                 onEdit: () => handleEdit('Informazioni sanitarie', healthSchema),
               ),
               const SizedBox(height: 32),
@@ -114,4 +114,3 @@ class ProfilePage extends HookWidget {
     );
   }
 }
-*/
