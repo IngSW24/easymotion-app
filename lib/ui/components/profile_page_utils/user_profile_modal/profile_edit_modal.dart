@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../../../api-client-generated/api_schema.models.swagger.dart';
 import '../../../Theme/Theme.dart';
-import '../../utility/Button.dart';
+import '../../utility/button.dart';
 import '../field_descriptor.dart';
 import 'field_builder.dart';
 import 'profile_edit_controller.dart';
