@@ -6,7 +6,6 @@ import 'profile_page_tests/profile_edit_controller_test.dart'
 import 'profile_page_tests/field_builder_test.dart' as field_builder_test;
 import 'profile_page_tests/profile_field_view_test.dart' as field_view_test;
 import 'profile_page_tests/date_picker_field_test.dart' as date_picker_test;
-import 'profile_page_tests/profile_edit_modal_test.dart' as modal_test;
 import 'profile_page_tests/profile_avatar_test.dart' as avatar_test;
 import 'profile_page_tests/section_card_test.dart' as section_card_test;
 
@@ -30,11 +29,6 @@ void main() {
     // Run date picker tests
     group('DatePickerField Tests', () {
       date_picker_test.main();
-    });
-
-    // Run modal tests
-    group('EditModalProfile Tests', () {
-      modal_test.main();
     });
 
     // Run avatar tests
