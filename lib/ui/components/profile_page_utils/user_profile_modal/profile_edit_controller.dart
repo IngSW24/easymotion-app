@@ -75,6 +75,9 @@ class ProfileEditController {
         Map<String, dynamic>.from(initialData.toJson());
 
     for (final def in schema) {
+      // Salta l'email durante la raccolta degli aggiornamenti
+      if (def.key == 'email') continue;
+
       final txt = textCtrls[def.key]!.text.trim();
       final data = def.location == FieldLocation.root
           ? update

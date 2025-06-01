@@ -238,8 +238,11 @@ class FieldBuilder extends StatelessWidget {
             labelText:
                 def.unit != null ? '${def.label} (${def.unit})' : def.label,
             border: const OutlineInputBorder(),
+            filled: def.key == 'email',
+            fillColor: def.key == 'email' ? Colors.grey[200] : null,
           ),
           maxLines: def.key == 'notes' || def.key == 'personalGoals' ? 4 : 1,
+          enabled: def.key != 'email',
         );
 
       case FieldDataType.number:

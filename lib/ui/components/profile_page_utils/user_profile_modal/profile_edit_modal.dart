@@ -130,6 +130,20 @@ class EditModalProfile extends HookWidget {
                   const SizedBox(height: 24),
                   for (final def in controller.schema) ...[
                     FieldBuilder(controller: controller, def: def),
+                    if (def.key == 'email') ...[
+                      const SizedBox(height: 4),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 16),
+                        child: Text(
+                          'La modifica della mail può essere effettuata unicamente dal sito web',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 16),
                   ],
                   const SizedBox(height: 8),
