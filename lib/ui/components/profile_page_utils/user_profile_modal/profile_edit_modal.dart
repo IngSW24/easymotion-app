@@ -144,6 +144,20 @@ class EditModalProfile extends HookWidget {
                         ),
                       ),
                     ],
+                    if (def.key == 'lastMedicalCheckup') ...[
+                      const SizedBox(height: 4),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 16),
+                        child: Text(
+                          'La modifica della data dell\'ultimo controllo medico può essere effettuata unicamente dal sito web',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 16),
                   ],
                   const SizedBox(height: 8),

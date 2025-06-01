@@ -238,11 +238,13 @@ class FieldBuilder extends StatelessWidget {
             labelText:
                 def.unit != null ? '${def.label} (${def.unit})' : def.label,
             border: const OutlineInputBorder(),
-            filled: def.key == 'email',
-            fillColor: def.key == 'email' ? Colors.grey[200] : null,
+            filled: def.key == 'email' || def.key == 'lastMedicalCheckup',
+            fillColor: (def.key == 'email' || def.key == 'lastMedicalCheckup')
+                ? Colors.grey[200]
+                : null,
           ),
           maxLines: def.key == 'notes' || def.key == 'personalGoals' ? 4 : 1,
-          enabled: def.key != 'email',
+          enabled: def.key != 'email' && def.key != 'lastMedicalCheckup',
         );
 
       case FieldDataType.number:
@@ -267,6 +269,7 @@ class FieldBuilder extends StatelessWidget {
         return DatePickerField(
           label: def.label,
           controller: controller.textCtrls[def.key]!,
+          enabled: def.key != 'lastMedicalCheckup',
         );
       case FieldDataType.boolean:
         // TODO: Handle this case.

@@ -7,10 +7,12 @@ class DatePickerField extends HookWidget {
     super.key,
     required this.label,
     required this.controller,
+    this.enabled = true,
   });
 
   final String label;
   final TextEditingController controller;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -20,34 +22,39 @@ class DatePickerField extends HookWidget {
     return TextFormField(
       controller: controller,
       readOnly: true,
+      enabled: enabled,
       decoration: InputDecoration(
         labelText: label,
         border: const OutlineInputBorder(),
         suffixIcon: const Icon(Icons.calendar_today),
+        filled: !enabled,
+        fillColor: !enabled ? Colors.grey[200] : null,
       ),
-      onTap: () async {
-        DateTime initial = DateTime.now();
-        if (controller.text.isNotEmpty) {
-          try {
-            initial = dateFormatter.parse(controller.text);
-          } catch (_) {
-            final parsed = DateTime.tryParse(controller.text);
-            if (parsed != null) initial = parsed;
-          }
-        }
+      onTap: enabled
+          ? () async {
+              DateTime initial = DateTime.now();
+              if (controller.text.isNotEmpty) {
+                try {
+                  initial = dateFormatter.parse(controller.text);
+                } catch (_) {
+                  final parsed = DateTime.tryParse(controller.text);
+                  if (parsed != null) initial = parsed;
+                }
+              }
 
-        final picked = await showDatePicker(
-          context: context,
-          initialDate: initial,
-          firstDate: DateTime(1900),
-          lastDate: DateTime.now(),
-          locale: locale,
-        );
+              final picked = await showDatePicker(
+                context: context,
+                initialDate: initial,
+                firstDate: DateTime(1900),
+                lastDate: DateTime.now(),
+                locale: locale,
+              );
 
-        if (picked != null) {
-          controller.text = dateFormatter.format(picked);
-        }
-      },
+              if (picked != null) {
+                controller.text = dateFormatter.format(picked);
+              }
+            }
+          : null,
     );
   }
 }
