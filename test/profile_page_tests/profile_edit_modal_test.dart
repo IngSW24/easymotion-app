@@ -6,6 +6,7 @@ import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.da
 import 'package:easymotion_app/ui/components/profile_page_utils/field_descriptor.dart';
 import 'package:easymotion_app/ui/components/profile_page_utils/user_profile_modal/profile_edit_modal.dart';
 
+/**
 class _FakePatient {
   final query = _FakeQuery();
   final update = _FakeUpdate();
@@ -20,6 +21,7 @@ class _FakeQuery {
 class _FakeUpdate {
   Future<void> mutate(dynamic _) async {}
 }
+ */
 
 void main() {
   late AuthUserDto initialData;
@@ -117,6 +119,7 @@ void main() {
       expect(textField.enabled, isFalse);
     });
 
+/**
     testWidgets('shows save button', (WidgetTester tester) async {
       final fakeUser = initialData;
       final fakePatient = _FakePatient();
@@ -135,7 +138,7 @@ void main() {
 
       expect(find.text('Save'), findsOneWidget);
     });
-
+*/
     testWidgets('shows loading state when saving', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(

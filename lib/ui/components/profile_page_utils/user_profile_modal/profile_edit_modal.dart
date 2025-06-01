@@ -64,25 +64,25 @@ class EditModalProfile extends HookWidget {
         final dto = controller.collectUpdates();
         final update = UpdateAuthUserDto.fromJson(dto.toJson());
 
-        print('=== DEBUG MUTATION ===');
-        print('1. DTO prima della mutation:');
-        print(dto.toJson());
-        print('2. Update DTO prima della mutation:');
-        print(update.toJson());
+        //print('=== DEBUG MUTATION ===');
+        //print('1. DTO prima della mutation:');
+        //print(dto.toJson());
+        //print('2. Update DTO prima della mutation:');
+        //print(update.toJson());
 
         // 1. mutation REST
         await patient.update.mutate(update);
-        print('3. Mutation completata');
+        //print('3. Mutation completata');
 
-        print('4. Dati della query dopo mutation:');
-        print(patient.query.data?.toJson());
+        //print('4. Dati della query dopo mutation:');
+        //print(patient.query.data?.toJson());
 
         // 2. refetch della query per propagare i nuovi dati a chi ascolta
         await patient.query.refetch();
 
-        print('5. Dati della query dopo refetch:');
-        print(patient.query.data?.toJson());
-        print('=== FINE DEBUG ===');
+        //print('5. Dati della query dopo refetch:');
+        //print(patient.query.data?.toJson());
+        //print('=== FINE DEBUG ===');
 
         // 3. chiudi il modal restituendo un flag di riuscita
         if (context.mounted) {
