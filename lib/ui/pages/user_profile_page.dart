@@ -1,3 +1,4 @@
+import 'package:easymotion_app/api-client-generated/api_schema.models.swagger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -21,19 +22,23 @@ class ProfilePage extends HookWidget {
     final patient = usePatient(context, user.id);
     final logoutFn = useLogoutFn(context);
 
-    final patientDto = patient.query.data?.patient;
-
     if (patient.query.isLoading) return const LoadingPage();
 
-    final personalMap = <String, dynamic>{
-      'firstName': patient.query.data?.firstName,
-      'middleName': patient.query.data?.middleName,
-      'lastName': patient.query.data?.lastName,
-      'email': patient.query.data?.email,
-      'birthDate': patient.query.data?.birthDate,
-    };
+    Map<String, dynamic> buildSectionMap(
+        List<FieldDefinition> schema, AuthUserDto? user) {
+      final userMap = user?.toJson() ?? {};
+      final patientMap = userMap['patient'] ?? {};
 
-    final healthMap = patientDto?.toJson() ?? {};
+      return {
+        for (final def in schema)
+          def.key: def.location == FieldLocation.root
+              ? userMap[def.key]
+              : patientMap[def.key]
+      };
+    }
+
+    final personalMap = buildSectionMap(personalSchema, patient.query.data);
+    final healthMap = buildSectionMap(healthSchema, patient.query.data);
 
     void handleEdit(String title, List<FieldDefinition> schema) {
       showModalBottomSheet(
@@ -59,7 +64,7 @@ class ProfilePage extends HookWidget {
               const ProfileAvatar(),
               const SizedBox(height: 16),
               Text(
-                '${patient.query.data?.firstName} ${patient.query.data?.lastName}',
+                '${patient.query.data?.firstName ?? ''} ${patient.query.data?.lastName ?? ''}',
                 style: DesignTokens.title,
                 textAlign: TextAlign.center,
               ),

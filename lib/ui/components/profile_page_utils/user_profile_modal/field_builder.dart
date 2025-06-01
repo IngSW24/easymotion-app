@@ -251,6 +251,13 @@ class FieldBuilder extends StatelessWidget {
             border: const OutlineInputBorder(),
           ),
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          validator: (value) {
+            if (value == null || value.isEmpty) return null;
+            if (double.tryParse(value) == null) {
+              return 'Inserire un numero valido';
+            }
+            return null;
+          },
         );
 
       case FieldDataType.date:

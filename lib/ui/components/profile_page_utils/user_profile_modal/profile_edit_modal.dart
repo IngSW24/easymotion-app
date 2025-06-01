@@ -34,12 +34,25 @@ class EditModalProfile extends HookWidget {
       [schema, initialData],
     );
 
+    // Cleanup dei controller quando il widget viene distrutto
+    useEffect(() {
+      return () => controller.dispose();
+    }, []);
+
     // Query & mutation del paziente loggato
     final user = useUserInfo(context).call()!;
     final patient = usePatient(context, user.id);
 
     // Stato di salvataggio per disabilitare il tasto e mostrare feedback
     final isSaving = useState(false);
+
+    // Effetto per aggiornare i controller quando i dati cambiano
+    useEffect(() {
+      if (patient.query.data != null) {
+        controller.updateControllers(patient.query.data!);
+      }
+      return null;
+    }, [patient.query.data]);
 
     void handleSave() async {
       if (isSaving.value) return; // evita tap multipli
@@ -51,14 +64,48 @@ class EditModalProfile extends HookWidget {
         final dto = controller.collectUpdates();
         final update = UpdateAuthUserDto.fromJson(dto.toJson());
 
+        print('=== DEBUG MUTATION ===');
+        print('1. DTO prima della mutation:');
+        print(dto.toJson());
+        print('2. Update DTO prima della mutation:');
+        print(update.toJson());
+
         // 1. mutation REST
         await patient.update.mutate(update);
+        print('3. Mutation completata');
+
+        print('4. Dati della query dopo mutation:');
+        print(patient.query.data?.toJson());
 
         // 2. refetch della query per propagare i nuovi dati a chi ascolta
         await patient.query.refetch();
 
+        print('5. Dati della query dopo refetch:');
+        print(patient.query.data?.toJson());
+        print('=== FINE DEBUG ===');
+
         // 3. chiudi il modal restituendo un flag di riuscita
-        if (context.mounted) Navigator.pop(context, true);
+        if (context.mounted) {
+          Navigator.pop(context, true);
+          // Forza un rebuild della pagina principale
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Profilo aggiornato con successo'),
+                duration: Duration(seconds: 2),
+              ),
+            );
+          }
+        }
+      } catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Errore durante il salvataggio: ${e.toString()}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       } finally {
         isSaving.value = false;
       }

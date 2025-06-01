@@ -34,7 +34,7 @@ Patient usePatient(BuildContext ctx, String id) {
       return res.body!;
     },
     onSuccess: (newDto, variables, context) {
-      queryClient.setQueryData(
+      queryClient.setQueryData<AuthUserDto?>(
         [patientQueryKey, id],
         (_) => newDto,
       );

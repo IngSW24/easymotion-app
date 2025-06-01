@@ -7,7 +7,7 @@ Map<String, dynamic> buildEmptyProfile() {
       case FieldDataType.string:
         return null;
       case FieldDataType.number:
-        return 0;
+        return null;
       case FieldDataType.date:
         return null;
       case FieldDataType.boolean:

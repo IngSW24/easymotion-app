@@ -14,24 +14,55 @@ class ProfileEditController {
     required this.schema,
     required this.initialData,
   }) {
-    // crea i text controllers solo per lo schema passato
-    textCtrls = {
-      if (schema.length == 6) ...{
-        for (final def in schema)
-          def.key: TextEditingController(
-            text: initialData.toJson()[def.key]?.toString() ?? '',
-          ),
-      } else ...{
-        for (final def in schema)
-          def.key: TextEditingController(
-            text: initialData.toJson()['patient'][def.key]?.toString() ?? '',
-          ),
-      },
-    };
+    _initializeControllers();
+  }
+
+  void _initializeControllers() {
+    textCtrls = {};
+    final userData = initialData.toJson();
+
+    for (final def in schema) {
+      String? initialValue;
+      final data = def.location == FieldLocation.root
+          ? userData
+          : userData['patient'] ?? {};
+
+      initialValue = data[def.key]?.toString() ?? '';
+      textCtrls[def.key] = TextEditingController(text: initialValue);
+    }
 
     smokerNotifier = ValueNotifier<bool>(
-      initialData.toJson()['patient']['smoker'] == "true",
+      userData['patient']?['smoker'] == "true" ||
+          userData['patient']?['smoker'] == true,
     );
+  }
+
+  void updateControllers(AuthUserDto newData) {
+    final userData = newData.toJson();
+
+    for (final def in schema) {
+      final data = def.location == FieldLocation.root
+          ? userData
+          : userData['patient'] ?? {};
+
+      final newValue = data[def.key]?.toString() ?? '';
+      if (textCtrls[def.key]?.text != newValue) {
+        textCtrls[def.key]?.text = newValue;
+      }
+    }
+
+    final newSmokerValue = userData['patient']?['smoker'] == "true" ||
+        userData['patient']?['smoker'] == true;
+    if (smokerNotifier.value != newSmokerValue) {
+      smokerNotifier.value = newSmokerValue;
+    }
+  }
+
+  void dispose() {
+    for (final controller in textCtrls.values) {
+      controller.dispose();
+    }
+    smokerNotifier.dispose();
   }
 
   /// Form validate
@@ -40,64 +71,43 @@ class ProfileEditController {
 
   /// Collects only modified fields
   AuthUserDto collectUpdates() {
-    final Map<String, dynamic> update = initialData.toJson();
+    final Map<String, dynamic> update =
+        Map<String, dynamic>.from(initialData.toJson());
 
-    //print("INITIALDATA $update");
-    //print(initialData.toJson()['patient']['smoker']?.toString());
     for (final def in schema) {
       final txt = textCtrls[def.key]!.text.trim();
+      final data = def.location == FieldLocation.root
+          ? update
+          : (update['patient'] ??= {});
 
-      if (schema.length == 6) {
-        final original = update[def.key]?.toString() ?? '';
-        if (txt.isEmpty || txt == original) continue;
+      // Per gli altri tipi, logica standard
+      final original = data[def.key]?.toString() ?? '';
+      if (txt.isEmpty && original.isEmpty) continue;
+      if (txt == original) continue;
 
-        switch (def.type) {
-          case FieldDataType.string:
-            update[def.key] = txt;
-            break;
-          case FieldDataType.number:
-            update[def.key] = double.tryParse(txt);
-            break;
-          case FieldDataType.date:
-            update[def.key] = txt;
-            break;
-          case FieldDataType.boolean:
-            update[def.key] = (txt.toLowerCase() == 'true');
-        }
-      } else {
-        if (def.key == 'smoker') {
-          if (smokerNotifier.value !=
-              (update['patient']['smoker'] as bool? ?? false)) {
-            update['patient']['smoker'] = smokerNotifier.value;
+      switch (def.type) {
+        case FieldDataType.string:
+          data[def.key] = txt;
+          break;
+        case FieldDataType.date:
+          data[def.key] = txt;
+          break;
+        case FieldDataType.boolean:
+          data[def.key] = (txt.toLowerCase() == 'true');
+          break;
+        case FieldDataType.number:
+          if (txt.isEmpty) {
+            data[def.key] = null;
+          } else {
+            final numValue = double.tryParse(txt);
+            if (numValue != null) {
+              data[def.key] = numValue;
+            }
           }
-        }
-        final original = update['patient'][def.key]?.toString() ?? '';
-        if (txt.isEmpty || txt == original) continue;
-
-        switch (def.type) {
-          case FieldDataType.string:
-            update['patient'][def.key] = txt;
-            break;
-          case FieldDataType.number:
-            update['patient'][def.key] = double.tryParse(txt);
-            break;
-          case FieldDataType.date:
-            update['patient'][def.key] = txt;
-            break;
-          case FieldDataType.boolean:
-            update['patient'][def.key] = (txt.toLowerCase() == 'true');
-            break;
-        }
+          break;
       }
-
-      //final data = update['birthDate'];
-      //print("DATE: $data");
     }
-    //final postData = update;
-    //print("DOPO INITIAL DATA TO JSON $postData");
-
-    final updated = AuthUserDto.fromJson(update);
-    //print(updated.toJson());
-    return updated;
+    //print('Fine Collection: $update');
+    return AuthUserDto.fromJson(update);
   }
 }
