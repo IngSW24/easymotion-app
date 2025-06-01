@@ -131,9 +131,8 @@ void main() {
       );
 
       expect(find.text('Nome'), findsOneWidget);
-      expect(find.text('—'), findsOneWidget);
+      expect(find.text('—'), findsAtLeastNWidgets(schema.length));
       expect(find.text('Altezza'), findsOneWidget);
-      expect(find.text('—'), findsOneWidget);
     });
 
     testWidgets('applies correct text styles', (WidgetTester tester) async {

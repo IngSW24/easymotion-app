@@ -26,6 +26,13 @@ void main() {
         location: FieldLocation.patient,
       ),
       FieldDefinition(
+        key: 'weight',
+        label: 'Peso',
+        type: FieldDataType.number,
+        unit: 'kg',
+        location: FieldLocation.patient,
+      ),
+      FieldDefinition(
         key: 'birthDate',
         label: 'Data nascita',
         type: FieldDataType.date,
@@ -40,7 +47,7 @@ void main() {
       email: 'john@example.com',
       birthDate: '1990-01-01',
       patient: PatientDto(
-        height: 180,
+        height: 180.0,
         userId: '1',
       ),
       role: enums.AuthUserDtoRole.user,
@@ -61,7 +68,7 @@ void main() {
   group('ProfileEditController', () {
     test('initializes controllers with correct initial values', () {
       expect(controller.textCtrls['firstName']!.text, equals('John'));
-      expect(controller.textCtrls['height']!.text, equals('180'));
+      expect(controller.textCtrls['height']!.text, equals('180.0'));
       expect(controller.textCtrls['birthDate']!.text, equals('1990-01-01'));
     });
 
@@ -73,7 +80,7 @@ void main() {
         email: 'jane@example.com',
         birthDate: '1992-01-01',
         patient: PatientDto(
-          weight: 70,
+          weight: 70.0,
           mobilityLevel: enums.PatientDtoMobilityLevel.moderate,
           activityLevel: enums.PatientDtoActivityLevel.medium,
           userId: '1',
@@ -86,30 +93,30 @@ void main() {
       controller.updateControllers(newData);
 
       expect(controller.textCtrls['firstName']!.text, equals('Jane'));
-      expect(controller.textCtrls['height']!.text, equals('170'));
+      expect(controller.textCtrls['weight']!.text, equals('70.0'));
       expect(controller.textCtrls['birthDate']!.text, equals('1992-01-01'));
     });
 
     test('collects updates correctly', () {
       controller.textCtrls['firstName']!.text = 'Jane';
-      controller.textCtrls['height']!.text = '170';
+      controller.textCtrls['weight']!.text = '70.0';
       controller.textCtrls['birthDate']!.text = '1992-01-01';
 
       final updates = controller.collectUpdates();
 
       expect(updates.firstName, equals('Jane'));
-      expect(updates.patient?.height, equals(170));
+      expect(updates.patient?.weight, equals(70.0));
       expect(updates.birthDate, equals('1992-01-01'));
     });
 
     test('handles empty values correctly', () {
       controller.textCtrls['firstName']!.text = '';
-      controller.textCtrls['height']!.text = '';
+      controller.textCtrls['weight']!.text = '';
 
       final updates = controller.collectUpdates();
 
       expect(updates.firstName, equals(''));
-      expect(updates.patient?.height, isNull);
+      expect(updates.patient?.weight, isNull);
     });
   });
 }

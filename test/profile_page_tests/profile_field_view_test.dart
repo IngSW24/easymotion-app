@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:easymotion_app/ui/components/profile_page_utils/field_descriptor.dart';
 import 'package:easymotion_app/ui/components/profile_page_utils/profile_field_view.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
+  setUpAll(() async {
+    await initializeDateFormatting('it_IT');
+  });
+
   group('ProfileFieldView', () {
     testWidgets('displays string value correctly', (WidgetTester tester) async {
       final def = FieldDefinition(

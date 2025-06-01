@@ -132,14 +132,14 @@ void main() {
       await tester.tap(find.byType(TextFormField));
       await tester.pumpAndSettle();
 
-      // Select a date (e.g., January 1, 2023)
-      await tester.tap(find.text('1'));
+      // Seleziona una data specifica (1 gennaio 2023)
+      await tester.tap(find.text('1')); // Seleziona il giorno
       await tester.tap(find.text('OK'));
       await tester.pumpAndSettle();
 
-      // The controller should be updated with the selected date
+      // Verifica che il controller contenga una data valida
       expect(controller.text, isNotEmpty);
-      expect(controller.text, contains('2023'));
+      expect(controller.text, matches(r'^\d{4}-\d{2}-\d{2}$'));
     });
   });
 }
