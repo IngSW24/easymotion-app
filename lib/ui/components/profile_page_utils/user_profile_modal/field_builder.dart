@@ -1,8 +1,10 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../utility/date_picker_field.dart';
 import 'profile_edit_controller.dart';
 import '../field_descriptor.dart';
+import 'profile_validators.dart';
 
 /// Costruisce dinamicamente i campi del profilo a partire da una [FieldDefinition].
 /// Alcuni controlli personalizzati (slider, dropdown, switch) sono gestiti qui.
@@ -219,33 +221,50 @@ class FieldBuilder extends StatelessWidget {
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'[0-9/]')),
         ],
-        validator: (value) {
-          if (value == null || value.isEmpty) return null;
-          final regex = RegExp(r'^\d{2,3}/\d{2,3}$');
-          return regex.hasMatch(value)
-              ? null
-              : 'Formato non valido (es. 120/80)';
-        },
+        validator: _getValidatorForField('bloodPressure'),
       );
     }
 
     // --- Campi standard -------------------------------------------------------------------------
     switch (def.type) {
       case FieldDataType.string:
-        return TextFormField(
-          controller: controller.textCtrls[def.key],
-          decoration: InputDecoration(
-            labelText:
-                def.unit != null ? '${def.label} (${def.unit})' : def.label,
-            border: const OutlineInputBorder(),
-            filled: def.key == 'email' || def.key == 'lastMedicalCheckup',
-            fillColor: (def.key == 'email' || def.key == 'lastMedicalCheckup')
-                ? Colors.grey[200]
-                : null,
-          ),
-          maxLines: def.key == 'notes' || def.key == 'personalGoals' ? 4 : 1,
-          enabled: def.key != 'email' && def.key != 'lastMedicalCheckup',
-        );
+        if (def.key == 'phoneNumber') {
+          return TextFormField(
+            controller: controller.textCtrls['phoneNumber'],
+            decoration: InputDecoration(
+              labelText: 'Telefono',
+              border: const OutlineInputBorder(),
+              prefixIcon: CountryCodePicker(
+                onChanged: (countryCode) {
+                  // Aggiorna il prefisso nel controller
+                  final currentText = controller.textCtrls['phoneNumber']!.text;
+                  final number = currentText.contains('+')
+                      ? currentText.substring(currentText.indexOf(' ') + 1)
+                      : currentText;
+                  controller.textCtrls['phoneNumber']!.text =
+                      '${countryCode.dialCode} $number';
+                },
+                initialSelection: 'IT',
+                favorite: const ['IT', 'US', 'FR', 'DE'],
+                showCountryOnly: false,
+                showOnlyCountryWhenClosed: false,
+                alignLeft: false,
+              ),
+            ),
+            keyboardType: TextInputType.phone,
+            validator: _getValidatorForField('phoneNumber'),
+          );
+        } else {
+          return TextFormField(
+            controller: controller.textCtrls[def.key],
+            decoration: InputDecoration(
+              labelText: def.label,
+              border: const OutlineInputBorder(),
+            ),
+            enabled: def.key != 'email',
+            validator: _getValidatorForField(def.key),
+          );
+        }
 
       case FieldDataType.number:
         return TextFormField(
@@ -256,13 +275,7 @@ class FieldBuilder extends StatelessWidget {
             border: const OutlineInputBorder(),
           ),
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          validator: (value) {
-            if (value == null || value.isEmpty) return null;
-            if (double.tryParse(value) == null) {
-              return 'Inserire un numero valido';
-            }
-            return null;
-          },
+          validator: _getValidatorForField(def.key),
         );
 
       case FieldDataType.date:
@@ -274,6 +287,31 @@ class FieldBuilder extends StatelessWidget {
       case FieldDataType.boolean:
         // TODO: Handle this case.
         throw UnimplementedError();
+    }
+  }
+
+  String? Function(String?)? _getValidatorForField(String key) {
+    switch (key) {
+      case 'firstName':
+        return ProfileValidators.required;
+      case 'lastName':
+        return ProfileValidators.required;
+      case 'phoneNumber':
+        return ProfileValidators.phoneNumber;
+      case 'height':
+        return ProfileValidators.height;
+      case 'weight':
+        return ProfileValidators.weight;
+      case 'bloodPressure':
+        return ProfileValidators.bloodPressure;
+      case 'restingHeartRate':
+        return ProfileValidators.restingHeartRate;
+      case 'sleepHours':
+        return ProfileValidators.sleepHours;
+      case 'alcoholUnits':
+        return ProfileValidators.alcoholUnits;
+      default:
+        return null;
     }
   }
 }

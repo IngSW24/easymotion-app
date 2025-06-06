@@ -36,6 +36,7 @@ class CourseListView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final courses = useCourses(context);
+    final screenWidth = MediaQuery.of(context).size.width;
 
     if (courses.isLoading) {
       return LoadingIndicator();
@@ -52,12 +53,28 @@ class CourseListView extends HookWidget {
       return EmptyAlert();
     }
 
+    // Usa ListView per schermi mobili, GridView per schermi più larghi
+    if (screenWidth < 600) {
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: courseList.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: CourseCard(course: courseList[index]),
+          );
+        },
+      );
+    }
+
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 340,
-          childAspectRatio: 3 / 4,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8),
+        maxCrossAxisExtent: 340,
+        childAspectRatio: 0.88,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+      ),
       itemCount: courseList.length,
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
