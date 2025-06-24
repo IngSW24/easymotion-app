@@ -51,7 +51,7 @@ final GoRouter _router = GoRouter(initialLocation: '/explore', routes: [
   GoRoute(
     path: '/profile',
     builder: (BuildContext context, GoRouterState state) {
-      return UserProfilePage();
+      return ProfilePage();
     },
   ),
   StatefulShellRoute.indexedStack(

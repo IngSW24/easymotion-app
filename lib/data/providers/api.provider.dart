@@ -19,11 +19,16 @@ class ApiProvider extends ChangeNotifier {
   late final ApiSchema schema;
   static final baseUrl = Uri.parse(apiURL!);
   BaseAuthUserDto? _user;
+  PatientDto? _patient;
   bool _isLoading = true;
   String? _accessToken;
 
   BaseAuthUserDto? getUser() {
     return _user;
+  }
+
+  PatientDto? getPatient() {
+    return _patient;
   }
 
   bool isLoading() {
