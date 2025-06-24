@@ -1,5 +1,15 @@
 # Easymotion mobile app (Flutter)
 
+- [Setup development environment](#setup-development-environment)
+- [Run app on an emulator (or on other supported platforms)](#run-app-on-an-emulator-or-on-other-supported-platforms)
+  * [dotenv file](#dotenv-file)
+- [Deploy](#deploy)
+  * [Versioning](#versioning)
+    + [Changelog example](#changelog-example)
+    + [Valid tags](#valid-tags)
+  * [Build the release version](#build-the-release-version)
+- [External documentation](#external-documentation)
+
 ## Setup development environment
 
 - Install [Flutter SDK](https://docs.flutter.dev/get-started/install)
@@ -20,6 +30,7 @@ The `.env` file allows you to change some environment variables read by the mobi
 
 - API_URL: API's URL without trailing slash
 - STATIC_URL: Static resource server URL without trailing slash
+- REGISTER_URL: Register URL without trailing slash
 
 ## Deploy
 
@@ -32,7 +43,7 @@ To deploy a release, you need to tag the corresponding commit with the following
 
 which have to match the following regex:
 
-`v[0-9]+\.[0-9]+\.[0-9]+(-beta)?`
+`v[0-9]+\.[0-9]+\.[0-9]\+(\-beta)?`
 
 then you need to create a new release from GitHub:
 
@@ -65,4 +76,11 @@ Release 1.2.3
   - `flutter build apk --split-per-abi`: Creates an APK for each target ABI (armeabi-v7a, arm64-v8a, x86_64)
   - `flutter build apk`: Creates a fat APK that includes all the target ABIs.
 - iOS: `flutter build ipa`: See [iOS | Flutter](https://docs.flutter.dev/deployment/ios)
-- Linux: `flutter build linux`
+- Linux: `flutter build linux`: [Linux | Flutter](https://docs.flutter.dev/platform-integration/linux/building)
+- Windows: `flutter build windows`: [Windows | Flutter](https://docs.flutter.dev/platform-integration/windows/building)
+
+## External documentation
+
+- [Code review guidelines](https://github.com/IngSW24/easymotion/blob/main/docs/development-guidelines/code-review-guidelines.md)
+- [Git branching and commit message policy](https://github.com/IngSW24/easymotion/blob/main/docs/development-guidelines/git-branching-and-commit-message-policy.md)
+- [Roadmap](https://github.com/IngSW24/easymotion/blob/main/docs/roadmap.md)
